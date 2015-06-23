@@ -18,6 +18,6 @@ Route::get('/', function () {
 
 Route::get('/photos', function () {
     $locations = App\LocationQuery::all();
-
-    dd($locations);
+    $photoData = new App\Console\Commands\PhotoData();
+    $photoData->queryPhotos();
 });
