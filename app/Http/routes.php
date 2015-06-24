@@ -17,7 +17,14 @@ Route::get('/', function () {
 
 
 Route::get('/photos', function () {
+    //dd(Carbon\Carbon::now());
+
+    $photos = new App\Console\Commands\PhotoFilter();
+    $photos->getPhotoData();
+
+    /*
     $locations = App\LocationQuery::all();
     $photoData = new App\Console\Commands\PhotoData();
     $photoData->queryPhotos();
+    */
 });
