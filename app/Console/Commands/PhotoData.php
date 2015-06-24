@@ -7,24 +7,6 @@ use App\TmpFlickrData;
 use App\LocationQuery;
 
 class PhotoData {
-    //Key: 8f7b89ad0400ac3446579611693c61f6
-    //Secret: c7aae4aa87991188
-
-    //https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}.jpg
-    //https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}_[mstzb].jpg
-    //https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{o-secret}_o.(jpg|gif|png)
-
-    // ex:
-    // https://api.flickr.com/services/rest/?method=flickr.photos.search
-    // &api_key=6fcd9a3cf8a8a260b36df54274e6b5bc
-    // &tags=istanbul+turkey
-    // &has_geo=1
-    // &format=json
-    // &nojsoncallback=1
-    // &auth_token=72157654426507979-df80e6b75efd729c
-    // &api_sig=68b585b85f149a3fd2ae9b5dd61d8341
-
-    //protected $flickr_api_key = \Config::get('constants.FLICKR_API');
     protected $base_url = 'https://api.flickr.com/services/rest/?method=';
     protected $method = 'flickr.photos.search';
     protected $search_string;
@@ -64,6 +46,7 @@ class PhotoData {
                 if($response->getStatusCode() == 200) {
                   $res_data = $response->getBody()->getContents();
                   $res_arr = json_decode($res_data, true);
+                  dd($res_arr["photos"]["photo"]);
                   // update page amount and current page number for location entry
                   $next_page = $location->current_page + 1;
                   $res_total_pages = $res_arr["photos"]["pages"];
@@ -80,17 +63,8 @@ class PhotoData {
                     'country' => $location->country,
                     'state_region' => $location->state_region,
                     'city' => $location->city,
-                    'response_data' => serialize($res_arr)
+                    'response_data' => serialize($res_arr["photos"]["photo"])
                   ]);
-
-                  /*DB::table('tmp_flickr_data')->insert(array(
-                    array(
-                      'country' => $location->country,
-                      'state_region' => $location->state_region,
-                      'city' => $location->city,
-                      'response_data' => serialize($res_arr)
-                    ),
-                  ));*/
                 }
             }
           }
