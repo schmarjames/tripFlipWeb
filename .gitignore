@@ -1,3 +1,6 @@
 /vendor
 /node_modules
 .env
+cv.py
+cv2.so
+/PDO_PGSQL-1.0.2

@@ -11,6 +11,11 @@
 |
 */
 
+// Authentication routes
+Route::get('auth/login', 'Auth\AuthController@getLogin');
+Route::post('auth/login', 'Auth\AuthController@postLogin');
+Route::get('auth/logout', 'Auth\AuthController@getLogout');
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -19,12 +24,11 @@ Route::get('/', function () {
 Route::get('/photos', function () {
     //dd(Carbon\Carbon::now());
 
-    $photos = new App\Console\Commands\PhotoFilter();
-    $photos->getPhotoData();
+    //$photos = new App\Console\Commands\PhotoFilter();
 
-    /*
-    $locations = App\LocationQuery::all();
-    $photoData = new App\Console\Commands\PhotoData();
-    $photoData->queryPhotos();
-    */
+
+    //$locations = App\LocationQuery::all();
+    //$photoData = new App\Console\Commands\PhotoData();
+    //$photoData->queryPhotos();
+
 });
