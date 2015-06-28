@@ -13,7 +13,7 @@ class AlterColumnOnLocationQueryTable extends Migration
     public function up()
     {
         Schema::table('location_query', function (Blueprint $table) {
-            DB::statement("ALTER TABLE location_query ALTER COLUMN city type character varying(255)[] using array[city]");
+            DB::statement("ALTER TABLE location_query ALTER COLUMN city type varchar(255)");
         });
     }
 
