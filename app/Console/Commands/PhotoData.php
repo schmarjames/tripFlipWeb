@@ -46,7 +46,7 @@ class PhotoData {
                 if($response->getStatusCode() == 200) {
                   $res_data = $response->getBody()->getContents();
                   $res_arr = json_decode($res_data, true);
-                  dd($res_arr["photos"]["photo"]);
+
                   // update page amount and current page number for location entry
                   $next_page = $location->current_page + 1;
                   $res_total_pages = $res_arr["photos"]["pages"];
