@@ -1,6 +1,13 @@
 angular
   .module('travelbloc', ['ui.router', 'ui.bootstrap', 'ngStorage'])
-  .config(['$stateProvider', '$httpProvider',
-    function config($stateProvider, $httpProvider) {
-      console.log("route section");
+  .config(['$stateProvider', '$urlRouterProvider', '$httpProvider',
+    function config($stateProvider, $urlRouterProvider, $httpProvider) {
+
+      $stateProvider
+        .state('login', {
+          templateUrl: 'templates/login.html',
+          controller: 'LoginCtrl'
+        });
+
+      $urlRouterProvider.otherwise('/');
     }]);

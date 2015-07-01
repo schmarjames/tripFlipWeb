@@ -28,6 +28,10 @@ elixir(function(mix) {
             'resources/vendor/bootstrap/dist/css/bootstrap-theme.css.map',
             'public/css/bootstrap-theme.css.map'
         );
+    mix.copy(
+        'resources/views/templates',
+        'public/templates'
+    );
     mix.scripts([
       'resources/vendor/angular/angular.js',
       'resources/vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
