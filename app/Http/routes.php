@@ -11,13 +11,13 @@
 |
 */
 
-// Authentication routes
-Route::get('auth/login', 'Auth\AuthController@getLogin');
-Route::post('auth/login', 'Auth\AuthController@postLogin');
-Route::get('auth/logout', 'Auth\AuthController@getLogout');
-
 Route::get('/', function () {
-    return view('index');
+    return view('welcome');
+});
+
+Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
+  Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
+  Route::post('authenticate', 'AuthenticateController@authenticate');
 });
 
 
