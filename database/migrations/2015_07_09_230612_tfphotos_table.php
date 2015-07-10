@@ -14,7 +14,7 @@ class TfphotosTable extends Migration
     {
       Schema::create('tfphotos', function (Blueprint $table) {
           $table->increments('id');
-          $table->int('geo');
+          $table->int('location_id');
           $table->int('country_id');
           $table->int('state_region_id');->nullable();
           $table->int('city_id')->nullable();
@@ -23,6 +23,7 @@ class TfphotosTable extends Migration
           $table->foreign('country_id')->reference('id')->on('countries');
           $table->foreign('state_region_id')->reference('id')->on('state_regions');
           $table->foreign('city_id')->reference('id')->on('cities');
+          $table->foreign('location_id')->reference('id')->('location_data');
       });
     }
 

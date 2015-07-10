@@ -14,6 +14,11 @@ use App\Cities;
 class AcceptsController extends Controller
 {
 
+  protected $base_url = 'https://api.flickr.com/services/rest/?method=';
+  protected $method = 'flickr.photos.geo.getLocation';
+  protected $format = 'json';
+  protected $nojsoncallback = 1;
+
     public function __construct() {
         $this->middleware('jwt.auth');
     }
@@ -106,7 +111,7 @@ class AcceptsController extends Controller
       $url = $this->_generateFlickrUrl($photo_data);
 
       // Get Geo Lat Long Data
-      $geo = $this->_getGeoData();
+      $geo = $this->_getGeoData($photo_data["id"]);
 
       // Insert photo data in table
       $tfphoto = Tfphotos::create([
@@ -179,8 +184,19 @@ class AcceptsController extends Controller
           );
     }
 
-    protected function _getGeoData()
+    protected function _getGeoData($id)
     {
+      $url = sprintf(
+        '%s%s&api_key=%s&photo_id=%sformat=%s&nojsoncallback=%d',
+        $this->base_url,
+        $this->method,
+        \Config::get('constants.FLICKR_API'),
+        $id,
+        $this->format,
+        $this->nojsoncallback
+      );
 
+      $client = new \GuzzleHttp\Client();
+      return $client->get($url);
     }
 }
