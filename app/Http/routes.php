@@ -18,6 +18,13 @@ Route::get('/', function () {
 Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
   Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
   Route::post('authenticate', 'AuthenticateController@authenticate');
+  Route::get('authenticate/user', 'AuthenticateController@getAuthenticatedUser');
+
+  Route::resource('rejects', 'RejectsController', ['only' => ['index', 'destroy']]);
+  Route::post('rejects/transfer/{id}/{table}', 'RejectsController@transfer');
+
+  Route::resource('accepts', 'AcceptsController', ['only' => ['index', 'store']]);
+  Route::post('accepts/transfer/{id}/{table}', 'AcceptsController@transfer');
 });
 
 
