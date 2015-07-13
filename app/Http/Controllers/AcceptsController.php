@@ -10,14 +10,52 @@ use App\AcceptedPhotos;
 use App\Countries;
 use App\StateRegions;
 use App\Cities;
+use App\County;
+use App\LocationData;
+use App\Tfphotos;
 
 class AcceptsController extends Controller
 {
+
+          /*
+            array(9) {
+              ["id"]=>
+              string(11) "17964739932"
+              ["owner"]=>
+              string(12) "24147900@N06"
+              ["secret"]=>
+              string(10) "399b3dc43f"
+              ["server"]=>
+              string(4) "5331"
+              ["farm"]=>
+              int(6)
+              ["title"]=>
+              string(36) "Port of Barcelona, Barcelona, Spain."
+              ["ispublic"]=>
+              int(1)
+              ["isfriend"]=>
+              int(0)
+              ["isfamily"]=>
+              int(0)
+            }
+          */
 
   protected $base_url = 'https://api.flickr.com/services/rest/?method=';
   protected $method = 'flickr.photos.geo.getLocation';
   protected $format = 'json';
   protected $nojsoncallback = 1;
+  protected $message = [
+    "error" => [
+      "store" => "There was an issue with approving the photo",
+      "transfer" => "Photo could not be transferred to the rejected table",
+      "delete" => "Photo could not be deleted"
+    ],
+    "success" => [
+      "store" => "Photo was successfully approved",
+      "transfer" => "Photo was successfully moved to the rejected table",
+      "delete" => "Photo is now deleted"
+      ]
+  ];
 
     public function __construct() {
         $this->middleware('jwt.auth');
@@ -31,7 +69,6 @@ class AcceptsController extends Controller
     public function index()
     {
         $acceptedPhotos = AcceptedPhotos::all();
-
         return $acceptedPhotos;
     }
 
@@ -54,41 +91,22 @@ class AcceptsController extends Controller
     public function transfer($id, $table)
     {
         $photo = AcceptedPhotos::find($id);
-        var_dump(unserialize($photo->photo_data)); die();
 
         // Insert photo data in table
-        Rejected::create([
+        $reject = Rejected::create([
           'country' => $photo->country,
           'state_region' => $photo->state_region,
           'city' => $photo->city,
           'photo_data' => $photo->photo_data
         ]);
 
-        /*
-          array(9) {
-            ["id"]=>
-            string(11) "17964739932"
-            ["owner"]=>
-            string(12) "24147900@N06"
-            ["secret"]=>
-            string(10) "399b3dc43f"
-            ["server"]=>
-            string(4) "5331"
-            ["farm"]=>
-            int(6)
-            ["title"]=>
-            string(36) "Port of Barcelona, Barcelona, Spain."
-            ["ispublic"]=>
-            int(1)
-            ["isfriend"]=>
-            int(0)
-            ["isfamily"]=>
-            int(0)
-          }
-        */
+        if(is_null($reject)) {
+          return $this->message["error"]["transfer"];
+        }
 
         // Delete entry from accepted table
-        return $photo->delete();
+        $photo->delete();
+        return $this->message["success"]["transfer"];
     }
 
     /**
@@ -100,29 +118,28 @@ class AcceptsController extends Controller
     protected function _approvePhoto($id)
     {
       $photo;
-      $url;
       $geo;
       $tfphoto;
 
       $photo = AcceptedPhotos::find($id);
       $photo_data = unserialize($photo->photo_data);
 
-      $this->_searchAndStoreLocationData($photo->country, $photo->state_region, $photo->city);
-      $url = $this->_generateFlickrUrl($photo_data);
-
       // Get Geo Lat Long Data
       $geo = $this->_getGeoData($photo_data["id"]);
 
-      // Insert photo data in table
-      $tfphoto = Tfphotos::create([
-        'geo' => "",
-        'country_id' => Countries::where('country', $location->country)->get()->country,
-        'state_region_id' => StateRegions::where('state_region', $location->state_region)->get()->state_region,
-        'city_id' => Cities::where('city', $location->city)->get()->city,
-        'flickr_url' => $url
-      ]);
+      $tfphoto = new Tfphotos;
 
-      return ($tfphoto) ? true : false;
+      $tfphoto = $this->_storeLocationData($geo, $tfphoto);
+      $tfphoto->url = $this->_generateFlickrUrl($photo_data);
+      $tfphoto->save();
+
+      if(is_null($tfphoto->id)) {
+        return $this->message["error"]["store"];
+      }
+
+      // delete $id's row from accepted table
+      AcceptedPhotos::find($id)->delete();
+      return $this->message["success"]["store"];
     }
 
     /**
@@ -152,28 +169,57 @@ class AcceptsController extends Controller
     /**
      * Store location in respected tables if they don't yet exist.
      *
-     * @param  string  $country, $state_region, $city
-     * @return Void
+     * @param  string  $data, $tf
+     * @return Object
      */
-    protected function _searchAndStoreLocationData($country, $state_region, $city)
+    protected function _storeLocationData($data, $tf)
     {
+      $location = $data["photo"]["location"];
+      $country = $location["country"]["_content"];
+      $state_region = $location["region"]["_content"];
+      $city = $location["locality"]["_content"];
+      $county = $location["county"]["_content"];
+
+      // Store location data
       if(Countries::where('country', $country)->count() == 0) {
-        Countries::create([ 'country' => $country ]);
+        $tf->country_id = Countries::create([ 'country' => $country ]);
+      } else {
+        $tf->country_id = Countries::where('country', $country)->first()->id;
       }
 
-      if(!is_null($state_region)) {
-        if(StateRegions::where('state_region', $state_region)->count() == 0) {
-          StateRegions::create([ 'state-region' => $state_region ]);
-        }
+      if(StateRegions::where('state_region', $state_region)->count() == 0) {
+        $tf->state_region_id = StateRegions::create([ 'state_region' => $state_region ]);
+      } else {
+        $tf->state_region_id = StateRegions::where('state_region', $state_region)->first()->id;
       }
 
-      if(!is_null($city)) {
-        if(Cities::where('city', $city)->count() == 0) {
-          Cities::create([ 'city' => $city ]);
-        }
+      if(Cities::where('city', $city)->count() == 0) {
+        $tf->city_id = Cities::create([ 'city' => $city ]);
+      } else {
+        $tf->city_id = Cities::where('city', $city)->first()->id;
       }
+
+      if(County::where('county', $county)->count() == 0) {
+        $tf->county_id = County::create(['county' => $county ]);
+      } else {
+        $tf->county_id = County::where('county', $county)->first()->id;
+      }
+
+      // Store geo data
+      $tf->location_id = LocationData::create([
+        'lat' => $location["latitude"],
+        'long' => $location["longitude"],
+        'accuracy' => $location["accuracy"]
+        ])->id;
+      return $tf;
     }
 
+    /**
+     * Prepare flickr photo url.
+     *
+     * @param  $data
+     * @return string
+     */
     protected function _generateFlickrUrl($data)
     {
       return sprintf('https://farm%s.staticflickr.com/%d/%d_%s.jpg',
@@ -184,10 +230,16 @@ class AcceptsController extends Controller
           );
     }
 
+    /**
+     * Runs request to flickrs api for photos location data.
+     *
+     * @param  $id
+     * @return Array
+     */
     protected function _getGeoData($id)
     {
       $url = sprintf(
-        '%s%s&api_key=%s&photo_id=%sformat=%s&nojsoncallback=%d',
+        '%s%s&api_key=%s&photo_id=%s&format=%s&nojsoncallback=%d',
         $this->base_url,
         $this->method,
         \Config::get('constants.FLICKR_API'),
@@ -195,8 +247,16 @@ class AcceptsController extends Controller
         $this->format,
         $this->nojsoncallback
       );
-
       $client = new \GuzzleHttp\Client();
-      return $client->get($url);
+      $reponse = $client->get($url);
+
+      if($reponse->getStatusCode() == 200) {
+        $res_data = $reponse->getBody()->getContents();
+        return json_decode($res_data, true);
+      }
+      return false;
     }
+
+
+
 }

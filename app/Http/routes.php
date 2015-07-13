@@ -23,7 +23,8 @@ Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
   Route::resource('rejects', 'RejectsController', ['only' => ['index', 'destroy']]);
   Route::post('rejects/transfer/{id}/{table}', 'RejectsController@transfer');
 
-  Route::resource('accepts', 'AcceptsController', ['only' => ['index', 'store']]);
+  Route::resource('accepts', 'AcceptsController', ['only' => ['index']]);
+  Route::post('accepts/store/{id}', 'AcceptsController@store');
   Route::post('accepts/transfer/{id}/{table}', 'AcceptsController@transfer');
 });
 

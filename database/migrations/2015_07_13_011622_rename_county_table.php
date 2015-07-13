@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class LocationDataTable extends Migration
+class RenameCountyTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,7 @@ class LocationDataTable extends Migration
      */
     public function up()
     {
-      Schema::create('location_data', function (Blueprint $table) {
-          $table->increments('id');
-          $table->int('lat');
-          $table->int('long');
-          $table->int('accuracy');->nullable();
-      });
+        Schema::rename('county', 'counties');
     }
 
     /**
@@ -27,6 +22,6 @@ class LocationDataTable extends Migration
      */
     public function down()
     {
-      Schema::drop('location_data');
+        Schema::rename('counties', 'county');
     }
 }

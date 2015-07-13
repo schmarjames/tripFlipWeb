@@ -14,16 +14,18 @@ class TfphotosTable extends Migration
     {
       Schema::create('tfphotos', function (Blueprint $table) {
           $table->increments('id');
-          $table->int('location_id');
-          $table->int('country_id');
-          $table->int('state_region_id');->nullable();
-          $table->int('city_id')->nullable();
-          $table->string('flickr_url');
+          $table->integer('location_id');
+          $table->integer('country_id');
+          $table->integer('state_region_id')->nullable();
+          $table->integer('city_id')->nullable();
+          $table->integer('county_id')->nullable();
+          $table->string('url');
 
-          $table->foreign('country_id')->reference('id')->on('countries');
-          $table->foreign('state_region_id')->reference('id')->on('state_regions');
-          $table->foreign('city_id')->reference('id')->on('cities');
-          $table->foreign('location_id')->reference('id')->('location_data');
+          $table->foreign('country_id')->references('id')->on('countries');
+          $table->foreign('state_region_id')->references('id')->on('state_regions');
+          $table->foreign('city_id')->references('id')->on('cities');
+          $table->foreign('county_id')->references('id')->on('county');
+          $table->foreign('location_id')->references('id')->on('location_data');
       });
     }
 
