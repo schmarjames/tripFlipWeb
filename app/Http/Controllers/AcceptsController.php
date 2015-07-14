@@ -69,7 +69,7 @@ class AcceptsController extends Controller
     public function index()
     {
         $acceptedPhotos = AcceptedPhotos::all();
-        return $acceptedPhotos;
+        return response()->json($acceptedPhotos);
     }
 
     /**
