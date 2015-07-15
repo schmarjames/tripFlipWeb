@@ -59,14 +59,14 @@ class PhotoFilter {
                 'country' => $this->country,
                 'state_region' => $this->state_region,
                 'city' => $this->city,
-                'photo_data' => serialize($photoArr)
+                'photo_data' => json_encode($photoArr)
             ]);
         } else {
             RejectedPhotos::create([
                 'country' => $this->country,
                 'state_region' => $this->state_region,
                 'city' => $this->city,
-                'photo_data' => serialize($photoArr)
+                'photo_data' => json_encode($photoArr)
             ]);
         }
     }
