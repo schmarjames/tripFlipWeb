@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\RejectedPhotos;
 use App\AcceptedPhotos;
 use App\Countries;
 use App\StateRegions;
@@ -79,21 +80,22 @@ class AcceptsController extends Controller
      */
     public function store($id)
     {
-      return $this->_approvePhoto($id);
+      return response()->json($this->_approvePhoto($id));
     }
 
     /**
      * Moves photo to reject table.
      *
-     * @param  int  $id, string $table
+     * @param  int  $id
      * @return Response
      */
-    public function transfer($id, $table)
+    public function transfer($id)
     {
+        if(!is_numeric($id)) return $this->message["error"]["transfer"];
         $photo = AcceptedPhotos::find($id);
 
         // Insert photo data in table
-        $reject = Rejected::create([
+        $reject = RejectedPhotos::create([
           'country' => $photo->country,
           'state_region' => $photo->state_region,
           'city' => $photo->city,
@@ -121,11 +123,12 @@ class AcceptsController extends Controller
       $geo;
       $tfphoto;
 
+      if(!is_numeric($id)) return $this->message["error"]["store"];
       $photo = AcceptedPhotos::find($id);
-      $photo_data = unserialize($photo->photo_data);
+      $photo_data = json_decode($photo->photo_data);
 
       // Get Geo Lat Long Data
-      $geo = $this->_getGeoData($photo_data["id"]);
+      $geo = $this->_getGeoData($photo_data->id);
 
       $tfphoto = new Tfphotos;
 
@@ -161,6 +164,7 @@ class AcceptsController extends Controller
      */
     public function destroy($id)
     {
+      if(!is_numeric($id)) return $this->message["error"]["delete"];
       $photo = AccpetedPhotos::find($id);
 
       return $photo->delete();
@@ -223,10 +227,10 @@ class AcceptsController extends Controller
     protected function _generateFlickrUrl($data)
     {
       return sprintf('https://farm%s.staticflickr.com/%d/%d_%s.jpg',
-              $data['farm'],
-              $data['server'],
-              $data['id'],
-              $data['secret']
+              $data->farm,
+              $data->server,
+              $data->id,
+              $data->secret
           );
     }
 

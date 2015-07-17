@@ -6,6 +6,14 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\RejectedPhotos;
+use App\AcceptedPhotos;
+use App\Countries;
+use App\StateRegions;
+use App\Cities;
+use App\County;
+use App\LocationData;
+use App\Tfphotos;
 
 class RejectsController extends Controller
 {
@@ -31,7 +39,7 @@ class RejectsController extends Controller
     public function index()
     {
       $rejectedPhotos = RejectedPhotos::all();
-      return $rejectedPhotos;
+      return response()->json($rejectedPhotos);
     }
 
     /**
@@ -42,23 +50,26 @@ class RejectsController extends Controller
      */
     public function destroy($id)
     {
-      $photo = RejectedPhotos::find($id);
+      if(!is_numeric($id)) return $this->message["error"]["delete"];
+      $photo = RejectedPhotos::find($id)->delete();
 
-      return $photo->delete();
+      return return $this->message["error"]["delete"];
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id, string $table
+     * @param  int  $id
      * @return Response
      */
-    public function transfer($id, $table)
+    public function transfer($id)
     {
+
+      if(!is_numeric($id)) return $this->message["error"]["transfer"];
       $photo = RejectedPhotos::find($id);
 
       // Insert photo data in table
-      $reject = Accepted::create([
+      $reject = AcceptedPhotos::create([
         'country' => $photo->country,
         'state_region' => $photo->state_region,
         'city' => $photo->city,
