@@ -12,7 +12,23 @@ use Tymon\JWTAuth\Exception\JWTException;
 class AuthenticateController extends Controller
 {
 
-  public function authenticate(Request $request) {
+  public function adminAuth(Request $request) {
+    Config::set('auth.model', 'App\AdminUser');
+    $credentials = $request->only('email', 'password');
+
+    try {
+      if (! $token = JWTAuth::attempt($credentials)) {
+        return response()->json(['error' => 'invalid_credentials'], 401);
+      }
+    } catch (JWTException $e) {
+      return response()->json(['error' => 'invalid_credentials']);
+    }
+
+    return response()->json(compact('token'));
+  }
+
+  public function auth(Request $request) {
+    Config::set('auth.model', 'App\User');
     $credentials = $request->only('email', 'password');
 
     try {

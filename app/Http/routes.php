@@ -17,7 +17,7 @@ Route::get('/', function () {
 
 Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
   Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
-  Route::post('authenticate', 'AuthenticateController@authenticate');
+  Route::post('adminauth', 'AuthenticateController@adminAuth');
   Route::get('authenticate/user', 'AuthenticateController@getAuthenticatedUser');
 
   Route::resource('rejects', 'RejectsController', ['only' => ['index', 'destroy']]);
@@ -26,6 +26,15 @@ Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
   Route::resource('accepts', 'AcceptsController', ['only' => ['index']]);
   Route::post('accepts/store/{id}', 'AcceptsController@store');
   Route::post('accepts/transfer/{id}', 'AcceptsController@transfer');
+
+  Route::resource('gallery/{id}', 'GalleryController');
+  Route::post('gallery/{id}/{country_id}/{query_num}', 'GalleryController@getPhotos');
+
+
+  Route::post('photo/likelist/{photo_id}', 'PhotoController@getSpecificLikes');
+  Route::post('photo/visitors/{photo_id}', 'PhotoController@getVisitors');
+  Route::post('photo/views/{view_array}', 'PhotoController@addViews');
+  Route::post('photo/like/{id}/{like_array}', 'PhotoController@addLikes');
 });
 
 
