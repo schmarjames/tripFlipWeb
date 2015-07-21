@@ -18,12 +18,41 @@ class DatabaseSeeder extends Seeder
         //$this->call('LocationQueryTableSeeder');
 
         /*DB::table('users')->insert([
-            'name' => 'Schmar',
-            'email' => 'loyd.slj@gmail.com',
+            'name' => 'Rob',
+            'email' => 'rob@gmail.com',
             'password' => bcrypt('AudiR8'),
+            'address' => '4537 S. Leclaire',
+            'city' => 'Chicago',
+            'state_region' => 'Illinois',
+            'country' => 'USA',
+            'zip_code' => '60638',
+            'profile_pic' => 'img/profie.jpg',
+            'geo' => "4.3, 2.3",
             'created_at' => Carbon\Carbon::now(),
             'updated_at' => Carbon\Carbon::now(),
         ]);*/
+
+        /*DB::table('gallery')->insert([
+            'user_id' => 4,
+            'country_list' => json_encode([2,3,4,5,6,7])
+        ]);*/
+
+        DB::table('likes')->insert([
+            'user_id' => 4,
+            'photo_id' => 1,
+        ]);
+        DB::table('likes')->insert([
+            'user_id' => 4,
+            'photo_id' => 2,
+        ]);
+        DB::table('likes')->insert([
+            'user_id' => 4,
+            'photo_id' => 6,
+        ]);
+        DB::table('likes')->insert([
+            'user_id' => 4,
+            'photo_id' => 5,
+        ]);
 
         Model::reguard();
     }

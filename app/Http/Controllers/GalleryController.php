@@ -18,13 +18,12 @@ class GalleryController extends Controller
     "error" => [
       "get_countries" => "Sorry, unable to get your favorite countries",
       "get_country_photos" => "Sorry, unable to get the countries photos"
-    ],
-    "success" => [
-      "store" => "Photo was successfully approved",
-      "transfer" => "Photo was successfully moved to the rejected table",
-      "delete" => "Photo is now deleted"
-      ]
+    ]
   ];
+
+  public function __construct() {
+      $this->middleware('jwt.auth');
+  }
 
   /**
    * Return a list of country ids based on the users id.
@@ -32,7 +31,7 @@ class GalleryController extends Controller
    * @param  int  $id
    * @return Response
    */
-    public function index($id)
+    public function getGallery($id)
     {
         if (!is_numeric($id) || is_null($id)) return response()->json($this->message["error"]["get_countries"]);
 
@@ -51,13 +50,24 @@ class GalleryController extends Controller
     {
       if (!is_numeric($id) || !is_numeric($country_id)) return response()->json($this->message["error"]["get_country_photos"]);
       $limit = 50;
+      $query_num = (is_null($query_num) || !is_numeric($query_num) || $query_num < 1) ? 1 : $query_num;
       $start_row = ($query_num * $limit) - $limit;
-      $query_num = (is_null($query_num) || !is_numeric($query_num) || $query_num < 1) ? 1 * $max : $query_num * $max;
 
-      if(Countries::first($country_id)) {
+      if(Countries::where('id', $country_id)->first()) {
         // get all photos liked by user
-        $likes = Likes::find($id)->get('photo_id')->toArray();
-        return response()->json(Tfphotos::whereIn('country_id', $likes)-take($limit)->skip($start_row)->get('url')->toArray());
+        $likes = Likes::where('user_id', $id)
+          ->select('photo_id')
+          ->get()
+          ->toArray();
+        
+        return response()->json(
+          Tfphotos::whereIn('country_id', $likes)
+            ->take($limit)
+            ->skip($start_row)
+            ->select('url')
+            ->get()
+            ->toArray()
+        );
       }
       return response()->json($this->message["error"]["get_country_photos"]);
     }

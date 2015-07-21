@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
-  Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
+  Route::resource('auth', 'AuthenticateController@auth');
   Route::post('adminauth', 'AuthenticateController@adminAuth');
   Route::get('authenticate/user', 'AuthenticateController@getAuthenticatedUser');
 
@@ -27,7 +27,7 @@ Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
   Route::post('accepts/store/{id}', 'AcceptsController@store');
   Route::post('accepts/transfer/{id}', 'AcceptsController@transfer');
 
-  Route::resource('gallery/{id}', 'GalleryController');
+  Route::get('gallery/{id}', 'GalleryController@getGallery');
   Route::post('gallery/{id}/{country_id}/{query_num}', 'GalleryController@getPhotos');
 
 

@@ -13,7 +13,8 @@ class AuthenticateController extends Controller
 {
 
   public function adminAuth(Request $request) {
-    Config::set('auth.model', 'App\AdminUser');
+    \Config::set('auth.model', 'App\AdminUsers');
+    //var_dump($request->url()); die();
     $credentials = $request->only('email', 'password');
 
     try {
@@ -28,7 +29,7 @@ class AuthenticateController extends Controller
   }
 
   public function auth(Request $request) {
-    Config::set('auth.model', 'App\User');
+    \Config::set('auth.model', 'App\User');
     $credentials = $request->only('email', 'password');
 
     try {
