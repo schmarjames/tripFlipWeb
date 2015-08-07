@@ -19,6 +19,9 @@ Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
   Route::resource('auth', 'AuthenticateController@auth');
   Route::post('adminauth', 'AuthenticateController@adminAuth');
   Route::get('authenticate/user', 'AuthenticateController@getAuthenticatedUser');
+  Route::post('authregister', 'AuthenticateController@authRegister');
+  Route::post('authAssignTemp', 'AuthenticateController@assignTemporaryPassword');
+  Route::post('authChangeCred', 'AuthenticateController@changeUserCredentials');
 
   Route::resource('rejects', 'RejectsController', ['only' => ['index', 'destroy']]);
   Route::post('rejects/transfer/{id}', 'RejectsController@transfer');
