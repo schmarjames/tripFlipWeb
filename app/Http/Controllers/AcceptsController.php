@@ -42,7 +42,8 @@ class AcceptsController extends Controller
           */
 
   protected $base_url = 'https://api.flickr.com/services/rest/?method=';
-  protected $method = 'flickr.photos.geo.getLocation';
+  protected $geo_method = 'flickr.photos.geo.getLocation';
+  protected $info_method = 'flickr.photos.getInfo';
   protected $format = 'json';
   protected $nojsoncallback = 1;
   protected $message = [
@@ -59,6 +60,7 @@ class AcceptsController extends Controller
   ];
 
     public function __construct() {
+        \Config::set('auth.model', 'App\AdminUsers');
         $this->middleware('jwt.auth');
     }
 
@@ -129,7 +131,8 @@ class AcceptsController extends Controller
 
       // Get Geo Lat Long Data
       $geo = $this->_getGeoData($photo_data->id);
-
+      $author = $this->_getMetaData($photo_data->id);
+      dd($author);
       $tfphoto = new Tfphotos;
 
       $tfphoto = $this->_storeLocationData($geo, $tfphoto);
@@ -245,7 +248,7 @@ class AcceptsController extends Controller
       $url = sprintf(
         '%s%s&api_key=%s&photo_id=%s&format=%s&nojsoncallback=%d',
         $this->base_url,
-        $this->method,
+        $this->geo_method,
         \Config::get('constants.FLICKR_API'),
         $id,
         $this->format,
@@ -261,6 +264,33 @@ class AcceptsController extends Controller
       return false;
     }
 
+  /**
+   * Runs request to flickrs api for photos author and miscelaneous data.
+   *
+   * @param  $id
+   * @return String
+   */
+  protected function _getMetaData($id)
+  {
+    $url = sprintf(
+      '%s%s&api_key=%s&photo_id=%s&format=%s&nojsoncallback=%d',
+      $this->base_url,
+      $this->info_method,
+      \Config::get('constants.FLICKR_API'),
+      $id,
+      $this->format,
+      $this->nojsoncallback
+    );
+    $client = new \GuzzleHttp\Client();
+    $response = $client->get($url);
 
+    if($response->getStatusCode() == 200) {
+      $res_data = $response->getBody()->getContents();
+      $data = json_decode($res_data, true);
+      return ($data['photo']['owner']['realname'] !== "") ?
+        $data['photo']['owner']['realname'] :
+        $data['photo']['owner']['username'];
+    }
+  }
 
 }

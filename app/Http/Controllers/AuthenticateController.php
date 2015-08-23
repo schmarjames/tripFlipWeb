@@ -68,8 +68,12 @@ class AuthenticateController extends Controller
     return response()->json($newUser);
   }
 
-  public function getAuthenticatedUser() {
-
+  public function getAuthenticatedUser(Request $request) {
+    if (!!$request->input('mobile')) {
+      \Config::set('auth.model', 'App\User');
+    } else {
+      \Config::set('auth.model', 'App\AdminUsers');
+    }
     try {
       if (!$user = JWTAuth::parseToken()->authenticate()) {
         return response()->json(['user_not_found'], 404);

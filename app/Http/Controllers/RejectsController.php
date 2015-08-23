@@ -29,6 +29,7 @@ class RejectsController extends Controller
   ];
 
   public function __construct() {
+    \Config::set('auth.model', 'App\AdminUsers');
     $this->middleware('jwt.auth');
   }
     /**

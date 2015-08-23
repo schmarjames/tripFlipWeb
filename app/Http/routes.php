@@ -34,6 +34,7 @@ Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
   Route::post('gallery/{id}/{country_id}/{query_num}', 'GalleryController@getPhotos');
 
 
+  Route::post('photo/collection', 'PhotoController@getCollection');
   Route::post('photo/likelist/{photo_id}', 'PhotoController@getSpecificLikes');
   Route::post('photo/visitors/{photo_id}', 'PhotoController@getVisitors');
   Route::post('photo/views/{view_array}', 'PhotoController@addViews');

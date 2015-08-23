@@ -20,6 +20,7 @@ class PhotoController extends Controller
   ];
 
   public function __construct() {
+      \Config::set('auth.model', 'App\User');
       $this->middleware('jwt.auth');
   }
 
@@ -57,5 +58,27 @@ class PhotoController extends Controller
         return true;
       }
       return false;
+    }
+
+    public function getCollection(Request $request) {
+      $data = $request->only('amount', 'latestPhoto', 'latest');
+      // check if this query is for previous or latest posted photos
+      if((bool)$data['latest']) {
+        return response()->json();
+      }
+
+      // query photos with a limit equal to requested amount
+      $collection = \DB::table('tfphotos')
+        ->join('location_data', 'tfphotos.location_id', '=', 'location_data.id')
+        ->join('countries', 'tfphotos.country_id', '=', 'countries.id')
+        ->leftJoin('state_regions', 'tfphotos.state_region_id', '=', 'state_regions.id')
+        ->leftJoin('cities' , 'tfphotos.city_id', '=', 'cities.id')
+        ->leftJoin('counties', 'tfphotos.county_id', '=', 'counties.id')
+        ->take($data['amount'])
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+      // return collection of photos and last photos id
+      return response()->json($collection);
     }
 }

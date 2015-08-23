@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
         Model::unguard();
 
         // $this->call('UserTableSeeder');
-        //$this->call('LocationQueryTableSeeder');
+        $this->call('LocationQueryTableSeeder');
 
         /*DB::table('users')->insert([
             'name' => 'Rob',
@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
             'country_list' => json_encode([2,3,4,5,6,7])
         ]);*/
 
-        DB::table('likes')->insert([
+        /*DB::table('likes')->insert([
             'user_id' => 4,
             'photo_id' => 1,
         ]);
@@ -52,7 +52,7 @@ class DatabaseSeeder extends Seeder
         DB::table('likes')->insert([
             'user_id' => 4,
             'photo_id' => 5,
-        ]);
+        ]);*/
 
         Model::reguard();
     }

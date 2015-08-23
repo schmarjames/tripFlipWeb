@@ -7,7 +7,7 @@ class LocationQueryTableSeeder extends Seeder {
     public function run() {
         DB::table('location_query')->insert(
             array(
-                array(
+                /*array(
                     "country"       => "spain",
                     "state_region"  => "",
                     "city"          => 'barcelona',
@@ -32,6 +32,13 @@ class LocationQueryTableSeeder extends Seeder {
                     "country"       => "argentina",
                     "state_region"  => "",
                     "city"          => 'buenos, aires',
+                    "total_pages"   => 0,
+                    "current_page"  => 0
+                ),*/
+                array(
+                    "country"       => "",
+                    "state_region"  => "",
+                    "city"          => 'San Francisco',
                     "total_pages"   => 0,
                     "current_page"  => 0
                 )
