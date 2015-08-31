@@ -35,10 +35,11 @@ Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
 
 
   Route::post('photo/collection', 'PhotoController@getCollection');
+  Route::post('photo/updatecount', 'PhotoController@getUpdatePhotoFeedCount');
   Route::post('photo/likelist/{photo_id}', 'PhotoController@getSpecificLikes');
   Route::post('photo/visitors/{photo_id}', 'PhotoController@getVisitors');
   Route::post('photo/views/{view_array}', 'PhotoController@addViews');
-  Route::post('photo/like/{id}/{like_array}', 'PhotoController@addLikes');
+  Route::post('photo/like/{user_id}/{photo_id}', 'PhotoController@addLikes');
 });
 
 

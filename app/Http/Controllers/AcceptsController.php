@@ -132,11 +132,11 @@ class AcceptsController extends Controller
       // Get Geo Lat Long Data
       $geo = $this->_getGeoData($photo_data->id);
       $author = $this->_getMetaData($photo_data->id);
-      dd($author);
-      $tfphoto = new Tfphotos;
 
+      $tfphoto = new Tfphotos;
       $tfphoto = $this->_storeLocationData($geo, $tfphoto);
       $tfphoto->url = $this->_generateFlickrUrl($photo_data);
+      $tfphoto->author = $author;
       $tfphoto->save();
 
       if(is_null($tfphoto->id)) {
@@ -255,10 +255,10 @@ class AcceptsController extends Controller
         $this->nojsoncallback
       );
       $client = new \GuzzleHttp\Client();
-      $reponse = $client->get($url);
+      $response = $client->get($url);
 
-      if($reponse->getStatusCode() == 200) {
-        $res_data = $reponse->getBody()->getContents();
+      if($response->getStatusCode() == 200) {
+        $res_data = $response->getBody()->getContents();
         return json_decode($res_data, true);
       }
       return false;
