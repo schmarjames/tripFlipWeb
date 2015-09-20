@@ -153,6 +153,11 @@ return [
          * CORS Support
          */
         Barryvdh\Cors\ServiceProvider::class,
+
+	/*
+         * DB Backup
+         */
+        BackupManager\Laravel\Laravel5ServiceProvider::class,
     ],
 
     /*
