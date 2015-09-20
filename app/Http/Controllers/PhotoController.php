@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Likes;
 use App\User;
 use App\Tfphotos;
+use App\ViewedPhotos;
 
 class PhotoController extends Controller
 {
@@ -59,19 +60,39 @@ class PhotoController extends Controller
 
           foreach ($likes_arr as $like) {
             dd($like);
-            Likes::create([
-              'user_id' => $id,
-              'photo_id' => $like
-            ]);
+            $currentLikeCount = Likes::where(["photo_id" => $like, "user_id" => $user->id])->get()->count();
+
+            if ($currentLikeCount == 0) {
+              Likes::create([
+                'user_id' => $id,
+                'photo_id' => $like
+              ]);
+            } else {
+              Likes::where(["photo_id" => $like, "user_id" => $user->id])->delete();
+            }
+
           }
           return response()->json(1);
         }
 
-        Likes::create([
-          'user_id' => $id,
-          'photo_id' => $like
-        ]);
-        return response()->json(1);
+        $currentLikeCount = Likes::where(["photo_id" => $like, "user_id" => $user->id])
+          ->get()
+          ->count();
+
+        if ($currentLikeCount == 0) {
+          // Add like
+          Likes::create([
+            'user_id' => $id,
+            'photo_id' => $like
+          ]);
+          return response()->json(1);
+        }
+        // Remove like
+        else {
+          Likes::where(["photo_id" => $like, "user_id" => $user->id])->delete();
+          return response()->json(0);
+        }
+
       }
 
       return response()->json(["error" => "Unauthorized users cannot use this functionality."]);
@@ -79,6 +100,7 @@ class PhotoController extends Controller
 
     public function getCollection(Request $request) {
       $data = $request->only('amount', 'lastQueryId', 'latest');
+      $user = \JWTAuth::parseToken()->authenticate();
 
       // If adding more photos to feed
       if (is_numeric($data['lastQueryId']) && !(bool)$data['latest']) {
@@ -105,6 +127,7 @@ class PhotoController extends Controller
           ->orderBy('created_at', 'asc')
           ->get();
       }
+
       // If initial query for feed
       else {
           $collection = Tfphotos::select('tfphotos.*', 'location_data.lat', 'location_data.long', 'countries.country', 'state_regions.state_region', 'cities.city', 'counties.county')
@@ -119,14 +142,57 @@ class PhotoController extends Controller
       }
 
       // include the likes and weather data foreach photo
-      $collection = $collection->map(function($photo, $v) {
-        $photo['likes'] = Likes::where("photo_id", $photo->id)->select("user_id")->get()->count();
+      $collection = $collection->map(function($photo, $v) use ($user) {
+        $photoLikedTotal = Likes::where("photo_id", $photo->id)->select("user_id")->get()->count();
+        $userLiked = Likes::where(["photo_id" => $photo->id, "user_id" => $user->id])->select("user_id")->get();
+
+        $photo['likes'] = $photoLikedTotal;
+        $photo['likedByUser'] = ($userLiked->count() > 0 ? true : false);
         $photo["weatherCondition"] = $this->getWeatherData($photo["lat"], $photo["long"])["weather"][0]["description"];
 
         return $photo;
       });
       // return collection of photos and last photos id
       return response()->json($collection);
+    }
+
+    public function getRandomCollection(Request $request) {
+      $data = \Input::all();
+
+      $userId = $data["userId"];
+      $viewedPhotos = $data["viewedPhotos"];
+      // Add view photos to database
+      if (count($viewedPhotos) > 0) {
+          $this->_storeUsersViewedPhotoIds($userId, $viewedPhotos);
+      }
+
+      $viewed = array_column($this->_getUsersViewedPhotoIds($userId)->toArray(), "photo_id");
+      $randoms = Tfphotos::select('id', 'url')
+        ->whereNotIn("id", function($query) use($userId) {
+          $query->from('likes')
+            ->selectRaw('photo_id')
+            ->where('user_id', '=', $userId);
+        })
+        ->whereNotIn("id", $viewed)
+        ->orderBy(\DB::raw('random()'))
+        ->take(20)
+        ->get();
+
+      return response()->json($randoms);
+    }
+
+    private function _storeUsersViewedPhotoIds($userId, $photos) {
+      foreach($photos as $photoId) {
+        ViewedPhotos::updateOrCreate(["user_id" => $userId, "photo_id" => $photoId]);
+      }
+    }
+
+    private function _getUsersViewedPhotoIds($userId) {
+      return ViewedPhotos::where("user_id", $userId)->select(["photo_id"])->get();
+    }
+
+    private function _removeUsersViewedPhotoRecord() {
+
     }
 
     public function getUpdatePhotoFeedCount(Request $request) {
