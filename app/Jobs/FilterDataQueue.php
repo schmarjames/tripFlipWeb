@@ -39,8 +39,8 @@ class FilterDataQueue extends Job implements SelfHandling, ShouldQueue
      */
     public function handle()
     {
-        foreach($ids as $id) {
-          $entry = TmpFlickrData::where('id', '=', $id)->get();
+        foreach($this->flickrEntries as $flickrEntry) {
+          $entry = TmpFlickrData::where('id', '=', $flickrEntry)->get();
           $this->_processPhotoCollection($entry);
         }
     }
