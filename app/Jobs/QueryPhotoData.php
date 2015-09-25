@@ -33,6 +33,7 @@ class QueryPhotoData extends Job implements SelfHandling, ShouldQueue
      */
     public function handle()
     {
-        PhotoData->prepareRequest($this->locations);
+        $photo = new PhotoData();
+        $photo->prepareRequest($this->locations);
     }
 }
