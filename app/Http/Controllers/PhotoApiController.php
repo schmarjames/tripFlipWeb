@@ -16,6 +16,12 @@ class PhotoApiController extends Controller
       $this->dispatch(new QueryPhotoData($locations));
     }
 
+    public function filterData(Request $request) {
+      $tmpData = TmpFlickrData::where('created_at', '<=', Carbon::now())->get();
+
+      $this->dispatch(new FilterDataQueue($tmpData));
+    }
+
     /**
      * Display a listing of the resource.
      *

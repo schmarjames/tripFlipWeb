@@ -24,6 +24,7 @@ Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
   Route::post('authChangeCred', 'AuthenticateController@changeUserCredentials');
 
   Route::post('location', 'PhotoApiController@locationQuery');
+  Route::post('filter', 'PhotoApiController@filterData');
 
   Route::resource('rejects', 'RejectsController', ['only' => ['index', 'destroy']]);
   Route::post('rejects/transfer/{id}', 'RejectsController@transfer');
