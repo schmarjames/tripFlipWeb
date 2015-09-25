@@ -51,14 +51,14 @@ class FilterDataQueue extends Job implements SelfHandling, ShouldQueue
      *  @return void
      */
    protected function _processPhotoCollection($entry) {
-     foreach ($entry as $e) {
-         $this->country      = $e->country;
-         $this->state_region = $e->state_region;
-         $this->city         = $e->city;
+
+         $this->country      = $entry->country;
+         $this->state_region = $entry->state_region;
+         $this->city         = $entry->city;
 
        //check each photo of this entry to see if its valid
-       $this->_sortPhotoCollection(unserialize($e->response_data));
-     }
+       $this->_sortPhotoCollection(unserialize($entry->response_data));
+
    }
 
     /*
