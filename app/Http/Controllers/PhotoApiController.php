@@ -20,9 +20,9 @@ class PhotoApiController extends Controller
     }
 
     public function filterData(Request $request) {
-      $tmpData = TmpFlickrData::where('created_at', '<=', Carbon::now())->get();
+      $tmpIds = TmpFlickrData::where('created_at', '<=', Carbon::now())->select('id')->get();
 
-      $this->dispatch(new FilterDataQueue($tmpData));
+      $this->dispatch(new FilterDataQueue($tmpIds));
     }
 
     /**

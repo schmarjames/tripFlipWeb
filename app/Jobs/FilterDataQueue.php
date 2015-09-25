@@ -27,9 +27,9 @@ class FilterDataQueue extends Job implements SelfHandling, ShouldQueue
      *
      * @return void
      */
-    public function __construct($tmp)
+    public function __construct($ids)
     {
-        $this->flickrEntries = $tmp;
+        $this->flickrEntries = $ids;
     }
 
     /**
@@ -39,7 +39,10 @@ class FilterDataQueue extends Job implements SelfHandling, ShouldQueue
      */
     public function handle()
     {
-        $this->_processPhotoCollection();
+        foreach($ids as $id) {
+          $entry = TmpFlickrData::where('id', '=', $id)->get();
+          $this->_processPhotoCollection($entry);
+        }
     }
 
     /*
@@ -47,14 +50,14 @@ class FilterDataQueue extends Job implements SelfHandling, ShouldQueue
      *
      *  @return void
      */
-   protected function _processPhotoCollection() {
-     foreach ($this->flickrEntries as $flickrEntry) {
-         $this->country      = $flickrEntry->country;
-         $this->state_region = $flickrEntry->state_region;
-         $this->city         = $flickrEntry->city;
+   protected function _processPhotoCollection($entry) {
+     foreach ($entry as $e) {
+         $this->country      = $e->country;
+         $this->state_region = $e->state_region;
+         $this->city         = $e->city;
 
        //check each photo of this entry to see if its valid
-       $this->_sortPhotoCollection(unserialize($flickrEntry->response_data));
+       $this->_sortPhotoCollection(unserialize($e->response_data));
      }
    }
 
