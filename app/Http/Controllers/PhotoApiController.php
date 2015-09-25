@@ -29,16 +29,18 @@ class PhotoApiController extends Controller
 
     public function filterData(Request $request) {
       $temps = TmpFlickrData::where('created_at', '<=', Carbon::now())->select('id')->get()->toArray();
-      $tmpIds = array_column($temps, 'id');
+      $this->flickrEntries = array_column($temps, 'id');
       //$this->dispatch(new FilterDataQueue($tmpIds));
-      $entry = TmpFlickrData::where('id', '=', $flickrEntry)->get();
+      foreach($this->flickrEntries as $flickrEntry) {
+          $entry = TmpFlickrData::where('id', '=', $flickrEntry)->get();
 
-      $this->country      = $entry->country;
-      $this->state_region = $entry->state_region;
-      $this->city         = $entry->city;
+          $this->country      = $entry->country;
+          $this->state_region = $entry->state_region;
+          $this->city         = $entry->city;
 
-    //check each photo of this entry to see if its valid
-    $this->_sortPhotoCollection(unserialize($entry->response_data));
+        //check each photo of this entry to see if its valid
+        $this->_sortPhotoCollection(unserialize($entry->response_data));
+      }
     }
 
     /*
