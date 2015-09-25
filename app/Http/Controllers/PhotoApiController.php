@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Jobs\QueryPhotoData;
+use App\Jobs\FilterDataQueue;
 use App\LocationQuery;
 use App\TmpFlickrData;
+use Carbon\Carbon;
 
 class PhotoApiController extends Controller
 {
