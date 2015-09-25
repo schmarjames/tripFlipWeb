@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace TripFlip;
 
 use DB;
 use App\TmpFlickrData;
@@ -15,12 +15,7 @@ class PhotoData {
     protected $format = 'json';
     protected $nojsoncallback = 1;
 
-
-    public function queryPhotos() { $this->_prepareRequest(); }
-
-    protected function _prepareRequest() {
-      // get all locations from location query table
-      $locations = LocationQuery::all();
+    public function prepareRequest($locations) {
 
       foreach ($locations as $location) {
         if($location->total_pages == 0 || !($location->current_page == $location->total_pages)) {

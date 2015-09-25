@@ -1,7 +1,7 @@
 import os, sys, urllib, cStringIO
 from PIL import Image
 sys.path.append('/usr/local/lib/python2.7/site-packages')
-import cv2 
+import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 

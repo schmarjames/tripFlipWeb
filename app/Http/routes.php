@@ -23,6 +23,8 @@ Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
   Route::post('authAssignTemp', 'AuthenticateController@assignTemporaryPassword');
   Route::post('authChangeCred', 'AuthenticateController@changeUserCredentials');
 
+  Route::post('location', 'PhotoApiController@locationQuery');
+
   Route::resource('rejects', 'RejectsController', ['only' => ['index', 'destroy']]);
   Route::post('rejects/transfer/{id}', 'RejectsController@transfer');
 
@@ -41,17 +43,4 @@ Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
   Route::post('photo/visitors/{photo_id}', 'PhotoController@getVisitors');
   Route::post('photo/views/{view_array}', 'PhotoController@addViews');
   Route::post('photo/like/{user_id}/{photo_id}', 'PhotoController@addLikes');
-});
-
-
-Route::get('/photos', function () {
-    //dd(Carbon\Carbon::now());
-
-    //$photos = new App\Console\Commands\PhotoFilter();
-
-
-    //$locations = App\LocationQuery::all();
-    //$photoData = new App\Console\Commands\PhotoData();
-    //$photoData->queryPhotos();
-
 });
