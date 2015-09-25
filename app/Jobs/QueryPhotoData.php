@@ -21,7 +21,7 @@ class QueryPhotoData extends Job implements SelfHandling, ShouldQueue
      *
      * @return void
      */
-    public function __construct(LocationQuery $locations)
+    public function __construct($locations)
     {
         $this->locations = $locations;
     }
