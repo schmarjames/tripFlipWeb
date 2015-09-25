@@ -16,7 +16,7 @@ class PhotoData {
     protected $nojsoncallback = 1;
 
     public function prepareRequest($locations) {
-
+      var_dump("im here"); die();
       foreach ($locations as $location) {
         if($location->total_pages == 0 || !($location->current_page == $location->total_pages)) {
           $this->search_string = "";
