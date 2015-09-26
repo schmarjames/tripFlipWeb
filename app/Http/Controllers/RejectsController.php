@@ -37,26 +37,25 @@ class RejectsController extends Controller
      *
      * @return Response
      */
-    public function index($amount, $lastQueryId)
+    /*public function index($amount, $lastQueryId)
     {
       $rejectedPhotos;
       if (is_numeric($lastQueryId)) {
         $rejectedPhotos = rejectedPhotos::select('*')
           ->where('id', '<', $lastQueryId)
           ->take($amount)
-          -get();
+          ->get();
       } else {
         $rejectedPhotos = rejectedPhotos::select('*')
           ->take($amount)
-          -get();
+          ->get();
       }
-      $rejectedPhotos = RejectedPhotos::all();
 
       var_dump($amount);
       var_dump($lastQueryId);
       die();
       //eturn response()->json($rejectedPhotos);
-    }
+    }*/
 
     public function queryPhotos($amount, $lastQueryId) {
       $rejectedPhotos;
@@ -64,18 +63,14 @@ class RejectsController extends Controller
         $rejectedPhotos = rejectedPhotos::select('*')
           ->where('id', '<', $lastQueryId)
           ->take($amount)
-          -get();
+          ->get();
       } else {
         $rejectedPhotos = rejectedPhotos::select('*')
           ->take($amount)
           ->get();
       }
-      $rejectedPhotos = RejectedPhotos::all();
 
-      var_dump($amount);
-      var_dump($lastQueryId);
-      die();
-      //eturn response()->json($rejectedPhotos);
+      return response()->json($rejectedPhotos);
     }
 
     /**
