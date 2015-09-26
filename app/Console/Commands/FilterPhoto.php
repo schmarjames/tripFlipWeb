@@ -98,7 +98,7 @@ class FilterPhoto extends Command
     */
    protected function _filterPhoto($url) {
        // pass url to python script
-       return (bool)exec("python scanPhoto.py $url");
+       return (bool)exec("python ../../../public/scanPhoto.py $url");
    }
 
      /*
