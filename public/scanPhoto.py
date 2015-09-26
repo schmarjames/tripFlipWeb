@@ -1,5 +1,6 @@
 import os, sys, urllib, cStringIO
 from PIL import Image
+sys.path.append('/home/forge/opencv-2.4.9/build/lib');
 import cv2 
 import numpy as np
 
@@ -44,6 +45,7 @@ def detectText(img):
     return len(contours)
 
 detect = 0
+
 img = createImage(sys.argv[1]);
 
 if (detectFace(img) == 0) and (detectText(img) < 2):
