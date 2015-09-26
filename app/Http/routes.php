@@ -25,7 +25,7 @@ Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
 
   Route::post('location', 'PhotoApiController@locationQuery');
 
-  Route::resource('rejects/{amount}/{lastQuery}', 'RejectsController', ['only' => ['index', 'destroy']]);
+  Route::resource('rejects', 'RejectsController', ['only' => ['index', 'destroy']]);
   Route::resource('rejects/photos/{amount}/{lastQuery}', 'RejectsController@queryPhotos');
   Route::post('rejects/transfer/{id}', 'RejectsController@transfer');
 
