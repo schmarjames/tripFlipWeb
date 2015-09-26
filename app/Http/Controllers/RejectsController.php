@@ -58,6 +58,26 @@ class RejectsController extends Controller
       //eturn response()->json($rejectedPhotos);
     }
 
+    public function queryPhotos($amount, $lastQueryId) {
+      $rejectedPhotos;
+      if (is_numeric($lastQueryId)) {
+        $rejectedPhotos = rejectedPhotos::select('*')
+          ->where('id', '<', $lastQueryId)
+          ->take($amount)
+          -get();
+      } else {
+        $rejectedPhotos = rejectedPhotos::select('*')
+          ->take($amount)
+          -get();
+      }
+      $rejectedPhotos = RejectedPhotos::all();
+
+      var_dump($amount);
+      var_dump($lastQueryId);
+      die();
+      //eturn response()->json($rejectedPhotos);
+    }
+
     /**
      * Remove the specified resource from storage.
      *
