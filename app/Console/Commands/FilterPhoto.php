@@ -1,20 +1,24 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Console\Commands;
 
-use App\TmpFlickrData;
-use App\AcceptedPhotos;
-use App\RejectedPhotos;
-use Carbon\Carbon;
-use App\Jobs\Job;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Bus\SelfHandling;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Console\Command;
 
-class FilterDataQueue extends Job implements SelfHandling, ShouldQueue
+class FilterPhoto extends Command
 {
-    use InteractsWithQueue, SerializesModels;
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'filter:photo';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Filter images with people or text in the tmp_flickr_data table.';
 
     protected $flickrEntryCount;
     protected $flickrEntries;
@@ -23,43 +27,32 @@ class FilterDataQueue extends Job implements SelfHandling, ShouldQueue
     protected $city;
 
     /**
-     * Create a new job instance.
+     * Create a new command instance.
      *
      * @return void
      */
-    public function __construct($ids)
+    public function __construct()
     {
-        $this->flickrEntries = $ids;
+        parent::__construct();
+        $this->flickrEntries = TmpFlickrData::where('created_at', '<=', Carbon::now())->get();
     }
 
     /**
-     * Execute the job.
+     * Execute the console command.
      *
-     * @return void
+     * @return mixed
      */
     public function handle()
     {
-        foreach($this->flickrEntries as $flickrEntry) {
-          $entry = TmpFlickrData::find($flickrEntry);
-          $this->_processPhotoCollection($entry);
+        foreach ($this->flickrEntries as $flickrEntry) {
+            $this->country      = $flickrEntry->country;
+            $this->state_region = $flickrEntry->state_region;
+            $this->city         = $flickrEntry->city;
+
+          //check each photo of this entry to see if its valid
+          $this->_sortPhotoCollection(unserialize($flickrEntry->response_data));
         }
     }
-
-    /*
-     *	Delegate each collection of photos to be sorted
-     *
-     *  @return void
-     */
-   protected function _processPhotoCollection($entry) {
-
-         $this->country      = $entry->country;
-         $this->state_region = $entry->state_region;
-         $this->city         = $entry->city;
-
-       //check each photo of this entry to see if its valid
-       $this->_sortPhotoCollection(unserialize($entry->response_data));
-
-   }
 
     /*
      *	Place each photo entry in its appropriate table
