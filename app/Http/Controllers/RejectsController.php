@@ -60,13 +60,13 @@ class RejectsController extends Controller
     public function queryPhotos($amount, $lastQueryId) {
       $rejectedPhotos;
       if (is_numeric($lastQueryId)) {
-        $rejectedPhotos = rejectedPhotos::select('*')
+        $rejectedPhotos = RejectedPhotos::select('*')
           ->where('id', '<', $lastQueryId)
           ->take($amount)
           ->orderBy('id', 'desc')
           ->get();
       } else {
-        $rejectedPhotos = rejectedPhotos::select('*')
+        $rejectedPhotos = RejectedPhotos::select('*')
           ->take($amount)
           ->orderBy('id', 'desc')
           ->get();

@@ -69,10 +69,28 @@ class AcceptsController extends Controller
      *
      * @return Response
      */
-    public function index()
+    /*public function index()
     {
         $acceptedPhotos = AcceptedPhotos::all();
         return response()->json($acceptedPhotos);
+    }*/
+
+    public function queryPhotos($amount, $lastQueryId) {
+      $accepteddPhotos;
+      if (is_numeric($lastQueryId)) {
+        $accepteddPhotos = AcceptedPhotos::select('*')
+          ->where('id', '<', $lastQueryId)
+          ->take($amount)
+          ->orderBy('id', 'desc')
+          ->get();
+      } else {
+        $accepteddPhotos = AcceptedPhotos::select('*')
+          ->take($amount)
+          ->orderBy('id', 'desc')
+          ->get();
+      }
+
+      return response()->json($accepteddPhotos);
     }
 
     /**
