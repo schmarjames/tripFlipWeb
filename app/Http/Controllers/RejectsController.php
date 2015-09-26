@@ -37,10 +37,25 @@ class RejectsController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index($amount, $lastQueryId)
     {
+      $rejectedPhotos;
+      if (is_numeric($lastQueryId)) {
+        $rejectedPhotos = rejectedPhotos::select('*')
+          ->where('id', '<', $lastQueryId)
+          ->take($amount)
+          -get();
+      } else {
+        $rejectedPhotos = rejectedPhotos::select('*')
+          ->take($amount)
+          -get();
+      }
       $rejectedPhotos = RejectedPhotos::all();
-      return response()->json($rejectedPhotos);
+
+      var_dump($amount);
+      var_dump($lastQueryId);
+      die();
+      //eturn response()->json($rejectedPhotos);
     }
 
     /**
