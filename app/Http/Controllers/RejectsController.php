@@ -44,11 +44,11 @@ class RejectsController extends Controller
         $rejectedPhotos = rejectedPhotos::select('*')
           ->where('id', '<', $lastQueryId)
           ->take($amount)
-          -get();
+          ->get();
       } else {
         $rejectedPhotos = rejectedPhotos::select('*')
           ->take($amount)
-          -get();
+          ->get();
       }
       $rejectedPhotos = RejectedPhotos::all();
 
@@ -64,7 +64,7 @@ class RejectsController extends Controller
         $rejectedPhotos = rejectedPhotos::select('*')
           ->where('id', '<', $lastQueryId)
           ->take($amount)
-          -get();
+          ->get();
       } else {
         $rejectedPhotos = rejectedPhotos::select('*')
           ->take($amount)
