@@ -63,10 +63,12 @@ class RejectsController extends Controller
         $rejectedPhotos = rejectedPhotos::select('*')
           ->where('id', '<', $lastQueryId)
           ->take($amount)
+          ->orderBy('id', 'desc')
           ->get();
       } else {
         $rejectedPhotos = rejectedPhotos::select('*')
           ->take($amount)
+          ->orderBy('id', 'desc')
           ->get();
       }
 
