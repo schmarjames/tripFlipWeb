@@ -48,13 +48,15 @@ class FilterPhoto extends Command
      */
     public function handle()
     {
-        foreach ($this->flickrEntries as $flickrEntry) {
-            $this->country      = $flickrEntry->country;
-            $this->state_region = $flickrEntry->state_region;
-            $this->city         = $flickrEntry->city;
+        if ($this->flickrEntries->count() > 0) {
+          foreach ($this->flickrEntries as $flickrEntry) {
+              $this->country      = $flickrEntry->country;
+              $this->state_region = $flickrEntry->state_region;
+              $this->city         = $flickrEntry->city;
 
-          //check each photo of this entry to see if its valid
-          $this->_sortPhotoCollection(unserialize($flickrEntry->response_data));
+            //check each photo of this entry to see if its valid
+            $this->_sortPhotoCollection(unserialize($flickrEntry->response_data));
+          }
         }
     }
 
@@ -98,7 +100,7 @@ class FilterPhoto extends Command
     */
    protected function _filterPhoto($url) {
        // pass url to python script
-       return (bool)exec("python ../../../public/scanPhoto.py $url");
+       return (bool)exec("python public/scanPhoto.py $url");
    }
 
      /*
