@@ -1,6 +1,6 @@
 <?php
 
-namespace TripFlip;
+namespace App\Console\Commands;
 
 use App\TmpFlickrData;
 use App\AcceptedPhotos;
