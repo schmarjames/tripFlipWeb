@@ -70,7 +70,7 @@ class RejectsController extends Controller
           ->get();
       }
 
-      //eturn response()->json($rejectedPhotos);
+      return response()->json($rejectedPhotos);
     }
 
     /**
