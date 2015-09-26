@@ -3,6 +3,10 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\TmpFlickrData;
+use App\AcceptedPhotos;
+use App\RejectedPhotos;
+use Carbon\Carbon;
 
 class FilterPhoto extends Command
 {
