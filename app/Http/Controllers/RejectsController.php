@@ -68,7 +68,7 @@ class RejectsController extends Controller
       } else {
         $rejectedPhotos = rejectedPhotos::select('*')
           ->take($amount)
-          -get();
+          ->get();
       }
       $rejectedPhotos = RejectedPhotos::all();
 
