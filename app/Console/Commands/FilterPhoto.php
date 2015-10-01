@@ -119,20 +119,21 @@ class FilterPhoto extends Command
      if($response->getStatusCode() == 200) {
        $res_data = $response->getBody()->getContents();
        $res_arr = json_decode($res_data, true);
+       if (array_key_exists('photo', $res_arr)) {
+         if (count($res_arr["photo"]["tags"]) > 0) {
+             $categories = PhotoCategories::all()->toArray();
 
-       if (count($res_arr["photo"]["tags"]) > 0) {
-           $categories = PhotoCategories::all()->toArray();
-
-           $tags = array_column($res_arr["photo"]["tags"]["tag"], "_content");
-           foreach($categories as $category) {
-             if (in_array($category["category"], $tags)) {
-               array_push($this->matchingCategoriesId, $category["id"]);
+             $tags = array_column($res_arr["photo"]["tags"]["tag"], "_content");
+             foreach($categories as $category) {
+               if (in_array($category["category"], $tags)) {
+                 array_push($this->matchingCategoriesId, $category["id"]);
+               }
              }
-           }
 
-           return (count($this->matchingCategoriesId) > 0) ? true : false;
+             return (count($this->matchingCategoriesId) > 0) ? true : false;
+         }
        }
-        return false;
+      return false;
      }
    }
 
