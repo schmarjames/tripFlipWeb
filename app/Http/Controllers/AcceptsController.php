@@ -13,6 +13,7 @@ use App\StateRegions;
 use App\Cities;
 use App\County;
 use App\LocationData;
+use App\PhotoCategories;
 use App\Tfphotos;
 
 class AcceptsController extends Controller
@@ -161,9 +162,22 @@ class AcceptsController extends Controller
         return $this->message["error"]["store"];
       }
 
+      // Store photo tags
+      $this->_storePhotoCategories($tfphoto->id, $photo_data->tags);
+
       // delete $id's row from accepted table
       AcceptedPhotos::find($id)->delete();
       return $this->message["success"]["store"];
+    }
+
+
+    protected function _storePhotoCategories($photo_id, $tags) {
+      foreach($tags as $tag_id) {
+          PhotoCategories::create([
+              'photo_id' => $photo_id,
+              'category_id' => $tag_id
+            ]);
+      }
     }
 
     /**
