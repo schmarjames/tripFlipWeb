@@ -78,7 +78,7 @@ class FilterPhoto extends Command
          $result;
 
          // check photo tags
-         $hasTags = $this->_checkPhotoTags($this->_photoGetInfoUrl($photoArr));
+         $hasTags = $this->_checkPhotoTags($this->_photoGetInfoUrl($photoArr["id"]));
 
          if ($hasTags) {
 
@@ -147,7 +147,7 @@ class FilterPhoto extends Command
    }
 
    protected function _photoGetInfoUrl($id) {
-     return sprintf('%s%s&api_key=%s&photo_id=%d&format=%s&nojsoncallback=%d',
+     return sprintf('%s%s&api_key=%s&photo_id=%s&format=%s&nojsoncallback=%d',
        $this->base_url,
        $this->method,
        \Config::get('constants.FLICKR_API'),
