@@ -129,7 +129,7 @@ class FilterPhoto extends Command
              }
            }
 
-           return (count($this->matchingCategoriesId) > 0) true : false;
+           return (count($this->matchingCategoriesId) > 0 true : false);
        }
         return false;
      }
