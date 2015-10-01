@@ -29,6 +29,12 @@ class FilterPhoto extends Command
     protected $country;
     protected $state_region;
     protected $city;
+    protected $matchingCategoriesId = [];
+
+    protected $base_url = 'https://api.flickr.com/services/rest/?method=';
+    protected $method = 'flickr.photos.getInfo';
+    protected $format = 'json';
+    protected $nojsoncallback = 1;
 
     /**
      * Create a new command instance.
@@ -50,6 +56,7 @@ class FilterPhoto extends Command
     {
         if ($this->flickrEntries->count() > 0) {
           foreach ($this->flickrEntries as $flickrEntry) {
+              $this->id           = $flickrEntry->id;
               $this->country      = $flickrEntry->country;
               $this->state_region = $flickrEntry->state_region;
               $this->city         = $flickrEntry->city;
@@ -69,26 +76,62 @@ class FilterPhoto extends Command
    protected function _sortPhotoCollection($photoArrs) {
      foreach($photoArrs as $photoArr) {
          $result;
-         // pass flickr url of photo to filter method
-         $result = $this->_filterPhoto($this->_photoUrl($photoArr));
 
-         // if photo is valid
-         // store in accepted table
-         if($result) {
-             AcceptedPhotos::create([
-                 'country' => $this->country,
-                 'state_region' => $this->state_region,
-                 'city' => $this->city,
-                 'photo_data' => json_encode($photoArr)
-             ]);
-         } else {
-             RejectedPhotos::create([
-                 'country' => $this->country,
-                 'state_region' => $this->state_region,
-                 'city' => $this->city,
-                 'photo_data' => json_encode($photoArr)
-             ]);
+         // check photo tags
+         $hasTags = $this->_checkPhotoTags($this->_photoGetInfoUrl($photoArr));
+
+         if ($hasTags) {
+
+           // store photos categories / tags
+           $photoArr['tags'] = $this->matchingCategoriesId;
+
+           // pass flickr url of photo to filter method
+           $result = $this->_filterPhoto($this->_photoUrl($photoArr));
+
+           // if photo is valid
+           // store in accepted table
+           if($result) {
+               AcceptedPhotos::create([
+                   'country' => $this->country,
+                   'state_region' => $this->state_region,
+                   'city' => $this->city,
+                   'photo_data' => json_encode($photoArr)
+               ]);
+           } else {
+               RejectedPhotos::create([
+                   'country' => $this->country,
+                   'state_region' => $this->state_region,
+                   'city' => $this->city,
+                   'photo_data' => json_encode($photoArr)
+               ]);
+           }
          }
+
+         // delete photo data because it does have the match categories we want
+         TmpFlickrData::where('id', $id)->delete();
+     }
+   }
+
+   protected function _checkPhotoTags($url) {
+     $response = $this->sendRequest($url);
+
+     if($response->getStatusCode() == 200) {
+       $res_data = $response->getBody()->getContents();
+       $res_arr = json_decode($res_data, true);
+
+       if (count($res_arr["photo"]["tags"]) > 0) {
+           $categories = PhotoCategories::all()->toArray();
+
+           $tags = array_column($res_arr["photo"]["tags"]["tag"], "_content");
+           foreach($categories as $category) {
+             if (in_array($category["category"], $tags)) {
+               array_push($this->matchingCategoriesId, $category["id"]);
+             }
+           }
+
+           return (count($this->matchingCategoriesId) > 0) true : false;
+       }
+        return false;
      }
    }
 
@@ -101,6 +144,22 @@ class FilterPhoto extends Command
    protected function _filterPhoto($url) {
        // pass url to python script
        return (bool)exec("python /home/forge/default/public/scanPhoto.py $url");
+   }
+
+   protected function _photoGetInfoUrl($id) {
+     return sprintf('%s%s&api_key=%s&photo_id=%d&format=%s&nojsoncallback=%d',
+       $this->base_url,
+       $this->method,
+       \Config::get('constants.FLICKR_API'),
+       $id,
+       $this->format,
+       $this->nojsoncallback
+     );
+   }
+
+   protected function _sendRequest($url) {
+     $client = new \GuzzleHttp\Client();
+     return $client->get($url);
    }
 
      /*
