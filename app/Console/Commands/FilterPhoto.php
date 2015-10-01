@@ -113,7 +113,7 @@ class FilterPhoto extends Command
    }
 
    protected function _checkPhotoTags($url) {
-     $response = $this->sendRequest($url);
+     $response = $this->_sendRequest($url);
 
      if($response->getStatusCode() == 200) {
        $res_data = $response->getBody()->getContents();
