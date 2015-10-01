@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\TmpFlickrData;
 use App\AcceptedPhotos;
 use App\RejectedPhotos;
+use App\PhotoCategories;
 use Carbon\Carbon;
 
 class FilterPhoto extends Command
