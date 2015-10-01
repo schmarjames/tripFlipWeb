@@ -26,6 +26,7 @@ class FilterPhoto extends Command
     protected $description = 'Filter images with people or text in the tmp_flickr_data table.';
 
     protected $flickrEntryCount;
+    protected $categories;
     protected $flickrEntries;
     protected $country;
     protected $state_region;
@@ -46,6 +47,7 @@ class FilterPhoto extends Command
     {
         parent::__construct();
         $this->flickrEntries = TmpFlickrData::where('created_at', '<=', Carbon::now())->get();
+        $this->categories = PhotoCategories::all()->toArray();
     }
 
     /**
@@ -122,15 +124,12 @@ class FilterPhoto extends Command
        $res_arr = json_decode($res_data, true);
        if (array_key_exists('photo', $res_arr)) {
          if (count($res_arr["photo"]["tags"]) > 0) {
-             $categories = PhotoCategories::all()->toArray();
-
              $tags = array_column($res_arr["photo"]["tags"]["tag"], "_content");
-             foreach($categories as $category) {
+             foreach($this->categories as $category) {
                if (in_array($category["category"], $tags)) {
                  array_push($this->matchingCategoriesId, $category["id"]);
                }
              }
-
              return (count($this->matchingCategoriesId) > 0) ? true : false;
          }
        }
