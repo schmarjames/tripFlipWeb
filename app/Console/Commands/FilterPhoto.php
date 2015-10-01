@@ -109,7 +109,7 @@ class FilterPhoto extends Command
          }
 
          // delete photo data because it does have the match categories we want
-         TmpFlickrData::where('id', $id)->delete();
+         TmpFlickrData::where('id', $this->id)->delete();
      }
    }
 
