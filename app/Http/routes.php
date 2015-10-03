@@ -57,6 +57,7 @@ Route::get('/photos', function() {
   $taggedPhotos = CategoryTagsOfPhotos::select('photo_id')->get()->toArray();
 
   foreach($photos as $photo) {
+    if (in_array($photo->id, $taggedPhotos)) continue;
     $photo_url = explode('/', $photo->url);
     $photo_id = explode('_', $photo_url[4])[0];
 
