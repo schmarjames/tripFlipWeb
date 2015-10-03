@@ -51,8 +51,7 @@ class AcceptsController extends Controller
     "error" => [
       "store" => "There was an issue with approving the photo",
       "transfer" => "Photo could not be transferred to the rejected table",
-      "delete" => "Photo could not be deleted",
-      "noTags" => "Unfortunately this photo didn't have any of the required tags for this application"
+      "delete" => "Photo could not be deleted"
     ],
     "success" => [
       "store" => "Photo was successfully approved",
@@ -60,14 +59,6 @@ class AcceptsController extends Controller
       "delete" => "Photo is now deleted"
       ]
   ];
-
-  protected $categories;
-  protected $matchingCategoriesId = [];
-
-  protected $base_url = 'https://api.flickr.com/services/rest/?method=';
-  protected $method = 'flickr.photos.getInfo';
-  protected $format = 'json';
-  protected $nojsoncallback = 1;
 
     public function __construct() {
         \Config::set('auth.model', 'App\AdminUsers');
@@ -157,17 +148,6 @@ class AcceptsController extends Controller
       $photo = AcceptedPhotos::find($id);
       $photo_data = json_decode($photo->photo_data);
 
-      // older photos during development may not have tags
-      /*if (!property_exists($photo_data, "tags")) {
-        $this->categories = PhotoCategories::all()->toArray();
-        if ($this->_checkPhotoTags($this->_photoGetInfoUrl($photo_data->id))) {
-            $photo_data["tags"] = $this->matchingCategoriesId;
-        } else {
-            AcceptedPhotos::where('id', $photo->id)->delete();
-            return $this->message["error"]["noTags"];
-        }
-      }*/
-
       // Get Geo Lat Long Data
       $geo = $this->_getGeoData($photo_data->id);
       $author = $this->_getMetaData($photo_data->id);
@@ -190,46 +170,8 @@ class AcceptsController extends Controller
       return $this->message["success"]["store"];
     }
 
-    /*protected function _checkPhotoTags($url) {
-      $response = $this->_sendRequest($url);
-      $this->matchingCategoriesId = [];
-
-      if($response->getStatusCode() == 200) {
-        $res_data = $response->getBody()->getContents();
-        $res_arr = json_decode($res_data, true);
-        if (array_key_exists('photo', $res_arr)) {
-          if (count($res_arr["photo"]["tags"]) > 0) {
-              $tags = array_column($res_arr["photo"]["tags"]["tag"], "_content");
-              foreach($this->categories as $category) {
-                if (in_array($category["category"], $tags)) {
-                  array_push($this->matchingCategoriesId, $category["id"]);
-                }
-              }
-              return (count($this->matchingCategoriesId) > 0) ? true : false;
-          }
-        }
-       return false;
-      }
-    }
-
-    protected function _sendRequest($url) {
-      $client = new \GuzzleHttp\Client();
-      return $client->get($url);
-    }
-
-    protected function _photoGetInfoUrl($id) {
-      return sprintf('%s%s&api_key=%s&photo_id=%s&format=%s&nojsoncallback=%d',
-        $this->base_url,
-        $this->method,
-        \Config::get('constants.FLICKR_API'),
-        $id,
-        $this->format,
-        $this->nojsoncallback
-      );
-    }*/
 
     protected function _storePhotoCategories($photo_id, $tags) {
-      $tags = array_unique($tags);
       foreach($tags as $tag_id) {
           PhotoCategories::create([
               'photo_id' => $photo_id,
