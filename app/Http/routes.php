@@ -99,7 +99,7 @@ Route::get('/photos', function() {
            ]);
        }
      } else {
-       Tfphotos::find($photos->id)->delete();
+       Tfphotos::find($photo->id)->delete();
      }
   }
 
