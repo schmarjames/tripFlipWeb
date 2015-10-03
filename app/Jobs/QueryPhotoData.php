@@ -6,7 +6,6 @@ use DB;
 use App\TmpFlickrData;
 use App\LocationQuery;
 use App\Jobs\Job;
-use TripFlip\PhotoData;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Bus\SelfHandling;
