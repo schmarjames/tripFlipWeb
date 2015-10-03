@@ -14,6 +14,7 @@ use App\Cities;
 use App\County;
 use App\LocationData;
 use App\PhotoCategories;
+use App\CategoryTagsOfPhotos;
 use App\Tfphotos;
 
 class AcceptsController extends Controller
@@ -210,7 +211,7 @@ class AcceptsController extends Controller
     protected function _storePhotoCategories($photo_id, $tags) {
       $tags = array_unique($tags);
       foreach($tags as $tag_id) {
-          PhotoCategories::create([
+          CategoryTagsOfPhotos::create([
               'photo_id' => $photo_id,
               'category_id' => $tag_id
             ]);
