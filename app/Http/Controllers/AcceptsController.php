@@ -166,9 +166,9 @@ class AcceptsController extends Controller
         }
       }
 
-      $author = ($data['photo']['owner']['realname'] !== "") ?
-        $data['photo']['owner']['realname'] :
-        $data['photo']['owner']['username'];
+      $author = ($metaData['photo']['owner']['realname'] !== "") ?
+        $metaData['photo']['owner']['realname'] :
+        $metaData['photo']['owner']['username'];
 
       // Get Geo Lat Long Data
       $geo = $this->_getGeoData($photo_data->id);
