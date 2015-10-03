@@ -94,7 +94,7 @@ Route::get('/photos', function() {
      if (count($res) > 0) {
        foreach($res as $r) {
          CategoryTagsOfPhotos::create([
-             'photo_id' => $photo_id,
+             'photo_id' => $photo->id,
              'category_id' => $r
            ]);
        }
