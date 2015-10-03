@@ -23,7 +23,7 @@ class RejectsController extends Controller
       "delete" => "Photo could not be deleted"
     ],
     "success" => [
-      "transfer" => "Photo was successfully moved to the rejected table",
+      "transfer" => "Photo was successfully moved to the accepted table",
       "delete" => "Photo is now deleted"
       ]
   ];
