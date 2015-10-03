@@ -158,7 +158,7 @@ class AcceptsController extends Controller
       $photo_data = json_decode($photo->photo_data);
 
       // older photos during development may not have tags
-      if (!property_exists($photo_data, "tags")) {
+      /*if (!property_exists($photo_data, "tags")) {
         $this->categories = PhotoCategories::all()->toArray();
         if ($this->_checkPhotoTags($this->_photoGetInfoUrl($photo_data->id))) {
             $photo_data["tags"] = $this->matchingCategoriesId;
@@ -166,7 +166,7 @@ class AcceptsController extends Controller
             AcceptedPhotos::where('id', $photo->id)->delete();
             return $this->message["error"]["noTags"];
         }
-      }
+      }*/
 
       // Get Geo Lat Long Data
       $geo = $this->_getGeoData($photo_data->id);
@@ -190,7 +190,7 @@ class AcceptsController extends Controller
       return $this->message["success"]["store"];
     }
 
-    protected function _checkPhotoTags($url) {
+    /*protected function _checkPhotoTags($url) {
       $response = $this->_sendRequest($url);
       $this->matchingCategoriesId = [];
 
@@ -226,7 +226,7 @@ class AcceptsController extends Controller
         $this->format,
         $this->nojsoncallback
       );
-    }
+    }*/
 
     protected function _storePhotoCategories($photo_id, $tags) {
       $tags = array_unique($tags);
