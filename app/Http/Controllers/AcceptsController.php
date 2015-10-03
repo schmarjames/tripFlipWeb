@@ -51,7 +51,8 @@ class AcceptsController extends Controller
     "error" => [
       "store" => "There was an issue with approving the photo",
       "transfer" => "Photo could not be transferred to the rejected table",
-      "delete" => "Photo could not be deleted"
+      "delete" => "Photo could not be deleted",
+      "noTags" => "Unfortunately this photo didn't have any of the required tags for this application"
     ],
     "success" => [
       "store" => "Photo was successfully approved",
@@ -59,6 +60,10 @@ class AcceptsController extends Controller
       "delete" => "Photo is now deleted"
       ]
   ];
+
+  protected $categories;
+  protected $matchingCategoriesId = [];
+  protected $getInfoMethod = 'flickr.photos.getInfo';
 
     public function __construct() {
         \Config::set('auth.model', 'App\AdminUsers');
@@ -148,9 +153,25 @@ class AcceptsController extends Controller
       $photo = AcceptedPhotos::find($id);
       $photo_data = json_decode($photo->photo_data);
 
+      $metaData = $this->_getMetaData($photo_data->id);
+
+      // older photos during development may not have tags
+      if (!property_exists($photo_data, "tags")) {
+        $this->categories = PhotoCategories::all()->toArray();
+        if ($this->_checkPhotoTags($metaData)) {
+            $photo_data["tags"] = $this->matchingCategoriesId;
+        } else {
+            AcceptedPhotos::where('id', $photo->id)->delete();
+            return $this->message["error"]["noTags"];
+        }
+      }
+
+      $author = ($data['photo']['owner']['realname'] !== "") ?
+        $data['photo']['owner']['realname'] :
+        $data['photo']['owner']['username'];
+
       // Get Geo Lat Long Data
       $geo = $this->_getGeoData($photo_data->id);
-      $author = $this->_getMetaData($photo_data->id);
 
       $tfphoto = new Tfphotos;
       $tfphoto = $this->_storeLocationData($geo, $tfphoto);
@@ -170,8 +191,24 @@ class AcceptsController extends Controller
       return $this->message["success"]["store"];
     }
 
+    protected function _checkPhotoTags($data) {
+      $response = $this->_sendRequest($url);
+      $this->matchingCategoriesId = [];
+
+      if (count($data["tags"]) > 0) {
+          $tags = array_column($data["photo"]["tags"]["tag"], "_content");
+          foreach($this->categories as $category) {
+            if (in_array($category["category"], $tags)) {
+              array_push($this->matchingCategoriesId, $category["id"]);
+            }
+          }
+          return (count($this->matchingCategoriesId) > 0) ? true : false;
+      }
+      return false;
+    }
 
     protected function _storePhotoCategories($photo_id, $tags) {
+      $tags = array_unique($tags);
       foreach($tags as $tag_id) {
           PhotoCategories::create([
               'photo_id' => $photo_id,
@@ -319,9 +356,7 @@ class AcceptsController extends Controller
     if($response->getStatusCode() == 200) {
       $res_data = $response->getBody()->getContents();
       $data = json_decode($res_data, true);
-      return ($data['photo']['owner']['realname'] !== "") ?
-        $data['photo']['owner']['realname'] :
-        $data['photo']['owner']['username'];
+      return $data["photo"];
     }
   }
 
