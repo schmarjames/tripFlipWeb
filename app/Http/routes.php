@@ -52,7 +52,7 @@ Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
 });
 
 Route::get('/photos', function() {
-
+  $del = [];
   $photos = Tfphotos::all();
   $taggedPhotos = CategoryTagsOfPhotos::select('photo_id')->get()->toArray();
 
@@ -99,7 +99,7 @@ Route::get('/photos', function() {
            ]);
        }
      } else {
-       Tfphotos::find($photo->id)->delete();
+       array_push($del, $photo->id);
      }
   }
 
