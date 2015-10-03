@@ -33,7 +33,7 @@ Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
 
   Route::resource('accepts', 'AcceptsController', ['only' => ['index']]);
   Route::post('accepts/photos/{amount}/{lastQuery}', 'AcceptsController@queryPhotos');
-  Route::post('accepts/store/{id}/{tags}', 'AcceptsController@store');
+  Route::post('accepts/store/{id}', 'AcceptsController@store');
   Route::post('accepts/transfer/{id}', 'AcceptsController@transfer');
 
   Route::get('gallery/{id}', 'GalleryController@getGallery');
