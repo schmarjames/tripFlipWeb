@@ -86,8 +86,9 @@ class RejectsController extends Controller
       if (!is_numeric($id)) return $this->message["error"]["delete"];
       $photo = RejectedPhotos::find($id);
       if (!is_null($photo)) return $this->message["error"]["delete"];
-      
+
       $photo->delete();
+      return $this->message["success"]["delete"];
     }
 
     /**
