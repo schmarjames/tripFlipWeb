@@ -12,6 +12,8 @@
 */
 
 use App\PhotoCategories;
+use App\Tfphotos;
+use App\CategoryTagsOfPhotos;
 
 Route::get('/', function () {
     return view('welcome');
@@ -47,4 +49,59 @@ Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
   Route::post('photo/visitors/{photo_id}', 'PhotoController@getVisitors');
   Route::post('photo/views/{view_array}', 'PhotoController@addViews');
   Route::post('photo/like/{user_id}/{photo_id}', 'PhotoController@addLikes');
+});
+
+Route::get('/photos', function() {
+
+  $photos = Tfphotos::all();
+  $taggedPhotos = CategoryTagsOfPhotos::select('photo_id')->get()->toArray();
+
+  foreach($photos as $photo) {
+    $photo_url = explode('/', $photo->url);
+    $photo_id = explode('_', $photo_url[4])[0];
+
+
+    $base_url = 'https://api.flickr.com/services/rest/?method=';
+    $method = 'flickr.photos.getInfo';
+    $format = 'json';
+    $nojsoncallback = 1;
+
+     $client = new \GuzzleHttp\Client();
+     $url = sprintf('%s%s&api_key=%s&photo_id=%d&format=%s&nojsoncallback=%d',
+       $base_url,
+       $method,
+       \Config::get('constants.FLICKR_API'),
+       $photo_id,
+       $format,
+       $nojsoncallback
+     );
+
+     $response = $client->get($url);
+     $res_data = $response->getBody()->getContents();
+     $res_arr = json_decode($res_data, true);
+
+     $categories = PhotoCategories::all()->toArray();
+     $tags = array_column($res_arr["photo"]["tags"]["tag"], "_content");
+     $res = [];
+
+     foreach($categories as $category) {
+       if (in_array($category["category"], $tags)) {
+         array_push($res, $category["id"]);
+       }
+     }
+
+     if (count($res) > 0) {
+       foreach($res as $r) {
+         CategoryTagsOfPhotos::create([
+             'photo_id' => $photo_id,
+             'category_id' => $r
+           ]);
+       }
+     } else {
+       Tfphoto::find($photos->id)->delete();
+     }
+  }
+
+
+
 });
