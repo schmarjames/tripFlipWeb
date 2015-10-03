@@ -79,11 +79,11 @@ class AcceptsController extends Controller
      *
      * @return Response
      */
-    /*public function index()
+    public function index()
     {
         $acceptedPhotos = AcceptedPhotos::all();
         return response()->json($acceptedPhotos);
-    }*/
+    }
 
     public function queryPhotos($amount, $lastQueryId) {
       $accepteddPhotos;
