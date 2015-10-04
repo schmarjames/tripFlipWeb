@@ -10,6 +10,7 @@ use App\Likes;
 use App\User;
 use App\Tfphotos;
 use App\ViewedPhotos;
+use App\CategoryTagsOfPhotos;
 
 class PhotoController extends Controller
 {
@@ -99,47 +100,53 @@ class PhotoController extends Controller
     }
 
     public function getCollection(Request $request) {
-      $data = $request->only('amount', 'lastQueryId', 'latest');
+      $data = $request->only('amount', 'lastQueryId', 'latest', 'tag');
       $user = \JWTAuth::parseToken()->authenticate();
 
-      // If adding more photos to feed
-      if (is_numeric($data['lastQueryId']) && !(bool)$data['latest']) {
-        $collection = Tfphotos::select('tfphotos.*', 'location_data.lat', 'location_data.long', 'countries.country', 'state_regions.state_region', 'cities.city', 'counties.county')
-          ->join('location_data', 'tfphotos.location_id', '=', 'location_data.id')
-          ->join('countries', 'tfphotos.country_id', '=', 'countries.id')
-          ->leftJoin('state_regions', 'tfphotos.state_region_id', '=', 'state_regions.id')
-          ->leftJoin('cities' , 'tfphotos.city_id', '=', 'cities.id')
-          ->leftJoin('counties', 'tfphotos.county_id', '=', 'counties.id')
-          ->where('tfphotos.id', '<', $data['lastQueryId'])
-          ->take($data['amount'])
-          ->orderBy('created_at', 'desc')
-          ->get();
-      }
-      // If adding latest photos to feed
-      else if (is_numeric($data['lastQueryId']) && (bool)$data['latest']) {
-        $collection = Tfphotos::select('tfphotos.*', 'location_data.lat', 'location_data.long', 'countries.country', 'state_regions.state_region', 'cities.city', 'counties.county')
-          ->join('location_data', 'tfphotos.location_id', '=', 'location_data.id')
-          ->join('countries', 'tfphotos.country_id', '=', 'countries.id')
-          ->leftJoin('state_regions', 'tfphotos.state_region_id', '=', 'state_regions.id')
-          ->leftJoin('cities' , 'tfphotos.city_id', '=', 'cities.id')
-          ->leftJoin('counties', 'tfphotos.county_id', '=', 'counties.id')
-          ->where('tfphotos.id', '>', $data['lastQueryId'])
-          ->orderBy('created_at', 'asc')
-          ->get();
-      }
-
-      // If initial query for feed
-      else {
+      if (!is_null($data['tag'])) {
+        $collection = $this->_getCategorySpecificPhotos($data);
+      } else {
+        // If adding more photos to feed
+        if (is_numeric($data['lastQueryId']) && !(bool)$data['latest']) {
           $collection = Tfphotos::select('tfphotos.*', 'location_data.lat', 'location_data.long', 'countries.country', 'state_regions.state_region', 'cities.city', 'counties.county')
             ->join('location_data', 'tfphotos.location_id', '=', 'location_data.id')
             ->join('countries', 'tfphotos.country_id', '=', 'countries.id')
             ->leftJoin('state_regions', 'tfphotos.state_region_id', '=', 'state_regions.id')
             ->leftJoin('cities' , 'tfphotos.city_id', '=', 'cities.id')
             ->leftJoin('counties', 'tfphotos.county_id', '=', 'counties.id')
+            ->where('tfphotos.id', '<', $data['lastQueryId'])
             ->take($data['amount'])
             ->orderBy('created_at', 'desc')
             ->get();
+        }
+        // If adding latest photos to feed
+        else if (is_numeric($data['lastQueryId']) && (bool)$data['latest']) {
+          $collection = Tfphotos::select('tfphotos.*', 'location_data.lat', 'location_data.long', 'countries.country', 'state_regions.state_region', 'cities.city', 'counties.county')
+            ->join('location_data', 'tfphotos.location_id', '=', 'location_data.id')
+            ->join('countries', 'tfphotos.country_id', '=', 'countries.id')
+            ->leftJoin('state_regions', 'tfphotos.state_region_id', '=', 'state_regions.id')
+            ->leftJoin('cities' , 'tfphotos.city_id', '=', 'cities.id')
+            ->leftJoin('counties', 'tfphotos.county_id', '=', 'counties.id')
+            ->where('tfphotos.id', '>', $data['lastQueryId'])
+            ->orderBy('created_at', 'asc')
+            ->get();
+        }
+
+        // If initial query for feed
+        else {
+            $collection = Tfphotos::select('tfphotos.*', 'location_data.lat', 'location_data.long', 'countries.country', 'state_regions.state_region', 'cities.city', 'counties.county')
+              ->join('location_data', 'tfphotos.location_id', '=', 'location_data.id')
+              ->join('countries', 'tfphotos.country_id', '=', 'countries.id')
+              ->leftJoin('state_regions', 'tfphotos.state_region_id', '=', 'state_regions.id')
+              ->leftJoin('cities' , 'tfphotos.city_id', '=', 'cities.id')
+              ->leftJoin('counties', 'tfphotos.county_id', '=', 'counties.id')
+              ->take($data['amount'])
+              ->orderBy('created_at', 'desc')
+              ->get();
+        }
       }
+
+      dd($collection);
 
       // include the likes and weather data foreach photo
       $collection = $collection->map(function($photo, $v) use ($user) {
@@ -154,6 +161,65 @@ class PhotoController extends Controller
       });
       // return collection of photos and last photos id
       return response()->json($collection);
+    }
+
+    private function _getCategorySpecificPhotos($data) {
+      // If adding more photos to feed
+      if (is_numeric($data['lastQueryId']) && !(bool)$data['latest']) {
+        $collection = Tfphotos::select('tfphotos.*', 'location_data.lat', 'location_data.long', 'countries.country', 'state_regions.state_region', 'cities.city', 'counties.county')
+          ->join('location_data', 'tfphotos.location_id', '=', 'location_data.id')
+          ->join('countries', 'tfphotos.country_id', '=', 'countries.id')
+          ->leftJoin('state_regions', 'tfphotos.state_region_id', '=', 'state_regions.id')
+          ->leftJoin('cities' , 'tfphotos.city_id', '=', 'cities.id')
+          ->leftJoin('counties', 'tfphotos.county_id', '=', 'counties.id')
+          ->whereIn('tfphotos.id', function($query) use($data) {
+            $query
+              ->from('category_tags_of_photos')
+              ->selectRaw('photo_id')
+              ->where('category_id', '=', $data['tag']);
+          })
+          ->where('tfphotos.id', '<', $data['lastQueryId'])
+          ->take($data['amount'])
+          ->orderBy('created_at', 'desc')
+          ->get();
+      }
+      // If adding latest photos to feed
+      else if (is_numeric($data['lastQueryId']) && (bool)$data['latest']) {
+        $collection = Tfphotos::select('tfphotos.*', 'location_data.lat', 'location_data.long', 'countries.country', 'state_regions.state_region', 'cities.city', 'counties.county')
+          ->join('location_data', 'tfphotos.location_id', '=', 'location_data.id')
+          ->join('countries', 'tfphotos.country_id', '=', 'countries.id')
+          ->leftJoin('state_regions', 'tfphotos.state_region_id', '=', 'state_regions.id')
+          ->leftJoin('cities' , 'tfphotos.city_id', '=', 'cities.id')
+          ->leftJoin('counties', 'tfphotos.county_id', '=', 'counties.id')
+          ->whereIn('tfphotos.id', function($query) use($data) {
+            $query
+              ->from('category_tags_of_photos')
+              ->selectRaw('photo_id')
+              ->where('category_id', '=', $data['tag']);
+          })
+          ->where('tfphotos.id', '>', $data['lastQueryId'])
+          ->orderBy('created_at', 'asc')
+          ->get();
+      }
+      // If initial query for feed
+      else {
+        $collection = Tfphotos::select('tfphotos.*', 'location_data.lat', 'location_data.long', 'countries.country', 'state_regions.state_region', 'cities.city', 'counties.county')
+          ->join('location_data', 'tfphotos.location_id', '=', 'location_data.id')
+          ->join('countries', 'tfphotos.country_id', '=', 'countries.id')
+          ->leftJoin('state_regions', 'tfphotos.state_region_id', '=', 'state_regions.id')
+          ->leftJoin('cities' , 'tfphotos.city_id', '=', 'cities.id')
+          ->leftJoin('counties', 'tfphotos.county_id', '=', 'counties.id')
+          ->whereIn('tfphotos.id', function($query) use($data) {
+              $query
+                ->from('category_tags_of_photos')
+                ->selectRaw('photo_id')
+                ->where('category_id', '=', $data['tag']);
+          })
+          ->take($data['amount'])
+          ->orderBy('created_at', 'desc')
+          ->get();
+      }
+      return $collection;
     }
 
     public function getRandomCollection(Request $request) {
