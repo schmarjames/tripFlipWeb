@@ -175,7 +175,7 @@ class PhotoController extends Controller
             $query
               ->from('category_tags_of_photos')
               ->selectRaw('photo_id')
-              ->where('category_id', '=', $data['tag']);
+              ->where('category_id', '=', $data['category']);
           })
           ->where('tfphotos.id', '<', $data['lastQueryId'])
           ->take($data['amount'])
@@ -194,7 +194,7 @@ class PhotoController extends Controller
             $query
               ->from('category_tags_of_photos')
               ->selectRaw('photo_id')
-              ->where('category_id', '=', $data['tag']);
+              ->where('category_id', '=', $data['category']);
           })
           ->where('tfphotos.id', '>', $data['lastQueryId'])
           ->orderBy('created_at', 'asc')
@@ -212,7 +212,7 @@ class PhotoController extends Controller
               $query
                 ->from('category_tags_of_photos')
                 ->selectRaw('photo_id')
-                ->where('category_id', '=', $data['tag']);
+                ->where('category_id', '=', $data['category']);
           })
           ->take($data['amount'])
           ->orderBy('created_at', 'desc')
