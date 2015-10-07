@@ -25,7 +25,7 @@ class PhotoController extends Controller
 
   public function __construct() {
       \Config::set('auth.model', 'App\User');
-      //$this->middleware('jwt.auth');
+      $this->middleware('jwt.auth');
   }
 
     public function getSpecificLikes($photo_id) {
@@ -104,7 +104,7 @@ class PhotoController extends Controller
       $data = $request->only('amount', 'lastQueryId', 'latest', 'category');
       $user = \JWTAuth::parseToken()->authenticate();
 
-      if (!is_null($data['category'])) {
+      if (is_numeric($data['category'])) {
         $collection = $this->_getCategorySpecificPhotos($data);
       } else {
         // If adding more photos to feed
