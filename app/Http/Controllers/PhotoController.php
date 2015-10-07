@@ -10,6 +10,7 @@ use App\Likes;
 use App\User;
 use App\Tfphotos;
 use App\ViewedPhotos;
+use App\PhotoCategories;
 use App\CategoryTagsOfPhotos;
 
 class PhotoController extends Controller
@@ -24,7 +25,7 @@ class PhotoController extends Controller
 
   public function __construct() {
       \Config::set('auth.model', 'App\User');
-      $this->middleware('jwt.auth');
+      //$this->middleware('jwt.auth');
   }
 
     public function getSpecificLikes($photo_id) {
@@ -100,10 +101,10 @@ class PhotoController extends Controller
     }
 
     public function getCollection(Request $request) {
-      $data = $request->only('amount', 'lastQueryId', 'latest', 'tag');
+      $data = $request->only('amount', 'lastQueryId', 'latest', 'category');
       $user = \JWTAuth::parseToken()->authenticate();
 
-      if (!is_null($data['tag'])) {
+      if (!is_null($data['category'])) {
         $collection = $this->_getCategorySpecificPhotos($data);
       } else {
         // If adding more photos to feed
