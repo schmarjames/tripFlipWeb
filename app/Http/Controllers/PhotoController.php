@@ -235,7 +235,8 @@ class PhotoController extends Controller
             })
             ->take(1)
             ->orderBy(\DB::raw('random()'))
-            ->get()[0];
+            ->get()
+            ->put(['category_id' => $category->id]);
         });
 
         return response()->json($categories);
