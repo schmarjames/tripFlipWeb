@@ -235,8 +235,7 @@ class PhotoController extends Controller
             })
             ->take(1)
             ->orderBy(\DB::raw('random()'))
-            ->get()
-            ->merge(['category_id' => $category->id]);
+            ->get();
         });
 
         return response()->json($categories);
