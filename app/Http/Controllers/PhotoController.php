@@ -236,7 +236,7 @@ class PhotoController extends Controller
             })
             ->orderBy(\DB::raw('random()'))
             ->get();
-          dd($photo_data);
+          dd($photo_data->url);
           array_push($data, [
             'photo_url' => $photo_data->url,
             'category_id' => $category->id
