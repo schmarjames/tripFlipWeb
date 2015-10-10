@@ -235,8 +235,7 @@ class PhotoController extends Controller
                 ->orderBy(\DB::raw('random()'));
             })
             ->orderBy(\DB::raw('random()'))
-            ->first()
-            ->url;
+            ->first();
 
           array_push($data, [
             'photo_url' => $photo_data,
