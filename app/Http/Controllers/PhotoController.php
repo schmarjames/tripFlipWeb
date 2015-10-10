@@ -224,7 +224,7 @@ class PhotoController extends Controller
     public function getcategoryphotos(Request $request) {
       $data = [];
       $categories = PhotoCategories::all()
-        ->each(function($category) {
+        ->each(function($category) use ($data) {
           $photo_data = Tfphotos::select('url')
             ->where('id', function($query) use($category) {
               $query
