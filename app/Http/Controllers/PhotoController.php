@@ -224,7 +224,7 @@ class PhotoController extends Controller
     public function getcategoryphotos(Request $request) {
       $categories = PhotoCategories::all()
         ->map(function($category) {
-          return Tfphotos::select('id', 'url')
+          return collect('category_id', $category->id)->put(Tfphotos::select('id', 'url')
             ->where('id', function($query) use($category) {
               $query
                 ->from('category_tags_of_photos')
@@ -235,8 +235,7 @@ class PhotoController extends Controller
             })
             ->take(1)
             ->orderBy(\DB::raw('random()'))
-            ->get()
-            ->put('category_id', $category->id);
+            ->get());
         });
 
         return response()->json($categories);
