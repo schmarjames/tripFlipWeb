@@ -242,7 +242,7 @@ class PhotoController extends Controller
             'category_id' => $category->id
           ]);
         });
-        $data
+        
         return response()->json($data);
     }
 
