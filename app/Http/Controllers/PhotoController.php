@@ -225,8 +225,7 @@ class PhotoController extends Controller
       $data = [];
       $categories = PhotoCategories::all()
         ->each(function($category) use ($data) {
-          $photo_data = Tfphotos::select('url')
-            ->where('id', function($query) use($category) {
+          $photo_data = Tfphotos::where('id', function($query) use($category) {
               $query
                 ->from('category_tags_of_photos')
                 ->selectRaw('photo_id')
