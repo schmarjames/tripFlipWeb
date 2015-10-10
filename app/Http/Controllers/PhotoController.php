@@ -239,7 +239,7 @@ class PhotoController extends Controller
             ->url;
 
           array_push($data, [
-            'photo_url' => $url,
+            'photo_url' => $photo_data,
             'category_id' => $category->id
           ]);
         });
