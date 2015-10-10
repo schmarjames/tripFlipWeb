@@ -221,6 +221,25 @@ class PhotoController extends Controller
       return $collection;
     }
 
+    public function getcategoryphotos(Request $request) {
+      $categories = PhotoCategories::all()
+        ->map(function($category) {
+          return Tfphotos::select('id', 'url')
+            ->where('id', function($query) use($category) {
+              $query
+                ->from('category_tags_of_photos')
+                ->selectRaw('photo_id')
+                ->where('category_id', '=', $category->id);
+            })
+            ->take(1)
+            ->orderBy(\DB::raw('random()'))
+            ->get();
+
+        });
+
+        return response()->json($categories);
+    }
+
     public function getRandomCollection(Request $request) {
       $data = \Input::all();
 
@@ -245,6 +264,8 @@ class PhotoController extends Controller
 
       return response()->json($randoms);
     }
+
+
 
     private function _storeUsersViewedPhotoIds($userId, $photos) {
       foreach($photos as $photoId) {
