@@ -237,6 +237,7 @@ class PhotoController extends Controller
             ->first();
 
           $photoUrl['category_id'] = $category->id;
+          $photoUrl['category_name'] = $category->category;
           return $photoUrl;
         });
 
