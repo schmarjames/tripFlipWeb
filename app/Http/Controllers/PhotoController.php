@@ -238,7 +238,7 @@ class PhotoController extends Controller
             ->first();
 
           array_push($data, [
-            'photo_url' => $photo_data-> url,
+            'photo_url' => $photo_data->url,
             'category_id' => $category->id
           ]);
         });
