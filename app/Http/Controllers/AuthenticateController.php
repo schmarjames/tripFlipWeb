@@ -90,8 +90,9 @@ class AuthenticateController extends Controller
   }
 
   public function assignTemporaryPassword(Request $request) {
+    \Config::set('auth.model', 'App\User');
     $email = $request->only('email');
-
+    return $email;
     $user = User::where('email', $email)->first();
 
     if (!is_null($user)) {
