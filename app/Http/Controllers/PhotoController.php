@@ -63,21 +63,38 @@ class PhotoController extends Controller
           $likes_arr = $like;
 
           foreach ($likes_arr as $like) {
-              Likes::updateOrCreate([
-                'user_id' => $id,
+            $currentLikeCount = Likes::where(["photo_id" => $like, "user_id" => $user->id])->get()->count();
+
+            if ($currentLikeCount == 0) {
+              Likes::create([
+                'user_id' => $user->id,
                 'photo_id' => $like
               ]);
+            } else {
+              Likes::where(["photo_id" => $like, "user_id" => $user->id])->delete();
+            }
+
           }
           return response()->json(1);
         }
 
+        $currentLikeCount = Likes::where(["photo_id" => $like, "user_id" => $user->id])
+        ->get()
+        ->count();
+
+        if ($currentLikeCount == 0) {
           // Add like
-          Likes::updateOrCreate([
-            'user_id' => $id,
+          Likes::create([
+            'user_id' => $user->id,
             'photo_id' => $like
           ]);
           return response()->json(1);
-      }
+        }
+        // Remove like
+        else {
+          Likes::where(["photo_id" => $like, "user_id" => $user->id])->delete();
+          return response()->json(0);
+        }
 
       return response()->json(["error" => "Unauthorized users cannot use this functionality."]);
     }
