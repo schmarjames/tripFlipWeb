@@ -49,5 +49,5 @@ Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
   Route::post('photo/likelist/{photo_id}', 'PhotoController@getSpecificLikes');
   Route::post('photo/visitors/{photo_id}', 'PhotoController@getVisitors');
   Route::post('photo/views/{view_array}', 'PhotoController@addViews');
-  Route::post('photo/like/{user_id}/{photo_id}', 'PhotoController@addLikes');
+  Route::post('photo/like', 'PhotoController@addLikes');
 });

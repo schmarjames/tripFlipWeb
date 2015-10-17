@@ -50,8 +50,10 @@ class PhotoController extends Controller
       return false;
     }
 
-    public function addLikes($id, $like) {
-
+    public function addLikes(Request $request) {
+      $data = \Input::all();
+      $id = $data['id'];
+      $like = $data['like'];
       // check user id
       $user = User::find($id);
 
@@ -69,24 +71,12 @@ class PhotoController extends Controller
           return response()->json(1);
         }
 
-        $currentLikeCount = Likes::where(["photo_id" => $like, "user_id" => $user->id])
-          ->get()
-          ->count();
-
-        if ($currentLikeCount == 0) {
           // Add like
-          Likes::create([
+          Likes::updateOrCreate([
             'user_id' => $id,
             'photo_id' => $like
           ]);
           return response()->json(1);
-        }
-        // Remove like
-        else {
-          Likes::where(["photo_id" => $like, "user_id" => $user->id])->delete();
-          return response()->json(0);
-        }
-
       }
 
       return response()->json(["error" => "Unauthorized users cannot use this functionality."]);
