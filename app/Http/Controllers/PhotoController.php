@@ -95,6 +95,7 @@ class PhotoController extends Controller
           Likes::where(["photo_id" => $like, "user_id" => $user->id])->delete();
           return response()->json(0);
         }
+      }
 
       return response()->json(["error" => "Unauthorized users cannot use this functionality."]);
     }
