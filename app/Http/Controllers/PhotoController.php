@@ -59,8 +59,8 @@ class PhotoController extends Controller
 
       // Check if $likes is an array
       if (!is_null($user)) {
-        if ($likes_arr = is_array($like)) {
-          $likes_arr = unserialize($likes_arr);
+        if (is_array($like)) {
+          $likes_arr = $like;
 
           foreach ($likes_arr as $like) {
               Likes::updateOrCreate([
