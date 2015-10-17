@@ -61,18 +61,10 @@ class PhotoController extends Controller
           $likes_arr = unserialize($likes_arr);
 
           foreach ($likes_arr as $like) {
-            dd($like);
-            $currentLikeCount = Likes::where(["photo_id" => $like, "user_id" => $user->id])->get()->count();
-
-            if ($currentLikeCount == 0) {
-              Likes::create([
+              Likes::updateOrCreate([
                 'user_id' => $id,
                 'photo_id' => $like
               ]);
-            } else {
-              Likes::where(["photo_id" => $like, "user_id" => $user->id])->delete();
-            }
-
           }
           return response()->json(1);
         }
