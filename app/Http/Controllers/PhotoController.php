@@ -25,7 +25,7 @@ class PhotoController extends Controller
 
   public function __construct() {
       \Config::set('auth.model', 'App\User');
-      //$this->middleware('jwt.auth');
+      $this->middleware('jwt.auth');
   }
 
     public function getSpecificLikes($photo_id) {
