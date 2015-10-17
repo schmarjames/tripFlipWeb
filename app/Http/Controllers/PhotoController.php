@@ -52,7 +52,7 @@ class PhotoController extends Controller
 
     public function addLikes(Request $request) {
       $data = \Input::all();
-      $id = $data['id'];
+      $id = $data['userId'];
       $like = $data['like'];
       // check user id
       $user = User::find($id);
