@@ -15,7 +15,15 @@ class PhotoApiController extends Controller
 {
 
     public function locationQuery(Request $request) {
-      $locations = LocationQuery::all();
+      $data = \Input::all();
+      $locations;
+      dd($data['id']);
+      if (!is_null($data['id']) && is_numeric($data['id'])) {
+          $locations = Location::where('id', $data['id'])->get();
+      } else {
+          $locations = LocationQuery::all();
+      }
+
       $this->dispatch(new QueryPhotoData($locations));
     }
 
