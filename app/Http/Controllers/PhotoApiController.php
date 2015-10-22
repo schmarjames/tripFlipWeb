@@ -19,7 +19,7 @@ class PhotoApiController extends Controller
       $locations;
 
       if (!is_null($data['id']) && is_numeric($data['id'])) {
-          $locations = Location::where('id', $data['id'])->get();
+          $locations = LocationQuery::where('id', $data['id'])->get();
       } else {
           $locations = LocationQuery::all();
       }
