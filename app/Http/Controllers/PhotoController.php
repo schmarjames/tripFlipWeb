@@ -221,7 +221,7 @@ class PhotoController extends Controller
       return $collection;
     }
 
-    public function getcategoryphotos(Request $request) {
+    public function getCategoryPhotos(Request $request) {
       $categories = PhotoCategories::all()
         ->map(function($category) {
           $photoUrl = Tfphotos::select('url')

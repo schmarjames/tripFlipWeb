@@ -40,11 +40,12 @@ Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
 
   Route::get('gallery/{id}', 'GalleryController@getGallery');
   Route::post('gallery/{id}/{country_id}/{query_num}', 'GalleryController@getPhotos');
+  Route::post('gallery/usercategories', 'GalleryController@getUserCategories');
 
 
   Route::post('photo/collection', 'PhotoController@getCollection');
   Route::post('photo/randomcollection', 'PhotoController@getRandomCollection');
-  Route::get('photo/categoryphotos', 'PhotoController@getcategoryphotos');
+  Route::get('photo/categoryphotos', 'PhotoController@getCategoryPhotos');
   Route::post('photo/updatecount', 'PhotoController@getUpdatePhotoFeedCount');
   Route::post('photo/likelist/{photo_id}', 'PhotoController@getSpecificLikes');
   Route::post('photo/visitors/{photo_id}', 'PhotoController@getVisitors');

@@ -10,6 +10,8 @@ use App\Gallery;
 use App\Countries;
 use App\Likes;
 use App\Tfphotos;
+use App\PhotoCategories;
+use App\CategoryTagsOfPhotos;
 
 class GalleryController extends Controller
 {
@@ -59,7 +61,7 @@ class GalleryController extends Controller
           ->select('photo_id')
           ->get()
           ->toArray();
-        
+
         return response()->json(
           Tfphotos::whereIn('country_id', $likes)
             ->take($limit)
@@ -71,6 +73,42 @@ class GalleryController extends Controller
       }
       return response()->json($this->message["error"]["get_country_photos"]);
     }
+
+    public function getUserCategories(Request $request) {
+      $user = \JWTAuth::parseToken()->authenticate();
+      $data = \Input::all();
+
+      $categories = PhotoCategories::all()
+        ->map(function($category) {
+
+          $likesAmount = Likes::count()
+            whereIn('photo_id', function($query) use ($category) {
+
+              $query
+                ->from('category_tags_of_photos')
+                ->selectRaw('photo_id')
+                ->where('category_id', '=', $category->id)
+
+            })
+            -where('user_id', $user->id)
+            ->get();
+            var_dump($likesAmount);
+        });
+
+        die();
+
+    }
+
+    /*public function getGalleryCollection(Request $request) {
+      $user = \JWTAuth::parseToken()->authenticate();
+      $data = \Input::all();
+
+      if ($data['queryType'] == 'category') {
+        $collection = $this->getCategoriesCollection();
+      } else if ($data['queryType'] == ) {
+
+      }
+    }*/
 
     /**
      * Show the form for creating a new resource.
