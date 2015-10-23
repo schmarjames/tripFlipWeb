@@ -111,7 +111,7 @@ class GalleryController extends Controller
           ->leftJoin('state_regions', 'tfphotos.state_region_id', '=', 'state_regions.id')
           ->leftJoin('cities' , 'tfphotos.city_id', '=', 'cities.id')
           ->leftJoin('counties', 'tfphotos.county_id', '=', 'counties.id')
-          ->whereIn('tfphotos.id', $likedPhotoIds),
+          ->whereIn('tfphotos.id', $likedPhotoIds)
           ->where(function($query) use ($countryId, $stateRegionId, $cityId) {
             if (!is_null($countryId)) {
               $query->where('tfphotos.country_id', $countryId);
