@@ -96,6 +96,9 @@ class GalleryController extends Controller
 
         list($countryId, $stateRegionId, $cityId) = $data['locationData'];
 
+        $likedPhotoIds = Likes::select('photo_id')->where('user_id', $user->id)->get()->toArray();
+        dd($likedPhotoIds);
+
         $collection = Tfphotos::select('tfphotos.*', 'location_data.lat', 'location_data.long', 'countries.country', 'state_regions.state_region', 'cities.city', 'counties.county')
           ->join('location_data', 'tfphotos.location_id', '=', 'location_data.id')
           ->join('countries', 'tfphotos.country_id', '=', 'countries.id')
