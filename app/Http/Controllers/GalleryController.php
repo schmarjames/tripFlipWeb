@@ -23,6 +23,8 @@ class GalleryController extends Controller
     ]
   ];
 
+  protected $weatherApiKey = "dc917ecc31f3df833231b3804d609fed";
+
   public function __construct() {
     \Config::set('auth.model', 'App\User');
     $this->middleware('jwt.auth');
