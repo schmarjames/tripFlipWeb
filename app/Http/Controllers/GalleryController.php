@@ -111,11 +111,23 @@ class GalleryController extends Controller
           ->leftJoin('state_regions', 'tfphotos.state_region_id', '=', 'state_regions.id')
           ->leftJoin('cities' , 'tfphotos.city_id', '=', 'cities.id')
           ->leftJoin('counties', 'tfphotos.county_id', '=', 'counties.id')
-          ->whereIn('tfphotos.id', $likedPhotoIds)
-          ->where('tfphotos.country_id', $countryId)
-          ->where('tfphotos.state_region_id', $stateRegionId)
-          ->where('tfphotos.city_id', $cityId)
-          ->take($data['amount'])
+          ->whereIn('tfphotos.id', $likedPhotoIds);
+
+        if (!is_null($countryId)) {
+          $collection->where('tfphotos.country_id', $countryId);
+        }
+
+
+        if (!is_null($stateRegionId)) {
+          $collection->where('tfphotos.state_region_id', $stateRegionId);
+        }
+
+
+        if (!is_null($cityId)) {
+          $collection->where('tfphotos.city_id', $cityId);
+        }
+
+        $collection->take($data['amount'])
           ->orderBy('created_at', 'desc')
           ->get();
 
