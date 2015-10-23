@@ -1,13 +1,12 @@
 import os, sys, urllib, cStringIO
 from PIL import Image
-sys.path.append('/usr/local/lib/python2.7/site-packages')
-import cv2
+sys.path.append('/home/forge/opencv-2.4.9/build/lib');
+import cv2 
 import numpy as np
-from matplotlib import pyplot as plt
 
 #face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-face_cascade = cv2.CascadeClassifier('/usr/local/Cellar/opencv/2.4.11_1/share/OpenCV/haarcascades/haarcascade_frontalface_default.xml');
-eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
+face_cascade = cv2.CascadeClassifier('../../opencv-2.4.9/data/haarcascades/haarcascade_frontalface_alt.xml');
+eye_cascade = cv2.CascadeClassifier('../../opencv-2.4.9/data/haarcascades/haarcascade_eye.xml')
 
 def createImage(url):
     file = urllib.urlopen(url)
@@ -46,6 +45,7 @@ def detectText(img):
     return len(contours)
 
 detect = 0
+
 img = createImage(sys.argv[1]);
 
 if (detectFace(img) == 0) and (detectText(img) < 2):

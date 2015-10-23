@@ -26,7 +26,6 @@ class FilterPhoto extends Command
     protected $description = 'Filter images with people or text in the tmp_flickr_data table.';
 
     protected $flickrEntryCount;
-    protected $categories;
     protected $flickrEntries;
     protected $country;
     protected $state_region;
@@ -47,7 +46,6 @@ class FilterPhoto extends Command
     {
         parent::__construct();
         $this->flickrEntries = TmpFlickrData::where('created_at', '<=', Carbon::now())->get();
-        $this->categories = PhotoCategories::all()->toArray();
     }
 
     /**
@@ -124,12 +122,15 @@ class FilterPhoto extends Command
        $res_arr = json_decode($res_data, true);
        if (array_key_exists('photo', $res_arr)) {
          if (count($res_arr["photo"]["tags"]) > 0) {
+             $categories = PhotoCategories::all()->toArray();
+
              $tags = array_column($res_arr["photo"]["tags"]["tag"], "_content");
-             foreach($this->categories as $category) {
+             foreach($categories as $category) {
                if (in_array($category["category"], $tags)) {
                  array_push($this->matchingCategoriesId, $category["id"]);
                }
              }
+
              return (count($this->matchingCategoriesId) > 0) ? true : false;
          }
        }
@@ -145,7 +146,7 @@ class FilterPhoto extends Command
     */
    protected function _filterPhoto($url) {
        // pass url to python script
-       return (bool)exec("python public/scanPhoto.py $url");
+       return (bool)exec("python /home/forge/default/public/scanPhoto.py $url");
    }
 
    protected function _photoGetInfoUrl($id) {

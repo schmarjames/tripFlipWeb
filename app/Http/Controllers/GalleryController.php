@@ -110,7 +110,13 @@ class GalleryController extends Controller
           ->leftJoin('state_regions', 'tfphotos.state_region_id', '=', 'state_regions.id')
           ->leftJoin('cities' , 'tfphotos.city_id', '=', 'cities.id')
           ->leftJoin('counties', 'tfphotos.county_id', '=', 'counties.id')
-          ->whereIn('tfphotos.id', $likedPhotoIds);
+          ->whereIn('tfphotos.id', function($query) use($user) {
+
+            $query
+              ->from('likes')
+              ->selectRaw('photo_id')
+              ->where('photo_id', 'tfphotos.id');
+          });
 
         if ($countryId)
             $collection->where('tfphotos.country_id', $countryId);
