@@ -79,6 +79,24 @@ class GalleryController extends Controller
       $user = \JWTAuth::parseToken()->authenticate();
       $data = \Input::all();
 
+      $categories = PhotoCategories::all()
+        ->map(function($category) {
+
+          $likesAmount = Likes::count()
+            whereIn('photo_id', function($query) use ($category) {
+
+              $query
+                ->from('category_tags_of_photos')
+                ->selectRaw('photo_id')
+                ->where('category_id', '=', $category->id)
+
+            })
+            -where('user_id', $user->id)
+            ->get();
+            var_dump($likesAmount);
+        });
+
+        die();
 
     }
 
