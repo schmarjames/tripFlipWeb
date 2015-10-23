@@ -84,7 +84,7 @@ class GalleryController extends Controller
         })
         ->get();
 
-        dd($options);
+        return response()->json($options);
     }
 
     public function getUserCategoryCollection(Request $request) {
