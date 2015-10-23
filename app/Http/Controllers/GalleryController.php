@@ -114,7 +114,7 @@ class GalleryController extends Controller
             $collection->where('tfphotos.country_id', $countryId);
 
         if ($stateRegionId)
-            $collection->where('tfphotos.state_regions_id', $stateRegionId);
+            $collection->where('tfphotos.state_region_id', $stateRegionId);
 
         if ($cityId)
             $collection->where('tfphotos.city_id', $cityId);
