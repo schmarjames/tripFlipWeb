@@ -105,21 +105,13 @@ class GalleryController extends Controller
           )
           ->toArray();
 
-          dd($likedPhotoIds);
-
         $collection = Tfphotos::select('tfphotos.*', 'location_data.lat', 'location_data.long', 'countries.country', 'state_regions.state_region', 'cities.city', 'counties.county')
           ->join('location_data', 'tfphotos.location_id', '=', 'location_data.id')
           ->join('countries', 'tfphotos.country_id', '=', 'countries.id')
           ->leftJoin('state_regions', 'tfphotos.state_region_id', '=', 'state_regions.id')
           ->leftJoin('cities' , 'tfphotos.city_id', '=', 'cities.id')
           ->leftJoin('counties', 'tfphotos.county_id', '=', 'counties.id')
-          ->whereIn('tfphotos.id', function($query) use($user) {
-
-            $query
-              ->from('likes')
-              ->selectRaw('photo_id')
-              ->where('photo_id', 'tfphotos.id');
-          });
+          ->whereIn('tfphotos.id', $likedPhotoIds);
 
         if ($countryId)
             $collection->where('tfphotos.country_id', $countryId);
