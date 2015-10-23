@@ -80,7 +80,7 @@ class GalleryController extends Controller
       $data = \Input::all();
 
       $categories = PhotoCategories::all()
-        ->map(function($category) {
+        ->map(function($category) use ($user) {
 
           $likesAmount = Likes::select('*')
             ->whereIn('photo_id', function($query) use ($category) {
