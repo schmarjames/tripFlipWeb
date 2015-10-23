@@ -113,7 +113,7 @@ class GalleryController extends Controller
           ->leftJoin('counties', 'tfphotos.county_id', '=', 'counties.id')
           ->whereIn('tfphotos.id', $likedPhotoIds)
           ->where('tfphotos.country_id', $countryId);
-          ->where('tfphotos.state_region_id', $stateRegionId);
+          ->where('tfphotos.state_region_id', $stateRegionId)
           ->where('tfphotos.city_id', $cityId)
           ->take($data['amount'])
           ->orderBy('created_at', 'desc')
