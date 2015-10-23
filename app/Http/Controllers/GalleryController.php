@@ -114,10 +114,10 @@ class GalleryController extends Controller
             $collection->where('tfphotos.country_id', $countryId);
 
         if ($stateRegionId)
-            $collection->where('tfphotos.state_regions_id');
+            $collection->where('tfphotos.state_regions_id', $stateRegionId);
 
         if ($cityId)
-            $collection->where('tfphotos.city_id');
+            $collection->where('tfphotos.city_id', $cityId);
 
 
         $collection->take($data['amount'])
