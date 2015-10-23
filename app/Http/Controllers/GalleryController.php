@@ -91,7 +91,7 @@ class GalleryController extends Controller
     public function getUserLocationCollection(Request $request) {
       $data = \Input::all();
       $user = \JWTAuth::parseToken()->authenticate();
-      dd($data);
+
       if(!is_null($data['locationData'])) {
 
         list($countryId, $stateRegionId, $cityId) = $data['locationData'];
