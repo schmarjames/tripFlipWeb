@@ -97,7 +97,7 @@ class GalleryController extends Controller
 
             $categoryInfo['category_id'] = $category->id;
             $categoryInfo['category_name'] = $category->category;
-
+            return $categoryInfo;
         });
         var_dump($categories);
         die();
