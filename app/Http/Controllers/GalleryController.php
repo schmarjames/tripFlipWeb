@@ -265,4 +265,23 @@ class GalleryController extends Controller
     {
         //
     }
+
+    public function getWeatherData($lat, $long) {
+      //api.openweathermap.org/data/2.5/weather?lat=" + this.state.lat + "&lon=" + this.state.long + "&APPID=dc917ecc31f3df833231b3804d609fed"
+      $url = sprintf(
+        "api.openweathermap.org/data/2.5/weather?lat=%s&lon=%s&APPID=%s",
+        $lat,
+        $long,
+        $this->weatherApiKey
+      );
+
+      $client = new \GuzzleHttp\Client();
+      $response = $client->get($url);
+
+      if ($response->getStatusCode() == 200) {
+          $res_data = $response->getBody()->getContents();
+          return json_decode($res_data, true);
+      }
+      return false;
+    }
 }
