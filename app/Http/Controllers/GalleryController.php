@@ -94,9 +94,12 @@ class GalleryController extends Controller
             ->where('user_id', $user->id)
             ->get()
             ->count();
-            var_dump($likesAmount);
-        });
 
+            $likesAmount['category_id'] = $category->id;
+            $likesAmount['category_name'] = $category->category;
+
+        });
+        var_dump($categories);
         die();
 
     }
