@@ -41,6 +41,7 @@ Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
   Route::get('gallery/{id}', 'GalleryController@getGallery');
   Route::post('gallery/{id}/{country_id}/{query_num}', 'GalleryController@getPhotos');
   Route::post('gallery/usercategories', 'GalleryController@getUserCategories');
+  Route::post('gallery/usercategorycollection', 'GalleryController@getUserCategoryCollection');
 
 
   Route::post('photo/collection', 'PhotoController@getCollection');
