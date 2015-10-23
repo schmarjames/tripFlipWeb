@@ -105,7 +105,6 @@ class GalleryController extends Controller
           )
           ->toArray();
 
-          dd(array_values($likedPhotoIds));
         $collection = Tfphotos::select('tfphotos.*', 'location_data.lat', 'location_data.long', 'countries.country', 'state_regions.state_region', 'cities.city', 'counties.county')
           ->join('location_data', 'tfphotos.location_id', '=', 'location_data.id')
           ->join('countries', 'tfphotos.country_id', '=', 'countries.id')
@@ -114,15 +113,19 @@ class GalleryController extends Controller
           ->leftJoin('counties', 'tfphotos.county_id', '=', 'counties.id')
           ->whereIn('tfphotos.id', $likedPhotoIds);
 
-        if ($countryId)
-            $collection->where('tfphotos.country_id', $countryId);
+        if ($countryId) {
+          $collection->where('tfphotos.country_id', $countryId);
+        }
 
-        if ($stateRegionId)
-            $collection->where('tfphotos.state_region_id', $stateRegionId);
 
-        if ($cityId)
-            $collection->where('tfphotos.city_id', $cityId);
+        if ($stateRegionId) {
+          $collection->where('tfphotos.state_region_id', $stateRegionId);
+        }
 
+
+        if ($cityId) {
+          $collection->where('tfphotos.city_id', $cityId);
+        }
 
         $collection->take($data['amount'])
           ->orderBy('created_at', 'desc')
