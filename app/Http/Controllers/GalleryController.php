@@ -113,6 +113,26 @@ class GalleryController extends Controller
 
     }
 
+    public function gallerySearchOptions(Request $request) {
+      $user = \JWTAuth::parseToken()->authenticate();
+
+      $options = Tfphotos::select('tfphotos.country_id', 'tfphotos.state_region_id', 'tfphotos.city_id', 'countries.country', 'state_regions.state_region', 'cities.city')
+        ->join('countries', 'tfphotos.country_id', '=', 'countries.id')
+        ->leftJoin('state_regions', 'tfphotos.state_region_id', '=', 'state_regions.id')
+        ->leftJoin('cities' , 'tfphotos.city_id', '=', 'cities.id')
+        ->whereIn('tfphoto.id', function($query) use ($user) {
+
+          $query
+            ->from('likes')
+            ->selectRaw('photo_id')
+            ->where('user_id', $user->id);
+
+        })
+        ->get();
+
+        dd($options);
+    }
+
     public function getUserCategoryCollection(Request $request) {
       $data = $request->only('amount', 'lastQueryId', 'latest', 'category');
       $user = \JWTAuth::parseToken()->authenticate();
