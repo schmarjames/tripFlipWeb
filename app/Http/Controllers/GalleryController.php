@@ -105,7 +105,7 @@ class GalleryController extends Controller
           )
           ->toArray();
 
-          dd($likedPhotoIds);
+          dd(array_values($likedPhotoIds));
         $collection = Tfphotos::select('tfphotos.*', 'location_data.lat', 'location_data.long', 'countries.country', 'state_regions.state_region', 'cities.city', 'counties.county')
           ->join('location_data', 'tfphotos.location_id', '=', 'location_data.id')
           ->join('countries', 'tfphotos.country_id', '=', 'countries.id')
