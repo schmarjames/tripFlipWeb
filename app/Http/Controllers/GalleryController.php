@@ -99,7 +99,9 @@ class GalleryController extends Controller
         $likedPhotoIds = Likes::select('photo_id')
           ->where('user_id', $user->id)
           ->get()
-          ->map(function($like) { return $like->photo_id; }));
+          ->map(function($like) {
+              return $like->photo_id;
+            });
 
           dd($likedPhotoIds);
 
