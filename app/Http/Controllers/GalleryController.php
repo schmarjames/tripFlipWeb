@@ -30,52 +30,6 @@ class GalleryController extends Controller
     $this->middleware('jwt.auth');
   }
 
-  /**
-   * Return a list of country ids based on the users id.
-   *
-   * @param  int  $id
-   * @return Response
-   */
-    public function getGallery($id)
-    {
-        if (!is_numeric($id) || is_null($id)) return response()->json($this->message["error"]["get_countries"]);
-
-        // Get gallery list of matching user
-        $gallery = Gallery::where('user_id', $id)->first();
-        return response()->json($gallery->country_list);
-    }
-
-    /**
-     * Get an array of photo urls based on the country id and query number.
-     *
-     * @param  int  $id, int $country_id, int $query_num
-     * @return Response
-     */
-    public function getPhotos($id, $country_id, $query_num)
-    {
-      if (!is_numeric($id) || !is_numeric($country_id)) return response()->json($this->message["error"]["get_country_photos"]);
-      $limit = 50;
-      $query_num = (is_null($query_num) || !is_numeric($query_num) || $query_num < 1) ? 1 : $query_num;
-      $start_row = ($query_num * $limit) - $limit;
-
-      if(Countries::where('id', $country_id)->first()) {
-        // get all photos liked by user
-        $likes = Likes::where('user_id', $id)
-          ->select('photo_id')
-          ->get()
-          ->toArray();
-
-        return response()->json(
-          Tfphotos::whereIn('country_id', $likes)
-            ->take($limit)
-            ->skip($start_row)
-            ->select('url')
-            ->get()
-            ->toArray()
-        );
-      }
-      return response()->json($this->message["error"]["get_country_photos"]);
-    }
 
     /**
      * Get categories and total liked photos of each category based
