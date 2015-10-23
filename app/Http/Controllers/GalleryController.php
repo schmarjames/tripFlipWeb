@@ -120,8 +120,7 @@ class GalleryController extends Controller
             $collection->where('tfphotos.city_id');
 
 
-        $collection->where('tfphotos.id', '<', $data['lastQueryId'])
-          ->take($data['amount'])
+        $collection->take($data['amount'])
           ->orderBy('created_at', 'desc')
           ->get();
 
