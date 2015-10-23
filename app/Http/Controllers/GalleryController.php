@@ -88,7 +88,7 @@ class GalleryController extends Controller
               $query
                 ->from('category_tags_of_photos')
                 ->selectRaw('photo_id')
-                ->where('category_id', '=', $category->id)
+                ->where('category_id', '=', $category->id);
 
             })
             ->where('user_id', $user->id)
