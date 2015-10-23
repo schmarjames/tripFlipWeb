@@ -91,7 +91,7 @@ class GalleryController extends Controller
                 ->where('category_id', '=', $category->id)
 
             })
-            -where('user_id', $user->id)
+            ->where('user_id', $user->id)
             ->get();
             var_dump($likesAmount);
         });
