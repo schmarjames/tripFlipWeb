@@ -107,7 +107,7 @@ class GalleryController extends Controller
             $query
               ->from('likes')
               ->selectRaw('photo_id')
-              ->whereIn('photo_id', 'tfphotos.id');
+              ->where('photo_id', 'tfphotos.id');
           });
 
         if ($countryId)
