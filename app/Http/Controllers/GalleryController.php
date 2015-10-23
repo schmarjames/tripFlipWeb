@@ -88,6 +88,49 @@ class GalleryController extends Controller
         return response()->json($options);
     }
 
+    public function getUserLocationCollection(Request $request) {
+      $data = $request->only('amount', 'lastQueryId', 'latest', 'category', 'locationData');
+      $user = \JWTAuth::parseToken()->authenticate();
+
+      if(!is_null($data['locationData'])) {
+
+        list($countryId, $stateRegionId, $cityId) = $data['locationData'];
+
+        $collection = Tfphotos::select('tfphotos.*', 'location_data.lat', 'location_data.long', 'countries.country', 'state_regions.state_region', 'cities.city', 'counties.county')
+          ->join('location_data', 'tfphotos.location_id', '=', 'location_data.id')
+          ->join('countries', 'tfphotos.country_id', '=', 'countries.id')
+          ->leftJoin('state_regions', 'tfphotos.state_region_id', '=', 'state_regions.id')
+          ->leftJoin('cities' , 'tfphotos.city_id', '=', 'cities.id')
+          ->leftJoin('counties', 'tfphotos.county_id', '=', 'counties.id')
+          ->whereIn('tfphotos.id', function($query) use($user) {
+
+            $query
+              ->from('likes')
+              ->selectRaw('photo_id')
+              ->whereIn('photo_id', 'tfphotos.id');
+          });
+
+        if ($countryId)
+            $collection->where('tfphotos.country_id', $countryId);
+
+        if ($stateRegionId)
+            $collection->where('tfphotos.state_regions_id');
+
+        if ($cityId)
+            $collection->where('tfphotos.city_id');
+
+
+        $collection->where('tfphotos.id', '<', $data['lastQueryId'])
+          ->take($data['amount'])
+          ->orderBy('created_at', 'desc')
+          ->get();
+
+          return response()->json($collection);
+      }
+
+      return response()->json("we have a problem");
+    }
+
     public function getUserCategoryCollection(Request $request) {
       $data = $request->only('amount', 'lastQueryId', 'latest', 'category');
       $user = \JWTAuth::parseToken()->authenticate();

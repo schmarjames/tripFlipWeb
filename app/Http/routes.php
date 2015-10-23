@@ -40,6 +40,7 @@ Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
 
   Route::post('gallery/usercategories', 'GalleryController@getUserCategories');
   Route::post('gallery/usercategorycollection', 'GalleryController@getUserCategoryCollection');
+  Route::post('gallery/userlocationcollection', 'GalleryController@getUserLocationCollection');
   Route::get('gallery/locationoptions', 'GalleryController@gallerySearchOptions');
 
 
