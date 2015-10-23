@@ -101,7 +101,9 @@ class GalleryController extends Controller
           ->get()
           ->map(function($like) {
               return $like->photo_id;
-            });
+            }
+          )
+          ->toArray();
 
           dd($likedPhotoIds);
 
