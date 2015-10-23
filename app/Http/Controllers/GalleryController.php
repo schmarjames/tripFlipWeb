@@ -74,7 +74,7 @@ class GalleryController extends Controller
         ->join('countries', 'tfphotos.country_id', '=', 'countries.id')
         ->leftJoin('state_regions', 'tfphotos.state_region_id', '=', 'state_regions.id')
         ->leftJoin('cities' , 'tfphotos.city_id', '=', 'cities.id')
-        ->whereIn('tfphoto.id', function($query) use ($user) {
+        ->whereIn('tfphotos.id', function($query) use ($user) {
 
           $query
             ->from('likes')
