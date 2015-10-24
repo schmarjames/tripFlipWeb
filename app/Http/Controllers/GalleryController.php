@@ -41,7 +41,38 @@ class GalleryController extends Controller
     public function getUserCategories(Request $request) {
       $user = \JWTAuth::parseToken()->authenticate();
       $data = \Input::all();
+      $albumData;
 
+      if ($data['type'] == 'categories') {
+        $albumData = $this->_getCategoryAlbumData($user);
+      } else if ($data['type'] == 'countries') {
+        $albumData = $this->_getCountryAlbumData($user);
+      }
+
+      return response()->json($albumData);
+
+    }
+
+    private function _getCountryAlbumData($user) {
+      $user = \JWTAuth::parseToken()->authenticate();
+
+      $options = Tfphotos::select('tfphotos.country_id', 'tfphotos.url', 'countries.country')
+        ->join('countries', 'tfphotos.country_id', '=', 'countries.id')
+        ->whereIn('tfphotos.id', function($query) use ($user) {
+
+          $query
+            ->from('likes')
+            ->selectRaw('photo_id')
+            ->where('user_id', $user->id);
+
+        })
+        ->distinct('tfphotos.country_id')
+        ->get();
+
+        return response()->json($options);
+    }
+
+    private function _getCategoryAlbumData($user) {
       $categories = PhotoCategories::all()
         ->map(function($category) use ($user) {
           $categoryInfo = [];
@@ -57,7 +88,7 @@ class GalleryController extends Controller
             ->where('user_id', $user->id)
             ->get()
             ->count();
-          
+
           $photoUrl = Tfphotos::select('url')
             ->where('id', function($query) use($category) {
               $query
@@ -76,8 +107,7 @@ class GalleryController extends Controller
           return $categoryInfo;
         });
 
-        return response()->json($categories);
-
+      return $categories;
     }
 
     public function gallerySearchOptions(Request $request) {
