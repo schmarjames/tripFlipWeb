@@ -42,7 +42,7 @@ class GalleryController extends Controller
       $user = \JWTAuth::parseToken()->authenticate();
       $data = \Input::all();
       $albumData;
-  
+
       if ($data['type'] == 'categories') {
         $albumData = $this->_getCategoryAlbumData($user);
       } else if ($data['type'] == 'countries') {
@@ -69,7 +69,7 @@ class GalleryController extends Controller
         ->distinct('tfphotos.country_id')
         ->get();
 
-        return response()->json($options);
+        return $options;
     }
 
     private function _getCategoryAlbumData($user) {
