@@ -58,6 +58,10 @@ class GalleryController extends Controller
             ->get()
             ->count();
 
+          if ($categoryInfo['likesAmount'] < 1) {
+            continue;
+          }
+
           $photoUrl = Tfphotos::select('url')
             ->where('id', function($query) use($category) {
               $query
