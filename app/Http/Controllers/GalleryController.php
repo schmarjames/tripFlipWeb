@@ -66,8 +66,7 @@ class GalleryController extends Controller
             ->where('user_id', $user->id);
 
         })
-        ->groupby('tfphotos.country_id')
-        ->distinct('tfphotos.country_id')
+        ->distinct('tfphotos.url')
         ->get();
 
         return $options;
