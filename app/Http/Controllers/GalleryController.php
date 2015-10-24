@@ -72,7 +72,7 @@ class GalleryController extends Controller
 
           $categoryInfo['category_id'] = $category->id;
           $categoryInfo['category_name'] = $category->category;
-          $categoryInfo['url'] = $photoUrl;
+          $categoryInfo['url'] = $photoUrl->url;
           return $categoryInfo;
         });
 
