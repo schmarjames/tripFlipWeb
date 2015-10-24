@@ -57,7 +57,7 @@ class GalleryController extends Controller
       $user = \JWTAuth::parseToken()->authenticate();
 
       $options = Tfphotos::select('tfphotos.country_id', 'tfphotos.url', 'countries.country')
-        ->join('countries', 'tfphotos.country_id', '=', 'countries.id')
+        ->leftJoin('countries', 'tfphotos.country_id', '=', 'countries.id')
         ->whereIn('tfphotos.id', function($query) use ($user) {
 
           $query
