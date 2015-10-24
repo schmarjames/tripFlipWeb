@@ -42,7 +42,7 @@ class GalleryController extends Controller
       $user = \JWTAuth::parseToken()->authenticate();
       $data = \Input::all();
       $albumData;
-
+      dd($data);
       if ($data['type'] == 'categories') {
         $albumData = $this->_getCategoryAlbumData($user);
       } else if ($data['type'] == 'countries') {
