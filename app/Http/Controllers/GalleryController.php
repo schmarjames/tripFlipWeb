@@ -66,7 +66,7 @@ class GalleryController extends Controller
             ->where('user_id', $user->id);
 
         })
-        ->distinct('tfphotos.url')
+        ->distinct('country')
         ->get();
 
         return $options;
