@@ -57,7 +57,7 @@ class GalleryController extends Controller
       $user = \JWTAuth::parseToken()->authenticate();
 
       $options = Tfphotos::select('tfphotos.country_id', 'tfphotos.url', 'countries.country')
-        ->leftJoin('countries', 'tfphotos.country_id', '=', 'countries.id')
+        ->join('countries', 'tfphotos.country_id', '=', 'countries.id')
         ->whereIn('tfphotos.id', function($query) use ($user) {
 
           $query
@@ -66,7 +66,8 @@ class GalleryController extends Controller
             ->where('user_id', $user->id);
 
         })
-        ->distinct('country_id')
+        ->groupby('tfphotos.country_id')
+        ->distinct('tfphotos.country_id')
         ->get();
 
         return $options;
