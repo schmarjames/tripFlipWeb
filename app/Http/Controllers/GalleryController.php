@@ -58,9 +58,22 @@ class GalleryController extends Controller
             ->get()
             ->count();
 
-            $categoryInfo['category_id'] = $category->id;
-            $categoryInfo['category_name'] = $category->category;
-            return $categoryInfo;
+          $photoUrl = Tfphotos::select('url')
+            ->where('id', function($query) use($category) {
+              $query
+                ->from('category_tags_of_photos')
+                ->selectRaw('photo_id')
+                ->where('category_id', '=', $category->id)
+                ->take(1)
+                ->orderBy(\DB::raw('random()'));
+            })
+            ->orderBy(\DB::raw('random()'))
+            ->first();
+
+          $categoryInfo['category_id'] = $category->id;
+          $categoryInfo['category_name'] = $category->category;
+          $categoryInfo['url'] = $photoUrl;
+          return $categoryInfo;
         });
 
         return response()->json($categories);
