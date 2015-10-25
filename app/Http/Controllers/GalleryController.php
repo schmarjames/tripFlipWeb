@@ -166,7 +166,7 @@ class GalleryController extends Controller
           ->leftJoin('cities' , 'tfphotos.city_id', '=', 'cities.id')
           ->leftJoin('counties', 'tfphotos.county_id', '=', 'counties.id')
           ->whereIn('tfphotos.id', $likedPhotoIds)
-          ->where(function($query) use ($countryId, $stateRegionId, $cityId) {
+          ->where(function($query) use ($countryId, $stateRegionId, $cityId, $data) {
             if (!is_null($countryId)) {
               $query->where('tfphotos.country_id', $countryId);
             }
@@ -179,6 +179,10 @@ class GalleryController extends Controller
 
             if (!is_null($cityId)) {
               $query->where('tfphotos.city_id', $cityId);
+            }
+
+            if (is_numeric($data['lastQueryId'])) {
+              $query->where('tfphotos.id', '>', $data['lastQueryId']);
             }
           })
           ->take($data['amount'])
