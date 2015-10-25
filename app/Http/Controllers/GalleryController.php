@@ -72,8 +72,8 @@ class GalleryController extends Controller
 
           $url = Tfphotos::select('url')
             ->where('country_id', $countryData->country_id)
-            ->get();
-            dd($url);
+            ->get()
+            ->url;
           $countryData['url'] = $url;
           return $countryData;
         });
