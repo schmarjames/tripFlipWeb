@@ -56,7 +56,7 @@ class GalleryController extends Controller
     private function _getCountryAlbumData($user) {
       $user = \JWTAuth::parseToken()->authenticate();
 
-      $options = Tfphotos::select('tfphotos.country_id', 'countries.country')
+      $options = Tfphotos::select('tfphotos.country_id AS id', 'countries.country')
         ->join('countries', 'tfphotos.country_id', '=', 'countries.id')
         ->whereIn('tfphotos.id', function($query) use ($user) {
 
