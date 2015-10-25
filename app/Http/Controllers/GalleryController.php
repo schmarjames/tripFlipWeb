@@ -145,9 +145,9 @@ class GalleryController extends Controller
     public function getUserLocationCollection(Request $request) {
       $data = \Input::all();
       $user = \JWTAuth::parseToken()->authenticate();
-        return response()->json($data['locationData']);
 
       if(!is_null($data['locationData'])) {
+
         list($countryId, $stateRegionId, $cityId) = $data['locationData'];
 
         $likedPhotoIds = Likes::where('user_id', $user->id)
