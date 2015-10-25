@@ -147,7 +147,7 @@ class GalleryController extends Controller
       $user = \JWTAuth::parseToken()->authenticate();
 
       if(!is_null($data['locationData'])) {
-
+        dd($data['locationData']);
         list($countryId, $stateRegionId, $cityId) = $data['locationData'];
 
         $likedPhotoIds = Likes::where('user_id', $user->id)
