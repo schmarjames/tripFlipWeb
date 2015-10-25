@@ -181,7 +181,7 @@ class GalleryController extends Controller
             }
 
             if (is_numeric($data['lastQueryId'])) {
-              $query->where('tfphotos.id', '>', $data['lastQueryId']);
+              $query->where('tfphotos.id', '<', $data['lastQueryId']);
             }
           })
           ->take($data['amount'])
