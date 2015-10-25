@@ -74,7 +74,7 @@ class GalleryController extends Controller
             ->where('country_id', $countryData->country_id)
             ->get();
             dd($url);
-          $countryData['url', $url];
+          $countryData['url'] = $url;
           return $countryData;
         });
 
