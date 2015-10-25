@@ -71,7 +71,7 @@ class GalleryController extends Controller
         ->map(function($countryData) use ($user) {
 
           $url = Tfphotos::select('url')
-            ->where('country_id', $countryData->country_id)
+            ->where('id', $countryData->country_id)
             ->take(1)
             ->orderBy(\DB::raw('random()'))
             ->first()
