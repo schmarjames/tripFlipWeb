@@ -148,7 +148,7 @@ class GalleryController extends Controller
 
       if(!is_null($data['locationData'])) {
 
-        list($countryId, $stateRegionId, $cityId) = jsona_decode($data['locationData']);
+        list($countryId, $stateRegionId, $cityId) = json_decode($data['locationData']);
         $likedPhotoIds = Likes::where('user_id', $user->id)
           ->select('photo_id')
           ->get()
