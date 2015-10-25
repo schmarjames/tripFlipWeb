@@ -74,7 +74,8 @@ class GalleryController extends Controller
             ->where('country_id', $countryData->country_id)
             ->take(1)
             ->orderBy(\DB::raw('random()'))
-            ->first();
+            ->first()
+            ->url;
           $countryData['url'] = $url;
           return $countryData;
         });
