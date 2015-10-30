@@ -201,10 +201,6 @@ class GalleryController extends Controller
       $stateRegionId;
       $cityId;
 
-      if(!is_null($data['locationData'])) {
-        list($countryId, $stateRegionId, $cityId) = json_decode($data['locationData']);
-      }
-
       $collection = new Tfphotos;
 
       $collection = $collection::select('tfphotos.*', 'location_data.lat', 'location_data.long', 'countries.country', 'state_regions.state_region', 'cities.city', 'counties.county')
