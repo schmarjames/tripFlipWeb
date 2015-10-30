@@ -204,6 +204,7 @@ class GalleryController extends Controller
       /*if(!is_null($data['locationData'])) {
         list($countryId, $stateRegionId, $cityId) = json_decode($data['locationData']);
       }*/
+      $collection = new Tfphotos;
 
       $collection = Tfphotos::select('tfphotos.*', 'location_data.lat', 'location_data.long', 'countries.country', 'state_regions.state_region', 'cities.city', 'counties.county')
         ->join('location_data', 'tfphotos.location_id', '=', 'location_data.id')
@@ -228,18 +229,18 @@ class GalleryController extends Controller
       if (is_numeric($data['lastQueryId']) && !(bool)$data['latest']) {
         $collection->where('tfphotos.id', '<', $data['lastQueryId']);
       }
-
       // If adding latest photos to feed
       else if (is_numeric($data['lastQueryId']) && (bool)$data['latest']) {
         $collection->where('tfphotos.id', '>', $data['lastQueryId']);
       }
       // If initial query for feed
       else {
-        $collection->take($data['amount'])
+        $collection
+          ->take($data['amount'])
           ->orderBy('created_at', 'desc')
           ->get();
       }
-      return response()->json($collection);
+
       // include the likes and weather data foreach photo
       $collection = $collection->map(function($photo, $v) use ($user) {
         $photoLikedTotal = Likes::where("photo_id", $photo->id)->select("user_id")->get()->count();
