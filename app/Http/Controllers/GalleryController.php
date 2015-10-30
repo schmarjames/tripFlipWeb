@@ -251,7 +251,7 @@ class GalleryController extends Controller
         return $photo;
       });
       // return collection of photos and last photos id
-      return response()->json($extra);
+      return response()->json($collection);
     }
 
     /**
