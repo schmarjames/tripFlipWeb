@@ -233,13 +233,11 @@ class GalleryController extends Controller
       else if (is_numeric($data['lastQueryId']) && (bool)$data['latest']) {
         $collection->where('tfphotos.id', '>', $data['lastQueryId']);
       }
-      // If initial query for feed
-      else {
-        $collection
-          ->take($data['amount'])
-          ->orderBy('created_at', 'desc')
-          ->get();
-      }
+
+      $collection
+        ->take($data['amount'])
+        ->orderBy('created_at', 'desc')
+        ->get();
 
       // include the likes and weather data foreach photo
       $extra = $collection->map(function($photo, $v) use ($user) {
