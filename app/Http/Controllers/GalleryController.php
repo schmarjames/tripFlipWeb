@@ -242,7 +242,7 @@ class GalleryController extends Controller
       }
 
       // include the likes and weather data foreach photo
-      $collection = $collection->map(function($photo, $v) use ($user) {
+      $extra = $collection->map(function($photo, $v) use ($user) {
         $photoLikedTotal = Likes::where("photo_id", $photo->id)->select("user_id")->get()->count();
         $userLiked = Likes::where(["photo_id" => $photo->id, "user_id" => $user->id])->select("user_id")->get();
 
@@ -253,7 +253,7 @@ class GalleryController extends Controller
         return $photo;
       });
       // return collection of photos and last photos id
-      return response()->json($collection);
+      return response()->json($extra);
     }
 
     /**
