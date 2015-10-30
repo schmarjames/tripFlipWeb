@@ -201,9 +201,10 @@ class GalleryController extends Controller
       $stateRegionId;
       $cityId;
 
-      /*if(!is_null($data['locationData'])) {
+      if(!is_null($data['locationData'])) {
         list($countryId, $stateRegionId, $cityId) = json_decode($data['locationData']);
-      }*/
+      }
+
       $collection = new Tfphotos;
 
       $collection = $collection::select('tfphotos.*', 'location_data.lat', 'location_data.long', 'countries.country', 'state_regions.state_region', 'cities.city', 'counties.county')
@@ -224,6 +225,24 @@ class GalleryController extends Controller
                 ->where('category_id', '=', $data['category']);
             });
         });
+
+      if(!is_null($data['locationData'])) {
+        list($countryId, $stateRegionId, $cityId) = json_decode($data['locationData']);
+
+        $collection = $collection->where(function($query) use ($countryId, $stateRegionId, $cityId, $data) {
+          if (!is_null($countryId)) {
+            $query->where('tfphotos.country_id', $countryId);
+          }
+
+          if (!is_null($stateRegionId)) {
+            $query->where('tfphotos.state_region_id', $stateRegionId);
+          }
+
+          if (!is_null($cityId)) {
+            $query->where('tfphotos.city_id', $cityId);
+          }
+        });
+      }
 
       // If adding more photos to feed
       if (is_numeric($data['lastQueryId']) && !(bool)$data['latest']) {
