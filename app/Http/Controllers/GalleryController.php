@@ -222,7 +222,7 @@ class GalleryController extends Controller
             });
         });
 
-      if(in_array('locationData', $data)) {
+      if (in_array('locationData', $data) && !is_null($data['locationData'])) {
         list($countryId, $stateRegionId, $cityId) = json_decode($data['locationData']);
 
         $collection = $collection->where(function($query) use ($countryId, $stateRegionId, $cityId, $data) {
