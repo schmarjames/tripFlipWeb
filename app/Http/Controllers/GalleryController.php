@@ -241,12 +241,8 @@ class GalleryController extends Controller
       }
 
       // If adding more photos to feed
-      if (is_numeric($data['lastQueryId']) && !(bool)$data['latest']) {
+      if (is_numeric($data['lastQueryId'])) {
         $collection = $collection->where('tfphotos.id', '<', $data['lastQueryId']);
-      }
-      // If adding latest photos to feed
-      else if (is_numeric($data['lastQueryId']) && (bool)$data['latest']) {
-        $collection = $collection->where('tfphotos.id', '>', $data['lastQueryId']);
       }
 
       $collection = $collection
