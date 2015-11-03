@@ -17,8 +17,8 @@ class LocationApiController extends Controller {
 
   public function handleLocation(Request $request) {
     $data = \Input::all();
-    dd($data["geo"]);
-    //Log::info($request);
+    //dd($data["geo"]);
+    Log::info($data["geo"]);
 
 
   }
