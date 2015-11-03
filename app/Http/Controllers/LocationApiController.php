@@ -20,7 +20,7 @@ class LocationApiController extends Controller {
     //dd($data["geo"]);
     Log::info($request);
 
-
+    return response()->json($request);
   }
 
 }
