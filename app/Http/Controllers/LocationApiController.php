@@ -16,7 +16,9 @@ use Log;
 class LocationApiController extends Controller {
 
   public function handleLocation(Request $request) {
-    Log::info($request);
+    $data = \Input::all();
+    dd($data["geo"]);
+    //Log::info($request);
 
 
   }
