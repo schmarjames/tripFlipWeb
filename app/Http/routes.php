@@ -28,7 +28,7 @@ Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
   Route::post('authChangeCred', 'AuthenticateController@changeUserCredentials');
 
   Route::post('location', 'PhotoApiController@locationQuery');
-  Route::post('goedata', 'LocationApiController@handleLocation');
+  Route::post('geodata', 'LocationApiController@handleLocation');
 
   Route::resource('rejects', 'RejectsController', ['only' => ['index', 'destroy']]);
   Route::post('rejects/photos/{amount}/{lastQuery}', 'RejectsController@queryPhotos');
