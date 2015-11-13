@@ -158,6 +158,11 @@ return [
          * DB Backup
          */
         BackupManager\Laravel\Laravel5ServiceProvider::class,
+
+        /*
+         * GeoCoder
+         */
+        Toin0u\Geocoder\GeocoderServiceProvider::class,
     ],
 
     /*
@@ -206,8 +211,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
         'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
-        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class
-
+        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+        'Geocoder' => Toin0u\Geocoder\Facade\Geocoder::class,
     ],
 
 ];
