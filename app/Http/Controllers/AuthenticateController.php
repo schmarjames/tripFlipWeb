@@ -58,7 +58,8 @@ class AuthenticateController extends Controller
       "country" => $data["country"],
       "zip_code" => $data["zipCode"],
       "profile_pic" => $data["avatarSource"],
-      "geo" => json_encode(["lat" => $data["lat"], "lng" => $data["lng"]])
+      "geo" => json_encode(["lat" => $data["lat"], "lng" => $data["lng"]]),
+      "notifications_active" => 1
       ]);
 
     if(!is_null($newUser)) {
@@ -92,7 +93,7 @@ class AuthenticateController extends Controller
   public function assignTemporaryPassword(Request $request) {
     \Config::set('auth.model', 'App\User');
     $email = $request->only('email');
-    
+
     $user = User::where('email', $email)->first();
 
     if (!is_null($user)) {

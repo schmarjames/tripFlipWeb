@@ -15,7 +15,17 @@ class DatabaseSeeder extends Seeder
         Model::unguard();
 
         // $this->call('UserTableSeeder');
-        $this->call('LocationQueryTableSeeder');
+        //$this->call('LocationQueryTableSeeder');
+
+        DB::table('admin_users')->insert([
+            'name' => 'Test',
+            'email' => 'test@gmail.com',
+            'password' => bcrypt('Impala96'),
+            'remember_token' => null,
+            'created_at' => Carbon\Carbon::now(),
+            'updated_at' => Carbon\Carbon::now(),
+            'permission_type' => 2
+        ]);
 
         /*DB::table('users')->insert([
             'name' => 'Rob',
