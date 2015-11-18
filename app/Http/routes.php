@@ -33,11 +33,15 @@ Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
   Route::resource('rejects', 'RejectsController', ['only' => ['index', 'destroy']]);
   Route::post('rejects/photos/{amount}/{lastQuery}', 'RejectsController@queryPhotos');
   Route::post('rejects/transfer/{id}', 'RejectsController@transfer');
+  Route::post('rejects/approve/{id}', 'RejectsController@approve');
 
   Route::resource('accepts', 'AcceptsController', ['only' => ['index']]);
   Route::post('accepts/photos/{amount}/{lastQuery}', 'AcceptsController@queryPhotos');
   Route::post('accepts/store/{id}', 'AcceptsController@store');
   Route::post('accepts/transfer/{id}', 'AcceptsController@transfer');
+  Route::post('accepts/approve/{id}', 'AcceptsController@approve');
+  Route::post('accepts/approvedphotos/{amount}/{lastQuery}', 'AcceptsController@queryApprovedPhotos');
+  Route::get('accepts/locations', 'AcceptsController@locations');
 
   Route::post('gallery/albumcollection', 'GalleryController@getUserCategories');
   Route::post('gallery/usercategorycollection', 'GalleryController@getUserCategoryCollection');

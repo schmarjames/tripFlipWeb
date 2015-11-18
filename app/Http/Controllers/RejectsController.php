@@ -24,7 +24,8 @@ class RejectsController extends Controller
     ],
     "success" => [
       "transfer" => "Photo was successfully moved to the accepted table",
-      "delete" => "Photo is now deleted"
+      "delete" => "Photo is now deleted",
+      "approve" => "Photo has been approved"
       ]
   ];
 
@@ -59,18 +60,16 @@ class RejectsController extends Controller
 
     public function queryPhotos($amount, $lastQueryId) {
       $rejectedPhotos;
+
+      $rejectedPhotos = RejectedPhotos::select('*');
       if (is_numeric($lastQueryId)) {
-        $rejectedPhotos = RejectedPhotos::select('*')
-          ->where('id', '<', $lastQueryId)
-          ->take($amount)
-          ->orderBy('id', 'desc')
-          ->get();
-      } else {
-        $rejectedPhotos = RejectedPhotos::select('*')
-          ->take($amount)
-          ->orderBy('id', 'desc')
-          ->get();
+        $rejectedPhotos = $rejectedPhotos->where('id', '<', $lastQueryId);
       }
+
+      $rejectedPhotos = $rejectedPhotos
+        ->take($amount)
+        ->orderBy('id', 'desc')
+        ->get();
 
       return response()->json($rejectedPhotos);
     }
@@ -119,4 +118,18 @@ class RejectsController extends Controller
       $photo->delete();
       return $this->message["success"]["transfer"];
     }
+
+    /**
+     * Toggle photos approval status
+     *
+     * @param  int  $id
+     * @return Response
+     */
+     public function approve($id) {
+       $photo = RejectedPhotos::where('id', $id)->update(['approved'=> 1]);
+
+       if (!is_null($photo)) {
+         return $this->message["success"]["approve"];
+       }
+     }
 }

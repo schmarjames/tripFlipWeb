@@ -16,6 +16,7 @@ use App\LocationData;
 use App\PhotoCategories;
 use App\CategoryTagsOfPhotos;
 use App\Tfphotos;
+use App\LocationQuery;
 
 class AcceptsController extends Controller
 {
@@ -58,7 +59,8 @@ class AcceptsController extends Controller
     "success" => [
       "store" => "Photo was successfully approved",
       "transfer" => "Photo was successfully moved to the rejected table",
-      "delete" => "Photo is now deleted"
+      "delete" => "Photo is now deleted",
+      "approve" => "Photo has been approved"
       ]
   ];
 
@@ -83,21 +85,47 @@ class AcceptsController extends Controller
     }*/
 
     public function queryPhotos($amount, $lastQueryId) {
-      $accepteddPhotos;
+      $acceptedPhotos;
+
+      $acceptedPhotos = AcceptedPhotos::select('*');
+
       if (is_numeric($lastQueryId)) {
-        $accepteddPhotos = AcceptedPhotos::select('*')
-          ->where('id', '<', $lastQueryId)
-          ->take($amount)
-          ->orderBy('id', 'desc')
-          ->get();
-      } else {
-        $accepteddPhotos = AcceptedPhotos::select('*')
-          ->take($amount)
-          ->orderBy('id', 'desc')
-          ->get();
+        $acceptedPhotos = $acceptedPhotos->where('id', '<', $lastQueryId);
       }
 
-      return response()->json($accepteddPhotos);
+      $acceptedPhotos = $acceptedPhotos->take($amount)
+      ->orderBy('id', 'desc')
+      ->get();
+
+      return response()->json($acceptedPhotos);
+    }
+
+    public function queryApprovedPhotos($amount, $lastQueryId) {
+      $approvedPhotos;
+      $acceptedPhotos;
+      $rejectedPhotos;
+
+      $acceptedPhotos = AcceptedPhotos::select('*');
+      $rejectedPhotos = RejectedPhotos::select('*');
+
+      if (is_numeric($lastQueryId)) {
+          $acceptedPhotos = $acceptedPhotos
+            ->where('id', '<', $lastQueryId);
+
+          $rejectedPhotos = $rejectedPhotos
+            ->where('id', '<', $lastQueryId);
+      }
+
+      $acceptedPhotos = $acceptedPhotos->where('approved', 1);
+      $rejectedPhotos = $rejectedPhotos->where('approved', 1);
+
+      $approvedPhotos = $acceptedPhotos
+        ->union($rejectedPhotos)
+        ->take($amount)
+        ->orderBy('id', 'desc')
+        ->get();
+
+      return response()->json($approvedPhotos);
     }
 
     /**
@@ -238,9 +266,43 @@ class AcceptsController extends Controller
     public function destroy($id)
     {
       if(!is_numeric($id)) return $this->message["error"]["delete"];
-      $photo = AccpetedPhotos::find($id);
+      $photo = AcceptedPhotos::find($id);
 
       return $photo->delete();
+    }
+
+
+   /**
+    * Toggle photos approval status
+    *
+    * @param  int  $id
+    * @return Response
+    */
+    public function approve($id) {
+     $photo = AcceptedPhotos::where('id', $id)->update(['approved'=> 1]);
+
+     if (!is_null($photo)) {
+       return $this->message["success"]["approve"];
+      }
+    }
+
+    public function locations() {
+      $locations = LocationQuery::distinct()->select('country', 'state_region', 'city')->get();
+      $locationArr = [];
+      $countries = [];
+      $stateRegions = [];
+      $cities = [];
+
+
+      foreach ($locations as $location) {
+        array_push($countries, ['name' => $location->country]);
+        array_push($stateRegions, ['name' => $location->state_region]);
+        array_push($cities, ['name' => $location->city]);
+      }
+
+      array_push($locationArr, ['countries' => $countries], ['stateRegions' => $stateRegions], ['cities' => $cities]);
+
+      return response()->json($locationArr);
     }
 
     /**
