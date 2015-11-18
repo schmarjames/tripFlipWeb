@@ -299,8 +299,9 @@ class AcceptsController extends Controller
         array_push($stateRegions, ['name' => $location->state_region]);
         array_push($cities, ['name' => $location->city]);
       }
-
-      array_push($locationArr, ['countries' => $countries], ['stateRegions' => $stateRegions], ['cities' => $cities]);
+      $locationArr['countries'] = $countries;
+      $locationArr['stateRegions'] = $stateRegions;
+      $locationArr['cities'] = $cities;
 
       return response()->json($locationArr);
     }
