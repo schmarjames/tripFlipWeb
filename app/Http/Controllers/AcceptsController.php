@@ -296,14 +296,21 @@ class AcceptsController extends Controller
 
       foreach ($locations as $location) {
         if ($location->country !== "") {
-          array_push($locationArr["locations"], ['name' => $location->country]);
+          array_push(
+            $locationArr["locations"],
+            [
+              'name' => $location->country,
+              'country' => $location->country
+            ]
+          );
         }
 
         if ($location->state_region !== "") {
           array_push(
             $locationArr["locations"],
             [
-              'name' => $location->state_region,
+              'name' => $location->state_region . ', ' . $location->country,
+              'stateRegion' => $location->state_region,
               'country' => $location->country
             ]
           );
@@ -313,9 +320,10 @@ class AcceptsController extends Controller
           array_push(
             $locationArr["locations"],
             [
-              'name' => $location->city,
-              'country' => $location->country,
-              'stateRegion' => $location->state_region
+              'name' => $location->city . ', ' . $location->state_region . ', ' . $location->country,
+              'city' => $location->city,
+              'stateRegion' => $location->state_region,
+              'country' => $location->country
             ]
           );
         }
