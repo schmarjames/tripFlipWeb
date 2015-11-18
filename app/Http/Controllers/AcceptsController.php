@@ -126,18 +126,18 @@ class AcceptsController extends Controller
       if ($locations) {
         $locations = json_decode($locations);
         if ($locations->country != "") {
-            $acceptedPhotos = $acceptedPhotos->where('country', $location->country);
-            $rejectedPhotos = $rejectedPhotos->where('country', $location->country);
+            $acceptedPhotos = $acceptedPhotos->where('country', $locations->country);
+            $rejectedPhotos = $rejectedPhotos->where('country', $locations->country);
         }
 
         if ($locations->stateRegion != "") {
-            $acceptedPhotos = $acceptedPhotos->where('state_region', $location->stateRegion);
-            $rejectedPhotos = $rejectedPhotos->where('state_region', $location->stateRegion);
+            $acceptedPhotos = $acceptedPhotos->where('state_region', $locations->stateRegion);
+            $rejectedPhotos = $rejectedPhotos->where('state_region', $locations->stateRegion);
         }
 
         if ($locations->city != "") {
-            $acceptedPhotos = $acceptedPhotos->where('city', $location->city);
-            $rejectedPhotos = $rejectedPhotos->where('city', $location->city);
+            $acceptedPhotos = $acceptedPhotos->where('city', $locations->city);
+            $rejectedPhotos = $rejectedPhotos->where('city', $locations->city);
         }
       }
 
