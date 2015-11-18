@@ -288,20 +288,38 @@ class AcceptsController extends Controller
 
     public function locations() {
       $locations = LocationQuery::distinct()->select('country', 'state_region', 'city')->get();
-      $locationArr = [];
+      $locationArr = ["locations" => []];
       $countries = [];
       $stateRegions = [];
       $cities = [];
 
 
       foreach ($locations as $location) {
-        array_push($countries, ['name' => $location->country]);
-        array_push($stateRegions, ['name' => $location->state_region]);
-        array_push($cities, ['name' => $location->city]);
+        if ($location->country !== "") {
+          array_push($locationArr["locations"], ['name' => $location->country]);
+        }
+
+        if ($location->state_region !== "") {
+          array_push(
+            $locationArr["locations"],
+            [
+              'name' => $location->state_region,
+              'country' => $location->country
+            ]
+          );
+        }
+
+        if ($location->city) {
+          array_push(
+            $locationArr["locations"],
+            [
+              'name' => $location->city,
+              'country' => $location->country,
+              'stateRegion' => $location->state_region
+            ]
+          );
+        }
       }
-      $locationArr['countries'] = $countries;
-      $locationArr['stateRegions'] = $stateRegions;
-      $locationArr['cities'] = $cities;
 
       return response()->json($locationArr);
     }
