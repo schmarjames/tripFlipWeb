@@ -84,10 +84,25 @@ class AcceptsController extends Controller
         return response()->json($acceptedPhotos);
     }*/
 
-    public function queryPhotos($amount, $lastQueryId) {
+    public function queryPhotos($amount, $lastQueryId, $locations) {
       $acceptedPhotos;
 
       $acceptedPhotos = AcceptedPhotos::select('*');
+
+      if ($locations) {
+        $locations = json_decode($locations);
+        if ($locations->country != "") {
+            $acceptedPhotos = $acceptedPhotos->where('country', $location->country);
+        }
+
+        if ($locations->stateRegion != "") {
+            $acceptedPhotos = $acceptedPhotos->where('state_region', $location->stateRegion);
+        }
+
+        if ($locations->city != "") {
+            $acceptedPhotos = $acceptedPhotos->where('city', $location->city);
+        }
+      }
 
       if (is_numeric($lastQueryId)) {
         $acceptedPhotos = $acceptedPhotos->where('id', '<', $lastQueryId);
@@ -100,13 +115,31 @@ class AcceptsController extends Controller
       return response()->json($acceptedPhotos);
     }
 
-    public function queryApprovedPhotos($amount, $lastQueryId) {
+    public function queryApprovedPhotos($amount, $lastQueryId, $locations) {
       $approvedPhotos;
       $acceptedPhotos;
       $rejectedPhotos;
 
       $acceptedPhotos = AcceptedPhotos::select('*');
       $rejectedPhotos = RejectedPhotos::select('*');
+
+      if ($locations) {
+        $locations = json_decode($locations);
+        if ($locations->country != "") {
+            $acceptedPhotos = $acceptedPhotos->where('country', $location->country);
+            $rejectedPhotos = $rejectedPhotos->where('country', $location->country);
+        }
+
+        if ($locations->stateRegion != "") {
+            $acceptedPhotos = $acceptedPhotos->where('state_region', $location->stateRegion);
+            $rejectedPhotos = $rejectedPhotos->where('state_region', $location->stateRegion);
+        }
+
+        if ($locations->city != "") {
+            $acceptedPhotos = $acceptedPhotos->where('city', $location->city);
+            $rejectedPhotos = $rejectedPhotos->where('city', $location->city);
+        }
+      }
 
       if (is_numeric($lastQueryId)) {
           $acceptedPhotos = $acceptedPhotos
