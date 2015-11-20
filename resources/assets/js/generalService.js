@@ -126,7 +126,7 @@
 
     function setPhotoToApprovalStatus(table, id) {
       var deferred = $q.defer(),
-          url = appConfig.url+"/api/approve/"+table+"/"+id;
+          url = appConfig.url+"/api/"+table+"/approve/"+id;
 
       $http({
         method: 'POST',
