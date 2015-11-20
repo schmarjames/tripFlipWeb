@@ -1,5 +1,35 @@
 <div class="page page-table">
 
+  <div class="panel-heading"><strong><i class="fa fa-list panel-ico"></i>Filter</strong></div>
+
+  <div class="table-filters">
+    <div class="row">
+      <form ng-submit="rejected.filterTable(filters)">
+        <div ng-if="currentUser.permission_type === 1" class="col-sm-4 col-xs-6">
+          <label>Get Approved Photos</label>
+          <input type="radio" class="form-control" ng-model="filters.approved" name="aproved-photos" value="0" required>
+          <input type="radio" class="form-control" ng-model="filters.approved" name="aproved-photos" value="1" required>
+        </div>
+        <div class="col-sm-2 col-xs-6 filter-result-info">
+          <label>Select A Location</label>
+          <angucomplete id="country"
+            placeholder="Search locations"
+            pause="100"
+            selectedobject="filters.selectedLocation"
+            localdata="rejected.locations"
+            searchfields="name"
+            titlefield="name"
+            minlength="1"
+            inputclass="form-control form-control-small"/>
+        </div>
+        <div class="col-sm-3 col-xs-6 filter-result-info">
+          <button class="btn btn-primary" type="submit">Filter</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
   <section class="panel panel-default table-dynamic">
     <div class="panel-heading"><strong><i class="fa fa-list panel-ico"></i>Rejected Photos</strong></div>
 

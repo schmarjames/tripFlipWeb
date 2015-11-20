@@ -15,7 +15,7 @@
     vm.currentPageAccepts = [];
     vm.newShow = {};
     vm.next = false;
-    vm.accepts = "";
+    vm.accepts = [];
     vm.lastPhotoId = null;
     vm.pageTotal = 0;
 
@@ -106,11 +106,11 @@
           vm.filters.location.city = location.city || "";
           vm.lastPhotoId = null;
           vm.accepts = [];
-          
+
           if (approved) {
             // query approved photos
             general.getApprovedPhotos(vm.lastPhotoId, vm.filters.location).then(vm.processPhotoData);
-          } else {
+          } else if (!approved || approved == "undefined") {
             // query all photos
             general.getAcceptedPhotos(vm.lastPhotoId, vm.filters.location).then(vm.processPhotoData);
           }
