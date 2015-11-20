@@ -58,15 +58,32 @@ class RejectsController extends Controller
       //eturn response()->json($rejectedPhotos);
     }*/
 
-    public function queryPhotos($amount, $lastQueryId) {
+    public function queryPhotos($amount, $lastQueryId, $locations) {
       $rejectedPhotos;
 
       $rejectedPhotos = RejectedPhotos::select('*');
+
+      if ($locations) {
+        $locations = json_decode($locations);
+        if ($locations->country != "") {
+            $rejectedPhotos = $rejectedPhotos->where('country', $locations->country);
+        }
+
+        if ($locations->stateRegion != "") {
+            $rejectedPhotos = $rejectedPhotos->where('state_region', $locations->stateRegion);
+        }
+
+        if ($locations->city != "") {
+            $rejectedPhotos = $rejectedPhotos->where('city', $locations->city);
+        }
+      }
+
       if (is_numeric($lastQueryId)) {
         $rejectedPhotos = $rejectedPhotos->where('id', '<', $lastQueryId);
       }
 
       $rejectedPhotos = $rejectedPhotos
+        ->where("approved", "!=", 1)
         ->take($amount)
         ->orderBy('id', 'desc')
         ->get();

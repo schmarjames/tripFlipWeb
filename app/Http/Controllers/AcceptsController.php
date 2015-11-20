@@ -108,9 +108,10 @@ class AcceptsController extends Controller
         $acceptedPhotos = $acceptedPhotos->where('id', '<', $lastQueryId);
       }
 
-      $acceptedPhotos = $acceptedPhotos->take($amount)
-      ->orderBy('id', 'desc')
-      ->get();
+      $acceptedPhotos = $acceptedPhotos->where("approved", "!=", 1)
+        ->take($amount)
+        ->orderBy('id', 'desc')
+        ->get();
 
       return response()->json($acceptedPhotos);
     }
