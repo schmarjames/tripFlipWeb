@@ -61,7 +61,7 @@ class RejectsController extends Controller
     public function queryPhotos($amount, $lastQueryId, $locations) {
       $rejectedPhotos;
 
-      $rejectedPhotos = RejectedPhotos::select('*');
+      $rejectedPhotos = RejectedPhotos::select('*')->where("approved", "!=", 1);
 
       if ($locations) {
         $locations = json_decode($locations);
@@ -83,7 +83,6 @@ class RejectsController extends Controller
       }
 
       $rejectedPhotos = $rejectedPhotos
-        ->where("approved", "!=", 1)
         ->take($amount)
         ->orderBy('id', 'desc')
         ->get();
