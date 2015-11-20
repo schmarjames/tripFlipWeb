@@ -48,9 +48,9 @@
       return deferred.promise;
     }
 
-    function getRejectedPhotos(lastId) {
+    function getRejectedPhotos(lastId, locations) {
       var deferred = $q.defer(),
-          url = appConfig.url+"/api/rejects/photos/100/"+lastId;
+          url = appConfig.url+"/api/rejects/photos/100/"+lastId+"/"+JSON.stringify(locations);
       $http({
         method: 'POST',
         url: url

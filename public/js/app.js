@@ -759,9 +759,9 @@ angular.module("app.ui.form.directives", []).directive("uiRangeSlider", [
       return deferred.promise;
     }
 
-    function getRejectedPhotos(lastId) {
+    function getRejectedPhotos(lastId, locations) {
       var deferred = $q.defer(),
-          url = appConfig.url+"/api/rejects/photos/100/"+lastId;
+          url = appConfig.url+"/api/rejects/photos/100/"+lastId+"/"+JSON.stringify(locations);
       $http({
         method: 'POST',
         url: url
@@ -949,7 +949,7 @@ angular.module("app.ui.form.directives", []).directive("uiRangeSlider", [
     vm.currentPageAccepts = [];
     vm.newShow = {};
     vm.next = false;
-    vm.accepts = "";
+    vm.accepts = [];
     vm.lastPhotoId = null;
     vm.pageTotal = 0;
 
@@ -1040,11 +1040,11 @@ angular.module("app.ui.form.directives", []).directive("uiRangeSlider", [
           vm.filters.location.city = location.city || "";
           vm.lastPhotoId = null;
           vm.accepts = [];
-          
+
           if (approved) {
             // query approved photos
             general.getApprovedPhotos(vm.lastPhotoId, vm.filters.location).then(vm.processPhotoData);
-          } else {
+          } else if (!approved || approved == "undefined") {
             // query all photos
             general.getAcceptedPhotos(vm.lastPhotoId, vm.filters.location).then(vm.processPhotoData);
           }
@@ -1203,11 +1203,25 @@ angular.module("AdminAppCtrl", []).controller("AdminAppCtrl", ["$scope", "$locat
     vm.lastPhotoId = null;
     vm.pageTotal = 0;
 
+    vm.locations = null;
+    vm.filters = {
+      approved : false,
+      location : {
+        country : "",
+        stateRegion : "",
+        city : ""
+      }
+    };
+
     vm.select = function(page) {
         var end, start;
 
         if (page > (vm.pageTotal-5)) {
-            general.getRejectedPhotos(vm.lastPhotoId).then(vm.processPhotoData);
+            if (vm.filters.approved) {
+              general.getApprovedPhotos(vm.lastPhotoId, vm.filters.location).then(vm.processPhotoData);
+            } else {
+              general.getRejectedPhotos(vm.lastPhotoId, vm.filters.location).then(vm.processPhotoData);
+            }
         }
         return start = (page - 1) * vm.numPerPage, end = start + vm.numPerPage, vm.currentPageRejects = vm.filteredRejects.slice(start, end);
     };
@@ -1265,6 +1279,29 @@ angular.module("AdminAppCtrl", []).controller("AdminAppCtrl", ["$scope", "$locat
 
     };
 
+    vm.filterTable = function(data) {
+      console.log(data);
+      var approved = Boolean(data.approved),
+          location = (data.selectedLocation !== null) ? data.selectedLocation.originalObject : null;
+
+      if (approved !== vm.filters.approved || location !== null) {
+          vm.filters.approved = approved;
+          vm.filters.location.country = location.country || "";
+          vm.filters.location.stateRegion = location.stateRegion || "";
+          vm.filters.location.city = location.city || "";
+          vm.lastPhotoId = null;
+          vm.rejects = [];
+
+          if (approved) {
+            // query approved photos
+            general.getApprovedPhotos(vm.lastPhotoId, vm.filters.location).then(vm.processPhotoData);
+          } else if (!approved || approved == "undefined") {
+            // query all photos
+            general.getRejectedPhotos(vm.lastPhotoId, vm.filters.location).then(vm.processPhotoData);
+          }
+      }
+    };
+
     vm.removePhoto = function(id, idx) {
       if ($rootScope.currentUser.permission_type === 1) {
           general.removePhoto(id).then(function(data) {
@@ -1309,7 +1346,11 @@ angular.module("AdminAppCtrl", []).controller("AdminAppCtrl", ["$scope", "$locat
       vm.search();
     };
 
-    general.getRejectedPhotos(vm.lastPhotoId).then(vm.processPhotoData);
+    general.getRejectedPhotos(vm.lastPhotoId, vm.filters.location).then(vm.processPhotoData);
+    general.getLocations().then(function(data) {
+      console.log(data);
+      vm.locations = data.locations;
+    });
 
     (init = function() {
         console.log("INIT");

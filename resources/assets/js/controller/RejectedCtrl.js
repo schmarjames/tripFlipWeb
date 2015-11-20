@@ -162,7 +162,11 @@
       vm.search();
     };
 
-    general.getRejectedPhotos(vm.lastPhotoId).then(vm.processPhotoData);
+    general.getRejectedPhotos(vm.lastPhotoId, vm.filters.location).then(vm.processPhotoData);
+    general.getLocations().then(function(data) {
+      console.log(data);
+      vm.locations = data.locations;
+    });
 
     (init = function() {
         console.log("INIT");
