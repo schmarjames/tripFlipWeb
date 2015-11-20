@@ -87,7 +87,7 @@ class AcceptsController extends Controller
     public function queryPhotos($amount, $lastQueryId, $locations) {
       $acceptedPhotos;
 
-      $acceptedPhotos = AcceptedPhotos::select('*');
+      $acceptedPhotos = AcceptedPhotos::select('*')->whereIn("approved", [null, 0]);
 
       if ($locations) {
         $locations = json_decode($locations);
