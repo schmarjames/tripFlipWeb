@@ -31,7 +31,7 @@ Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
   Route::post('geodata', 'LocationApiController@handleLocation');
 
   Route::resource('rejects', 'RejectsController', ['only' => ['index', 'destroy']]);
-  Route::post('rejects/photos/{amount}/{lastQuery}', 'RejectsController@queryPhotos');
+  Route::post('rejects/photos/{amount}/{lastQuery}/{locations}', 'RejectsController@queryPhotos');
   Route::post('rejects/transfer/{id}', 'RejectsController@transfer');
   Route::post('rejects/approve/{id}', 'RejectsController@approve');
 
