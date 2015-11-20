@@ -61,7 +61,7 @@ class RejectsController extends Controller
     public function queryPhotos($amount, $lastQueryId, $locations) {
       $rejectedPhotos;
 
-      $rejectedPhotos = RejectedPhotos::select('*')->whereIn("approved", [null, 0]);
+      $rejectedPhotos = RejectedPhotos::select('*')->whereNull("approved");
 
       if ($locations) {
         $locations = json_decode($locations);
