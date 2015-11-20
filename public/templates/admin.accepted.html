@@ -1,0 +1,141 @@
+<div class="page page-table">
+
+  <section class="panel panel-default table-dynamic">
+    <div class="panel-heading"><strong><i class="fa fa-list panel-ico"></i>Filter</strong></div>
+
+    <div class="table-filters">
+      <div class="row">
+        <form ng-submit="accepted.filterTable(filters)">
+          <div ng-if="currentUser.permission_type === 1" class="col-sm-4 col-xs-6">
+            <label>Get Approved Photos</label>
+            <input type="radio" class="form-control" ng-model="filters.approved" name="aproved-photos" value="0" required>
+            <input type="radio" class="form-control" ng-model="filters.approved" name="aproved-photos" value="1" required>
+          </div>
+          <div class="col-sm-2 col-xs-6 filter-result-info">
+            <label>Select A Location</label>
+            <angucomplete id="country"
+              placeholder="Search locations"
+              pause="100"
+              selectedobject="filters.selectedLocation"
+              localdata="accepted.locations"
+              searchfields="name"
+              titlefield="name"
+              minlength="1"
+              inputclass="form-control form-control-small"/>
+          </div>
+          <div class="col-sm-3 col-xs-6 filter-result-info">
+            <button class="btn btn-primary" type="submit">Filter</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel panel-default table-dynamic">
+    <div class="panel-heading"><strong><i class="fa fa-list panel-ico"></i>Accepted Photos</strong></div>
+
+    <div class="table-filters">
+        <div class="row">
+            <div class="col-sm-4 col-xs-6">
+                <form ng-show="accepted.accepts.length > 0">
+                    <input type="text"
+                           placeholder="search"
+                           class="form-control"
+                           data-ng-model="accepted.searchKeywords"
+                           data-ng-keyup="accepted.search()">
+                </form>
+            </div>
+            <div class="col-sm-3 col-xs-6 filter-result-info" ng-show="accepted.accepts.length > 0">
+                <span>
+                    Accepted Photo {{accepted.filteredAccepts.length}}/{{accepted.accepts.length}} entries
+                </span>
+            </div>
+            <div class="col-sm-3 col-sm-offset-2 col-xs-6 col-xs-offset-5">
+            </div>
+        </div>
+    </div>
+
+    <p class="col-md-6" ng-show="accepted.accepts.length == 0"><strong>You do not have any accepted photos.</strong></p>
+
+    <table class="table table-bordered table-striped table-responsive" ng-show="accepted.accepts.length > 0">
+        <thead>
+            <tr>
+                <th><div class="th">
+                    City
+                    <span class="glyphicon glyphicon-chevron-up"
+                          data-ng-click=" order('city') "
+                          data-ng-class="{active: row == 'city'}"></span>
+                    <span class="glyphicon glyphicon-chevron-down"
+                          data-ng-click=" order('-city') "
+                          data-ng-class="{active: row == '-city'}"></span>
+                </div></th>
+                <th><div class="th">
+                    State / Region
+                    <span class="glyphicon glyphicon-chevron-up"
+                          data-ng-click=" order('state_region') "
+                          data-ng-class="{active: row == 'state_region'}"></span>
+                    <span class="glyphicon glyphicon-chevron-down"
+                          data-ng-click=" order('-state_region') "
+                          data-ng-class="{active: row == '-state_region'}"></span>
+                </div></th>
+                <th><div class="th">
+                    Country
+                    <span class="glyphicon glyphicon-chevron-up"
+                          data-ng-click=" order('country') "
+                          data-ng-class="{active: row == 'country'}"></span>
+                    <span class="glyphicon glyphicon-chevron-down"
+                          data-ng-click=" order('-country') "
+                          data-ng-class="{active: row == '-country'}"></span>
+                </div></th>
+                <th><div class="th">
+                    Photo
+                    <span class="glyphicon glyphicon-chevron-up"
+                          data-ng-click=" order('photo') "
+                          data-ng-class="{active: row == 'photo'}"></span>
+                    <span class="glyphicon glyphicon-chevron-down"
+                          data-ng-click=" order('-photo') "
+                          data-ng-class="{active: row == '-photo'}"></span>
+                </div></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-repeat="accept in accepted.currentPageAccepts">
+                <td>{{accept.city}}</td>
+                <td>{{accept.state_region}}</td>
+                <td>{{accept.country}}</td>
+                <td><img ng-src="{{accept.photo_data}}" /></td>
+                <td>
+                  <a ng-show="!accept.approved" ng-click="accepted.approvePhoto(accept.id, accept.index)"  class="btn btn-primary">Approve</a>
+                  <a ng-if="currentUser.permission_type === 1" ng-click="accepted.rejectPhoto(accept.id, accept.index)" class="btn btn-primary">Reject</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <footer class="table-footer"  ng-show="accepted.accepts.length > 0">
+        <div class="row">
+            <div class="col-md-6 page-num-info">
+                <span>
+                    Show
+                    <select data-ng-model="accepted.numPerPage"
+                            data-ng-options="num for num in accepted.numPerPageOpt"
+                            data-ng-change="accepted.onNumPerPageChange()">
+                    </select>
+                    entries per page
+                </span>
+            </div>
+            <div class="col-md-6 text-right pagination-container">
+                <pagination class="pagination-sm"
+                            ng-model="accepted.currentPage"
+                            total-items="accepted.filteredAccepts.length"
+                            max-size="4"
+                            ng-change="accepted.select(accepted.currentPage)"
+                            items-per-page="accepted.numPerPage"
+                            rotate="false"
+                            boundary-links="true"></pagination>
+            </div>
+        </div>
+    </footer>
+  </section>
+</div>

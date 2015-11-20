@@ -16,7 +16,7 @@ use App\Tfphotos;
 use App\CategoryTagsOfPhotos;
 
 Route::get('/', function () {
-    return view('start');
+    return view('master');
 });
 
 Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {

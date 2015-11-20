@@ -12,34 +12,72 @@ var elixir = require('laravel-elixir');
  */
 
 elixir(function(mix) {
-    mix.copy('resources/vendor/bootstrap/fonts/', 'public/fonts');
-    mix.less('app.less', 'resources/assets/build/app.css');
+
+    mix.copy('resources/vendor/jquery/dist/jquery.min.js', 'public/js/jquery.min.js');
+    mix.copy('resources/vendor/bootstrap/dist/fonts/*.*', 'public/fonts/');
+    mix.copy('resources/vendor/weather-icons/fonts/*.*', 'public/fonts/');
+    mix.copy('resources/vendor/font-awesome/fonts/*.*', 'public/fonts/');
+
     mix.styles([
-        'resources/vendor/bootstrap/dist/css/bootstrap.min.css',
-        'resources/vendor/bootstrap/dist/css/bootstrap-theme.min.css',
-        'resources/vendor/angular-bootstrap/ui-bootstrap-csp.css',
-        'assets/build/app.css'
-    ], 'public/css/app.css', 'resources/');
-    mix.copy(
-            'resources/vendor/bootstrap/dist/css/bootstrap.css.map',
-            'public/css/bootstrap.css.map'
-        );
-    mix.copy(
-            'resources/vendor/bootstrap/dist/css/bootstrap-theme.css.map',
-            'public/css/bootstrap-theme.css.map'
-        );
-    mix.copy(
-        'resources/views/templates',
-        'public/templates'
-    );
+        'fontawesome/css/font-awesome.min.css',
+        'weather-icons/css/weather-icons.min.css',
+        'bootstrap/dist/css/bootstrap.min.css',
+        'bootstrap/dist/css/bootstrap-theme.min.css',
+        'angucomplete/angucomplete.css',
+        'main.css'
+    ], 'public/css/main.css', 'resources/vendor/');
+
     mix.scripts([
-      'resources/vendor/angular/angular.js',
-      'resources/vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
-      'resources/vendor/angular-bootstrap/ui-bootstrap.min.js',
-      'resources/vendor/angular-ui-router/release/angular-ui-router.min.js',
-      'resources/vendor/ngstorage/ngStorage.min.js'
-      ], 'public/js/vendor.js', 'resources/');
+      'bootstrap/dist/js/bootstrap.min.js',
+                    'gmap.js',
+                    'slimScroll/jquery.slimscroll.min.js',
+                    'angular/angular.min.js',
+                    'angular-animate/angular-animate.min.js',
+                    'angular-route/angular-route.min.js',
+                    'angular-ui-router/release/angular-ui-router.js',
+                    'angular-sanitize/angular-sanitize.min.js',
+                    'underscore/underscore-min.js',
+                    'raphael/raphael-min.js',
+                    'morrisjs/morris.min.js',
+                    'flot/jquery.flot.js',
+                    'flot/jquery.flot.canvas.js',
+                    'flot/jquery.flot.categories.js',
+                    'flot/jquery.flot.crosshair.js',
+                    'flot/jquery.flot.image.js',
+                    'flot/jquery.flot.navigate.js',
+                    'flot/jquery.flot.time.js',
+                    'flot/jquery.flot.pie.js',
+                    'flot/jquery.flot.resize.js',
+                    'flot/jquery.flot.selection.js',
+                    'flot/jquery.flot.stack.js',
+                    'chartjs/Chart.min.js',
+                    'checklist-model/checklist-model.js',
+                    'jquery.sparkline.build/dist/jquery.sparkline.min.js',
+                    'easypie/dist/angular.easypiechart.min.js',
+                    'angular-wizard/dist/angular-wizard.js',
+                    'rangy/rangy-core.min.js',
+                    'rangy/rangy-selectionsaverestore.min.js',
+                    'textAngular/dist/textAngular.min.js',
+                    'angular-ui-tree/dist/angular-ui-tree.js',
+                    'jqvmap/dist/jquery.vmap.min.js',
+                    'angular-bootstrap/ui-bootstrap-tpls.min.js',
+                    'ngstorage/ngStorage.min.js',
+                    'satellizer/satellizer.min.js',
+                    'angular-flash-alert/dist/angular-flash.min.js',
+                    'angucomplete/angucomplete.js',
+                    'other_charts.js',
+                    'extras.js'
+    ], 'public/js/vendor.js', 'resources/vendor/');
+
     mix.scripts([
-        'resources/assets/js/*.js',
-    ], 'public/js/site.js', 'resources/');
+      'app.js',
+      'APIInteceptor.js',
+      'dashboardService.js',
+      'directives.js',
+      'generalService.js',
+      'services.js',
+      'userService.js',
+      'controller/*.js',
+    ], 'public/js/app.js');
+
 });
