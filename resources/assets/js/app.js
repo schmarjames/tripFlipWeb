@@ -4,7 +4,7 @@
  **************************/
 
 var app = angular.module("app", [
-    "ui.router", "ngAnimate", "ui.bootstrap", "flash", "angucomplete",
+    "ui.router", "ngAnimate", "ui.bootstrap", "flash", "angucomplete", "angular-loading-bar",
     "ngStorage", "satellizer",
     "general.service",
     "APIInterceptor",

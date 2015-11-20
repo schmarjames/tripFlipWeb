@@ -24,6 +24,7 @@ elixir(function(mix) {
         'bootstrap/dist/css/bootstrap.min.css',
         'bootstrap/dist/css/bootstrap-theme.min.css',
         'angucomplete/angucomplete.css',
+        'angular-loading-bar/src/loading-bar.css',
         'main.css'
     ], 'public/css/main.css', 'resources/vendor/');
 
@@ -33,6 +34,7 @@ elixir(function(mix) {
                     'slimScroll/jquery.slimscroll.min.js',
                     'angular/angular.min.js',
                     'angular-animate/angular-animate.min.js',
+                    'angular-loading-bar/src/loading-bar.js',
                     'angular-route/angular-route.min.js',
                     'angular-ui-router/release/angular-ui-router.js',
                     'angular-sanitize/angular-sanitize.min.js',
