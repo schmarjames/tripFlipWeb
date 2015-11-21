@@ -20,6 +20,7 @@
     vm.pageTotal = 0;
 
     vm.locations = null;
+    vm.newFilters = {};
     vm.filters = {
       approved : false,
       location : {
@@ -94,16 +95,16 @@
       }
     };
 
-    vm.filterTable = function(data) {
-      console.log(data);
-      var approved = Boolean(data.approved),
-          location = (data.selectedLocation !== null) ? data.selectedLocation.originalObject : null;
+    vm.filterTable = function() {
+      console.log(vm.newFilters);
+      var approved = Boolean(vm.newFilters.approved),
+          location = (vm.newFilters.selectedLocation !== undefined) ? vm.newFilters.selectedLocation.originalObject : undefined;
 
       if (approved !== vm.filters.approved || location !== null) {
           vm.filters.approved = approved;
-          vm.filters.location.country = location.country || "";
-          vm.filters.location.stateRegion = location.stateRegion || "";
-          vm.filters.location.city = location.city || "";
+          vm.filters.location.country = (location != undefined) ? location.country : "";
+          vm.filters.location.stateRegion = (location != undefined) ? location.stateRegion : "";
+          vm.filters.location.city = (location != undefined) ? location.city : "";
           vm.lastPhotoId = null;
           vm.accepts = [];
 

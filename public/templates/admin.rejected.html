@@ -4,18 +4,18 @@
 
   <div class="table-filters">
     <div class="row">
-      <form ng-submit="rejected.filterTable(filters)">
+      <form ng-submit="rejected.filterTable()">
         <div ng-if="currentUser.permission_type === 1" class="col-sm-4 col-xs-6">
           <label>Get Approved Photos</label>
-          <input type="radio" class="form-control" ng-model="filters.approved" name="aproved-photos" value="0" required>
-          <input type="radio" class="form-control" ng-model="filters.approved" name="aproved-photos" value="1" required>
+          <input type="radio" class="form-control" ng-model="rejected.newFilters.approved" name="aproved-photos" value="0" required>
+          <input type="radio" class="form-control" ng-model="rejected.newFilters.approved" name="aproved-photos" value="1">
         </div>
         <div class="col-sm-2 col-xs-6 filter-result-info">
           <label>Select A Location</label>
           <angucomplete id="country"
             placeholder="Search locations"
             pause="100"
-            selectedobject="filters.selectedLocation"
+            selectedobject="rejected.newFilters.selectedLocation"
             localdata="rejected.locations"
             searchfields="name"
             titlefield="name"
@@ -105,7 +105,7 @@
                 <td>{{reject.country}}</td>
                 <td><img ng-src="{{reject.photo_data}}" /></td>
                 <td>
-                  <a ng-show="!reject.approved" ng-click="rejected.acceptPhoto(reject.id, reject.index)"  class="btn btn-primary">Accept Photo</a>
+                  <a ng-click="rejected.acceptPhoto(reject.id, reject.index)"  class="btn btn-primary">Accept Photo</a>
                   <a ng-if="currentUser.permission_type === 1" ng-click="rejected.removePhoto(reject.id, reject.index)" class="btn btn-primary">Remove</a>
                 </td>
             </tr>
