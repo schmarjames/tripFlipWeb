@@ -113,7 +113,7 @@ class AcceptsController extends Controller
         ->take($amount)
         ->orderBy('id', 'desc')
         ->get();
-      $total = ApprovedPhotos::select(DB::raw('count(*)'))->where('admin_user_id', $user->id)->get();
+      $total = ApprovedPhotos::select(\DB::raw('count(*)'))->where('admin_user_id', $user->id)->get();
 
       return response()->json([ 'acceptedPhotos' => $acceptedPhotos, 'totalApproves' => $total]);
     }
@@ -323,7 +323,7 @@ class AcceptsController extends Controller
        'photo_id' => $id
      ]);
 
-     $total = ApprovedPhotos::select(DB::raw('count(*)'))->where('admin_user_id', $user->id)->get();
+     $total = ApprovedPhotos::select(\DB::raw('count(*)'))->where('admin_user_id', $user->id)->get();
 
      if (!is_null($photo)) {
        return ['message' => $this->message["success"]["approve"], 'total' => $total];
