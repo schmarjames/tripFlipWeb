@@ -1019,7 +1019,7 @@ angular.module("app.ui.form.directives", []).directive("uiRangeSlider", [
           general.setPhotoToApprovalStatus("accepts", id).then(function(data) {
             console.log(data);
             var message = data.message;
-            vm.totalApproves = data.total[0].count;
+            vm.totalApproves = data.total;
             Flash.create('success', message);
             // remove this photo from the vm.accepted array
             delete vm.accepts[idx];
@@ -1075,7 +1075,7 @@ angular.module("app.ui.form.directives", []).directive("uiRangeSlider", [
     vm.processPhotoData = function(data) {
       var photo_url = "";
       var accepts = data.acceptedPhotos;
-      vm.totalApproves = data.totalApproves[0].count;
+      vm.totalApproves = data.totalApproves;
 
       for (var i=0; i<accepts.length; i++) {
         accepts[i].photo_data = JSON.parse(accepts[i].photo_data);
@@ -1276,7 +1276,7 @@ angular.module("AdminAppCtrl", []).controller("AdminAppCtrl", ["$scope", "$locat
         general.setPhotoToApprovalStatus("rejects", id).then(function(data) {
           console.log(data);
           var message = data.message;
-          vm.totalApproves = data.total[0].count;
+          vm.totalApproves = data.total;
           Flash.create('success', message);
           // remove this photo from the vm.accepted array
           delete vm.accepts[idx];
@@ -1334,7 +1334,7 @@ angular.module("AdminAppCtrl", []).controller("AdminAppCtrl", ["$scope", "$locat
       console.log(data);
       var photo_url = "";
       var rejects = data.rejectedPhotos;
-      vm.totalApproves = data.totalApproves[0].count;
+      vm.totalApproves = data.totalApproves;
 
       for (var i=0; i<=rejects.length; i++) {
         if (rejects[i] !== undefined) {
