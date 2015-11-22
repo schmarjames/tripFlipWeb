@@ -14,7 +14,6 @@ use App\Cities;
 use App\County;
 use App\LocationData;
 use App\Tfphotos;
-use App\ApprovedPhotos;
 
 class RejectsController extends Controller
 {
@@ -34,6 +33,30 @@ class RejectsController extends Controller
     \Config::set('auth.model', 'App\AdminUsers');
     $this->middleware('jwt.auth');
   }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
+    /*public function index($amount, $lastQueryId)
+    {
+      $rejectedPhotos;
+      if (is_numeric($lastQueryId)) {
+        $rejectedPhotos = rejectedPhotos::select('*')
+          ->where('id', '<', $lastQueryId)
+          ->take($amount)
+          ->get();
+      } else {
+        $rejectedPhotos = rejectedPhotos::select('*')
+          ->take($amount)
+          ->get();
+      }
+
+      var_dump($amount);
+      var_dump($lastQueryId);
+      die();
+      //eturn response()->json($rejectedPhotos);
+    }*/
 
     public function queryPhotos($amount, $lastQueryId, $locations) {
       $rejectedPhotos;
@@ -64,9 +87,7 @@ class RejectsController extends Controller
         ->orderBy('id', 'desc')
         ->get();
 
-      $total = ApprovedPhotos::select(\DB::raw('count(*)'))->where('admin_user_id', $user->id)->get();
-
-      return response()->json([ 'rejectedPhotos' => $rejectedPhotos, 'totalApproves' => $total]);
+      return response()->json($rejectedPhotos);
     }
 
     /**
