@@ -30,6 +30,8 @@
       }
     };
 
+    vm.totalApproves = 0;
+
     vm.select = function(page) {
         var end, start;
 
@@ -67,7 +69,8 @@
       if ($rootScope.currentUser.permission_type === 1) {
           general.approvePhoto(id).then(function(data) {
             console.log(data);
-            var message = data;
+            var message = data.message;
+            vm.totalApproves = data.total;
             Flash.create('success', message);
             // remove this photo from the vm.accepted array
             delete vm.accepts[idx];
@@ -137,24 +140,27 @@
 
     vm.processPhotoData = function(data) {
       var photo_url = "";
-      for (var i=0; i<data.length; i++) {
-        data[i].photo_data = JSON.parse(data[i].photo_data);
-        photo_url = "https://farm" + data[i].photo_data.farm + ".staticflickr.com/" + data[i].photo_data.server + "/" + data[i].photo_data.id + "_" + data[i].photo_data.secret + ".jpg";
-        console.log(data);
-        data[i].approved = (data[i].approved !== null) ? Boolean(data[i].approved) : false;
-        data[i].photo_data = photo_url;
-        data[i].index = i;
+      var accepts = data.acceptedPhotos;
+      vm.totalApproves = data.totalApproves;
 
-        if (i === (data.length-1)) {
-          vm.lastPhotoId = data[i].id;
+      for (var i=0; i<accepts.length; i++) {
+        accepts[i].photo_data = JSON.parse(accepts[i].photo_data);
+        photo_url = "https://farm" + accepts[i].photo_data.farm + ".staticflickr.com/" + accepts[i].photo_data.server + "/" + accepts[i].photo_data.id + "_" + accepts[i].photo_data.secret + ".jpg";
+        console.log(data);
+        accepts[i].approved = (accepts[i].approved !== null) ? Boolean(accepts[i].approved) : false;
+        accepts[i].photo_data = photo_url;
+        accepts[i].index = i;
+
+        if (i === (accepts.length-1)) {
+          vm.lastPhotoId = accepts[i].id;
         }
         console.log(photo_url);
       }
 
       if (vm.accepts.length === 0) {
-          vm.accepts = data;
+          vm.accepts = accepts;
       } else {
-          vm.accepts = vm.accepts.concat(data);
+          vm.accepts = vm.accepts.concat(accepts);
       }
       vm.pageTotal = vm.accepts.length / vm.numPerPage;
       vm.search();

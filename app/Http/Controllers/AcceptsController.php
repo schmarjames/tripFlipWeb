@@ -17,6 +17,7 @@ use App\PhotoCategories;
 use App\CategoryTagsOfPhotos;
 use App\Tfphotos;
 use App\LocationQuery;
+use App\ApprovedPhotos;
 
 class AcceptsController extends Controller
 {
@@ -85,8 +86,8 @@ class AcceptsController extends Controller
     }*/
 
     public function queryPhotos($amount, $lastQueryId, $locations) {
+      $user = \JWTAuth::parseToken()->authenticate();
       $acceptedPhotos;
-
       $acceptedPhotos = AcceptedPhotos::select('*')->whereNull("approved");
 
       if ($locations) {
@@ -112,8 +113,9 @@ class AcceptsController extends Controller
         ->take($amount)
         ->orderBy('id', 'desc')
         ->get();
+      $total = ApprovedPhotos::select(DB::raw('count(*)'))->where('admin_user_id', $user->id)->get();
 
-      return response()->json($acceptedPhotos);
+      return response()->json([ 'acceptedPhotos' => $acceptedPhotos, 'totalApproves' => $total]);
     }
 
     public function queryApprovedPhotos($amount, $lastQueryId, $locations) {
@@ -313,10 +315,18 @@ class AcceptsController extends Controller
     * @return Response
     */
     public function approve($id) {
+    $user = \JWTAuth::parseToken()->authenticate();
      $photo = AcceptedPhotos::where('id', $id)->update(['approved'=> 1]);
 
+     ApprovedPhotos::create([
+       'admin_user_id' => $user->id,
+       'photo_id' => $id
+     ]);
+
+     $total = ApprovedPhotos::select(DB::raw('count(*)'))->where('admin_user_id', $user->id)->get();
+
      if (!is_null($photo)) {
-       return $this->message["success"]["approve"];
+       return ['message' => $this->message["success"]["approve"], 'total' => $total];
       }
     }
 
