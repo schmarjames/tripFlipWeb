@@ -115,7 +115,7 @@ class AcceptsController extends Controller
         ->get();
       $total = ApprovedPhotos::select(\DB::raw('count(*)'))->where('admin_user_id', $user->id)->get();
 
-      return response()->json([ 'acceptedPhotos' => $acceptedPhotos, 'totalApproves' => $total]);
+      return response()->json([ 'acceptedPhotos' => $acceptedPhotos, 'totalApproves' => $total->count]);
     }
 
     public function queryApprovedPhotos($amount, $lastQueryId, $locations) {
@@ -326,7 +326,7 @@ class AcceptsController extends Controller
      $total = ApprovedPhotos::select(\DB::raw('count(*)'))->where('admin_user_id', $user->id)->get();
 
      if (!is_null($photo)) {
-       return ['message' => $this->message["success"]["approve"], 'total' => $total];
+       return ['message' => $this->message["success"]["approve"], 'total' => $total->count];
       }
     }
 
