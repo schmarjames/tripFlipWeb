@@ -14,6 +14,7 @@ use App\Cities;
 use App\County;
 use App\LocationData;
 use App\Tfphotos;
+use App\ApprovedPhotos;
 
 class RejectsController extends Controller
 {
