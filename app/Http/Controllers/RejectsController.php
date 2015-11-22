@@ -65,7 +65,7 @@ class RejectsController extends Controller
         ->orderBy('id', 'desc')
         ->get();
 
-      $total = ApprovedPhotos::select(\DB::raw('count(*)'))->where('admin_user_id', $user->id)->get();
+      $total = ApprovedPhotos::select('*')->where('admin_user_id', $user->id)->get()->count();
 
       return response()->json([ 'rejectedPhotos' => $rejectedPhotos, 'totalApproves' => $total]);
     }
@@ -130,7 +130,7 @@ class RejectsController extends Controller
           'photo_id' => $id
         ]);
 
-        $total = ApprovedPhotos::select(\DB::raw('count(*)'))->where('admin_user_id', $user->id)->get();
+        $total = ApprovedPhotos::select('*')->where('admin_user_id', $user->id)->get()->count();
 
         if (!is_null($photo)) {
           return ['message' => $this->message["success"]["approve"], 'total' => $total];
