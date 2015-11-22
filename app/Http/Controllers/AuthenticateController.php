@@ -148,6 +148,52 @@ class AuthenticateController extends Controller
     return response()->json(["success" => 0, "message" => "This email is not recognized."]);
   }
 
+  public function changeUserProfileSettings(Request $request) {
+    $user = \JWTAuth::parseToken()->authenticate();
+    $data = \Input::all();
+
+    if ($data['type'] == 'profile') {
+        $userData = $data['data'];
+        $entry = User::where('id', $user->id)
+          ->update([
+              'name' => $userData['name'],
+              'email' => $userData['email'],
+              'address' => $userData['address'],
+              'city' => $userData['city'],
+              'zip_code' => $userData['zipCode'],
+              'country' => $userData['country'],
+              'state_region' => $userData['stateRegion'],
+              'profile_pic' => $userData['avatarSource']
+            ]);
+        $user->name = $userData['name'];
+        $user->email = $userData['email'];
+        $user->address = $userData['address'];
+        $user->city = $userData['city'];
+        $user->zip_code = $userData['zipCode'];
+        $user->country = $userData['country'];
+        $user->state_region = $userData['stateRegion'];
+        $user->profile_pic = $userData['avatarSource'];
+        $entry = $user->save();
+
+        return (!is_null($entry)) ? response()->json(1) : response()->json(0);
+    }
+
+    else if ($data['type'] == 'password') {
+      $passwordData = $data['data'];
+      if (password_verify($passwordData['currentPassword'], $user->password)) {
+          if ($passwordData['newPassword'] == $passwordData['repeatNewPassword']) {
+            $user->password = bcrypt($passwordData['newPassword']);
+            $entry = $user->save();
+
+            return (!is_null($entry)) ? response()->json(1) : response()->json(0);
+          }
+      }
+
+      return response()->json(0);
+    }
+
+  }
+
   protected function generatePassword($length) {
     return substr(preg_replace("/[^a-zA-Z0-9]/", "", base64_encode($this->getRandomBytes($length+1))), 0, $length);
   }

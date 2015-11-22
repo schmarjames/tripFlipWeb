@@ -26,6 +26,7 @@ Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
   Route::post('authregister', 'AuthenticateController@authRegister');
   Route::post('authAssignTemp', 'AuthenticateController@assignTemporaryPassword');
   Route::post('authChangeCred', 'AuthenticateController@changeUserCredentials');
+  Route::post('authProfileSettings', 'AuthenticateController@changeUserProfileSettings');
 
   Route::post('location', 'PhotoApiController@locationQuery');
   Route::post('geodata', 'LocationApiController@handleLocation');
