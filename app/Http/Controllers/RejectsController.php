@@ -146,7 +146,7 @@ class RejectsController extends Controller
      */
      public function approve($id) {
        $user = \JWTAuth::parseToken()->authenticate();
-        $photo = AcceptedPhotos::where('id', $id)->update(['approved'=> 1]);
+        $photo = RejectedPhotos::where('id', $id)->update(['approved'=> 1]);
 
         ApprovedPhotos::create([
           'admin_user_id' => $user->id,
@@ -158,6 +158,5 @@ class RejectsController extends Controller
         if (!is_null($photo)) {
           return ['message' => $this->message["success"]["approve"], 'total' => $total];
         }
-       }
      }
 }
