@@ -14,7 +14,6 @@ use App\Cities;
 use App\County;
 use App\LocationData;
 use App\Tfphotos;
-use App\ApprovedPhotos;
 
 class RejectsController extends Controller
 {
@@ -34,30 +33,6 @@ class RejectsController extends Controller
     \Config::set('auth.model', 'App\AdminUsers');
     $this->middleware('jwt.auth');
   }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    /*public function index($amount, $lastQueryId)
-    {
-      $rejectedPhotos;
-      if (is_numeric($lastQueryId)) {
-        $rejectedPhotos = rejectedPhotos::select('*')
-          ->where('id', '<', $lastQueryId)
-          ->take($amount)
-          ->get();
-      } else {
-        $rejectedPhotos = rejectedPhotos::select('*')
-          ->take($amount)
-          ->get();
-      }
-
-      var_dump($amount);
-      var_dump($lastQueryId);
-      die();
-      //eturn response()->json($rejectedPhotos);
-    }*/
 
     public function queryPhotos($amount, $lastQueryId, $locations) {
       $rejectedPhotos;
@@ -145,18 +120,10 @@ class RejectsController extends Controller
      * @return Response
      */
      public function approve($id) {
-       $user = \JWTAuth::parseToken()->authenticate();
-        $photo = RejectedPhotos::where('id', $id)->update(['approved'=> 1]);
+       $photo = RejectedPhotos::where('id', $id)->update(['approved'=> 1]);
 
-        ApprovedPhotos::create([
-          'admin_user_id' => $user->id,
-          'photo_id' => $id
-        ]);
-
-        $total = ApprovedPhotos::select(\DB::raw('count(*)'))->where('admin_user_id', $user->id)->get();
-
-        if (!is_null($photo)) {
-          return ['message' => $this->message["success"]["approve"], 'total' => $total];
-        }
+       if (!is_null($photo)) {
+         return $this->message["success"]["approve"];
+       }
      }
 }

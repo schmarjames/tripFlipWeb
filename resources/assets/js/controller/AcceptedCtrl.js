@@ -85,7 +85,7 @@
           general.setPhotoToApprovalStatus("accepts", id).then(function(data) {
             console.log(data);
             var message = data.message;
-            vm.totalApproves = data.total.count;
+            vm.totalApproves = data.total[0].count;
             Flash.create('success', message);
             // remove this photo from the vm.accepted array
             delete vm.accepts[idx];
@@ -141,7 +141,7 @@
     vm.processPhotoData = function(data) {
       var photo_url = "";
       var accepts = data.acceptedPhotos;
-      vm.totalApproves = data.totalApproves.count;
+      vm.totalApproves = data.totalApproves[0].count;
 
       for (var i=0; i<accepts.length; i++) {
         accepts[i].photo_data = JSON.parse(accepts[i].photo_data);
