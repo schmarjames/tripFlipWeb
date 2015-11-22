@@ -327,7 +327,7 @@ class AcceptsController extends Controller
 
      if (!is_null($photo)) {
        return ['message' => $this->message["success"]["approve"], 'total' => $total];
-      }
+     }
     }
 
     public function locations() {

@@ -30,6 +30,8 @@
       }
     };
 
+    vm.totalApproves = 0;
+
     vm.select = function(page) {
         var end, start;
 
@@ -82,7 +84,8 @@
       else if ($rootScope.currentUser.permission_type === 2) {
         general.setPhotoToApprovalStatus("rejects", id).then(function(data) {
           console.log(data);
-          var message = data;
+          var message = data.message;
+          vm.totalApproves = data.total.count;
           Flash.create('success', message);
           // remove this photo from the vm.accepted array
           delete vm.accepts[idx];
@@ -138,17 +141,20 @@
 
     vm.processPhotoData = function(data) {
       var photo_url = "";
-      for (var i=0; i<=data.length; i++) {
-        if (data[i] !== undefined) {
-          data[i].photo_data = JSON.parse(data[i].photo_data);
-          photo_url = "https://farm" + data[i].photo_data.farm + ".staticflickr.com/" + data[i].photo_data.server + "/" + data[i].photo_data.id + "_" + data[i].photo_data.secret + ".jpg";
+      var rejects = data.rejectedPhotos;
+      vm.totalApproves = data.totalApproves.count;
 
-          data[i].approved = (data[i].approved !== null) ? Boolean(data[i].approved) : false;
-          data[i].photo_data = photo_url;
-          data[i].index = i;
+      for (var i=0; i<=rejects.length; i++) {
+        if (rejects[i] !== undefined) {
+          rejects[i].photo_data = JSON.parse(rejects[i].photo_data);
+          photo_url = "https://farm" + rejects[i].photo_data.farm + ".staticflickr.com/" + rejects[i].photo_data.server + "/" + rejects[i].photo_data.id + "_" + rejects[i].photo_data.secret + ".jpg";
 
-          if (i === (data.length-1)) {
-            vm.lastPhotoId = data[i].id;
+          rejects[i].approved = (rejects[i].approved !== null) ? Boolean(rejects[i].approved) : false;
+          rejects[i].photo_data = photo_url;
+          rejects[i].index = i;
+
+          if (i === (rejects.length-1)) {
+            vm.lastPhotoId = rejects[i].id;
           }
           console.log(photo_url);
         }
@@ -157,7 +163,7 @@
       if (vm.rejects.length === 0) {
           vm.rejects = data;
       } else {
-          vm.rejects = vm.rejects.concat(data);
+          vm.rejects = vm.rejects.concat(rejects);
       }
       vm.pageTotal = vm.rejects.length / vm.numPerPage;
       vm.search();

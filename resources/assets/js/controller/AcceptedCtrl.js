@@ -69,8 +69,7 @@
       if ($rootScope.currentUser.permission_type === 1) {
           general.approvePhoto(id).then(function(data) {
             console.log(data);
-            var message = data.message;
-            vm.totalApproves = data.total;
+            var message = data;
             Flash.create('success', message);
             // remove this photo from the vm.accepted array
             delete vm.accepts[idx];
@@ -85,7 +84,8 @@
       else if ($rootScope.currentUser.permission_type === 2) {
           general.setPhotoToApprovalStatus("accepts", id).then(function(data) {
             console.log(data);
-            var message = data;
+            var message = data.message;
+            vm.totalApproves = data.total.count;
             Flash.create('success', message);
             // remove this photo from the vm.accepted array
             delete vm.accepts[idx];
@@ -141,7 +141,7 @@
     vm.processPhotoData = function(data) {
       var photo_url = "";
       var accepts = data.acceptedPhotos;
-      vm.totalApproves = data.totalApproves;
+      vm.totalApproves = data.totalApproves.count;
 
       for (var i=0; i<accepts.length; i++) {
         accepts[i].photo_data = JSON.parse(accepts[i].photo_data);

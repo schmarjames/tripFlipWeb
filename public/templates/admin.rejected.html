@@ -1,5 +1,8 @@
 <div class="page page-table">
 
+  <div class="panel-heading" ng-if="currentUser.permission_type === 2"><strong>Total Approved Photos: </strong> {{accepted.totalApproves}}</div>
+
+<section class="panel panel-default table-dynamic">
   <div class="panel-heading"><strong><i class="fa fa-list panel-ico"></i>Filter</strong></div>
 
   <div class="table-filters">
