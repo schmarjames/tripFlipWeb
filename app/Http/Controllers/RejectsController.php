@@ -36,6 +36,7 @@ class RejectsController extends Controller
   }
 
     public function queryPhotos($amount, $lastQueryId, $locations) {
+      $user = \JWTAuth::parseToken()->authenticate();
       $rejectedPhotos;
 
       $rejectedPhotos = RejectedPhotos::select('*')->whereNull("approved");
@@ -121,10 +122,18 @@ class RejectsController extends Controller
      * @return Response
      */
      public function approve($id) {
-       $photo = RejectedPhotos::where('id', $id)->update(['approved'=> 1]);
+       $user = \JWTAuth::parseToken()->authenticate();
+        $photo = AcceptedPhotos::where('id', $id)->update(['approved'=> 1]);
 
-       if (!is_null($photo)) {
-         return $this->message["success"]["approve"];
-       }
+        ApprovedPhotos::create([
+          'admin_user_id' => $user->id,
+          'photo_id' => $id
+        ]);
+
+        $total = ApprovedPhotos::select(\DB::raw('count(*)'))->where('admin_user_id', $user->id)->get();
+
+        if (!is_null($photo)) {
+          return ['message' => $this->message["success"]["approve"], 'total' => $total];
+        }
      }
 }
