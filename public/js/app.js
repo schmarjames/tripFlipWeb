@@ -1080,7 +1080,7 @@ angular.module("app.ui.form.directives", []).directive("uiRangeSlider", [
       for (var i=0; i<accepts.length; i++) {
         accepts[i].photo_data = JSON.parse(accepts[i].photo_data);
         photo_url = "https://farm" + accepts[i].photo_data.farm + ".staticflickr.com/" + accepts[i].photo_data.server + "/" + accepts[i].photo_data.id + "_" + accepts[i].photo_data.secret + ".jpg";
-        console.log(data.totalApproves[0].count);
+        console.log(data);
         accepts[i].approved = (accepts[i].approved !== null) ? Boolean(accepts[i].approved) : false;
         accepts[i].photo_data = photo_url;
         accepts[i].index = i;
@@ -1276,7 +1276,7 @@ angular.module("AdminAppCtrl", []).controller("AdminAppCtrl", ["$scope", "$locat
         general.setPhotoToApprovalStatus("rejects", id).then(function(data) {
           console.log(data);
           var message = data.message;
-          vm.totalApproves = data.total.count;
+          vm.totalApproves = data.total[0].count;
           Flash.create('success', message);
           // remove this photo from the vm.accepted array
           delete vm.accepts[idx];
@@ -1331,9 +1331,10 @@ angular.module("AdminAppCtrl", []).controller("AdminAppCtrl", ["$scope", "$locat
     };
 
     vm.processPhotoData = function(data) {
+      console.log(data);
       var photo_url = "";
       var rejects = data.rejectedPhotos;
-      vm.totalApproves = data.totalApproves.count;
+      vm.totalApproves = data.totalApproves[0].count;
 
       for (var i=0; i<=rejects.length; i++) {
         if (rejects[i] !== undefined) {
@@ -1352,7 +1353,7 @@ angular.module("AdminAppCtrl", []).controller("AdminAppCtrl", ["$scope", "$locat
       }
 
       if (vm.rejects.length === 0) {
-          vm.rejects = data;
+          vm.rejects = rejects;
       } else {
           vm.rejects = vm.rejects.concat(rejects);
       }

@@ -85,7 +85,7 @@
         general.setPhotoToApprovalStatus("rejects", id).then(function(data) {
           console.log(data);
           var message = data.message;
-          vm.totalApproves = data.total.count;
+          vm.totalApproves = data.total[0].count;
           Flash.create('success', message);
           // remove this photo from the vm.accepted array
           delete vm.accepts[idx];
@@ -140,9 +140,10 @@
     };
 
     vm.processPhotoData = function(data) {
+      console.log(data.totalApproves[0].count);
       var photo_url = "";
       var rejects = data.rejectedPhotos;
-      vm.totalApproves = data.totalApproves.count;
+      vm.totalApproves = data.totalApproves[0].count;
 
       for (var i=0; i<=rejects.length; i++) {
         if (rejects[i] !== undefined) {
@@ -161,7 +162,7 @@
       }
 
       if (vm.rejects.length === 0) {
-          vm.rejects = data;
+          vm.rejects = rejects;
       } else {
           vm.rejects = vm.rejects.concat(rejects);
       }

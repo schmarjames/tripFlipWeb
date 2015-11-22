@@ -114,7 +114,7 @@ class AcceptsController extends Controller
         ->orderBy('id', 'desc')
         ->get();
       $total = ApprovedPhotos::select(\DB::raw('count(*)'))->where('admin_user_id', $user->id)->get();
-
+      dd($total);
       return response()->json([ 'acceptedPhotos' => $acceptedPhotos, 'totalApproves' => $total]);
     }
 
