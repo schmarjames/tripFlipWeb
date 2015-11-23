@@ -100,7 +100,7 @@
 
     vm.filterTable = function() {
       console.log(vm.newFilters);
-      var approved = Boolean(vm.newFilters.approved),
+      var approved = (vm.newFilters.approved == 0) ? false : true,
           location = (vm.newFilters.selectedLocation !== undefined) ? vm.newFilters.selectedLocation.originalObject : undefined;
 
       if (approved !== vm.filters.approved || location !== null) {

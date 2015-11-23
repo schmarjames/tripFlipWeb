@@ -1034,7 +1034,7 @@ angular.module("app.ui.form.directives", []).directive("uiRangeSlider", [
 
     vm.filterTable = function() {
       console.log(vm.newFilters);
-      var approved = Boolean(vm.newFilters.approved),
+      var approved = (vm.newFilters.approved == 0) ? false : true,
           location = (vm.newFilters.selectedLocation !== undefined) ? vm.newFilters.selectedLocation.originalObject : undefined;
 
       if (approved !== vm.filters.approved || location !== null) {
@@ -1048,7 +1048,7 @@ angular.module("app.ui.form.directives", []).directive("uiRangeSlider", [
           if (approved) {
             // query approved photos
             general.getApprovedPhotos(vm.lastPhotoId, vm.filters.location).then(vm.processPhotoData);
-          } else if (!approved || approved == "undefined") {
+          } else {
             // query all photos
             general.getAcceptedPhotos(vm.lastPhotoId, vm.filters.location).then(vm.processPhotoData);
           }
@@ -1292,7 +1292,7 @@ angular.module("AdminAppCtrl", []).controller("AdminAppCtrl", ["$scope", "$locat
 
     vm.filterTable = function() {
       console.log(vm.newFilters);
-      var approved = Boolean(vm.newFilters.approved),
+      var approved = (vm.newFilters.approved == 0) ? false : true,
           location = (vm.newFilters.selectedLocation !== undefined) ? vm.newFilters.selectedLocation.originalObject : undefined;
 
       if (approved !== vm.filters.approved || location !== null) {
@@ -1306,7 +1306,7 @@ angular.module("AdminAppCtrl", []).controller("AdminAppCtrl", ["$scope", "$locat
           if (approved) {
             // query approved photos
             general.getApprovedPhotos(vm.lastPhotoId, vm.filters.location).then(vm.processPhotoData);
-          } else if (!approved || approved == "undefined") {
+          } else {
             // query all photos
             general.getRejectedPhotos(vm.lastPhotoId, vm.filters.location).then(vm.processPhotoData);
           }
