@@ -160,6 +160,7 @@ class AcceptsController extends Controller
         ->orderBy('id', 'desc')
         ->get();
 
+      $total = ApprovedPhotos::select('*')->where('admin_user_id', $user->id)->get()->count();
       return response()->json([ 'acceptedPhotos' => $approvedPhotos, 'totalApproves' => $total]);
     }
 
