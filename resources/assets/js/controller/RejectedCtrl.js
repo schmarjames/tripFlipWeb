@@ -115,7 +115,7 @@
           if (approved) {
             // query approved photos
             general.getApprovedPhotos(vm.lastPhotoId, vm.filters.location).then(vm.processPhotoData);
-          } else if (!approved || approved == "undefined") {
+          } else {
             // query all photos
             general.getRejectedPhotos(vm.lastPhotoId, vm.filters.location).then(vm.processPhotoData);
           }

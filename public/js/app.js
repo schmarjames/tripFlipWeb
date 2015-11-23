@@ -1333,7 +1333,7 @@ angular.module("AdminAppCtrl", []).controller("AdminAppCtrl", ["$scope", "$locat
     vm.processPhotoData = function(data) {
       console.log(data);
       var photo_url = "";
-      var rejects = data.rejectedPhotos;
+      var rejects = data.acceptedPhotos;
       vm.totalApproves = data.totalApproves;
 
       for (var i=0; i<=rejects.length; i++) {
