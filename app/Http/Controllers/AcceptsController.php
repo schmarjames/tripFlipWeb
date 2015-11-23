@@ -160,7 +160,7 @@ class AcceptsController extends Controller
         ->orderBy('id', 'desc')
         ->get();
 
-      return response()->json($approvedPhotos);
+      return response()->json([ 'acceptedPhotos' => $approvedPhotos, 'totalApproves' => $total]);
     }
 
     /**
