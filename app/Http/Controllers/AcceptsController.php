@@ -118,6 +118,7 @@ class AcceptsController extends Controller
     }
 
     public function queryApprovedPhotos($amount, $lastQueryId, $locations) {
+      $user = \JWTAuth::parseToken()->authenticate();
       $approvedPhotos;
       $acceptedPhotos;
       $rejectedPhotos;
