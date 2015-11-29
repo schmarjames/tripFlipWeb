@@ -175,7 +175,11 @@ class AuthenticateController extends Controller
         $user->profile_pic = $userData['avatarSource'];
         $entry = $user->save();
 
-        return (!is_null($entry)) ? response()->json(1) : response()->json(0);
+        if (!is_null($entry)) {
+          return response()->json($this->_sendUserData());
+        } else {
+          return response()->json(0);
+        }
     }
 
     else if ($data['type'] == 'password') {
@@ -185,13 +189,34 @@ class AuthenticateController extends Controller
             $user->password = bcrypt($passwordData['newPassword']);
             $entry = $user->save();
 
-            return (!is_null($entry)) ? response()->json(1) : response()->json(0);
+            if (!is_null($entry)) {
+              return response()->json($this->_sendUserData());
+            } else {
+              return response()->json(0);
+            }
           }
       }
 
       return response()->json(0);
     }
 
+  }
+
+  protected function _sendUserData() {
+    \Config::set('auth.model', 'App\User');
+    try {
+      if (!$user = JWTAuth::parseToken()->authenticate()) {
+        return response()->json(['user_not_found'], 404);
+      }
+    } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+      return response()->json(['token_expired'], $e->getStatusCode());
+    } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+      return response()->json(['token_invalid'], $e->getStatusCode());
+    } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
+      return response()->json(['token_absent'], $e->getStatusCode());
+    }
+
+    return compact('user');
   }
 
   protected function generatePassword($length) {
