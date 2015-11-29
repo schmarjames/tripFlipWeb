@@ -188,6 +188,24 @@ class GalleryController extends Controller
           ->orderBy('created_at', 'desc')
           ->get();
 
+          // include the likes and weather data foreach photo
+          $collection = $collection->map(function($photo, $v) use ($user) {
+            $photoLikedTotal = Likes::where("photo_id", $photo->id)->select("user_id")->get()->count();
+            $userLiked = Likes::where(["photo_id" => $photo->id, "user_id" => $user->id])->select("user_id")->get();
+
+            $photo['likes'] = $photoLikedTotal;
+            $photo['likedByUser'] = ($userLiked->count() > 0 ? true : false);
+
+            $weatherData = $this->getWeatherData($photo["lat"], $photo["long"]);
+            $photo["weather"] = [
+              "description" => $weatherData["weather"][0]["description"],
+              "iconCode" => $weatherData["weather"][0]["icon"],
+              "temp" => $weatherData["main"]["temp"]
+            ];
+
+            return $photo;
+          });
+
           return response()->json($collection);
       }
 
