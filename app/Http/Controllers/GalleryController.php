@@ -257,7 +257,13 @@ class GalleryController extends Controller
 
         $photo['likes'] = $photoLikedTotal;
         $photo['likedByUser'] = ($userLiked->count() > 0 ? true : false);
-        $photo["weatherCondition"] = $this->getWeatherData($photo["lat"], $photo["long"])["weather"][0]["description"];
+
+        $weatherData = $this->getWeatherData($photo["lat"], $photo["long"]);
+        $photo["weather"] = [
+          "description" => $weatherData["weather"][0]["description"],
+          "iconCode" => $weatherData["weather"][0]["icon"],
+          "temp" => $weatherData["main"]["temp"]
+        ];
 
         return $photo;
       });
