@@ -24,6 +24,7 @@ class GalleryController extends Controller
   ];
 
   protected $weatherApiKey = "dc917ecc31f3df833231b3804d609fed";
+  protected $tempUnitsType = "imperial";
 
   public function __construct() {
     \Config::set('auth.model', 'App\User');
@@ -356,9 +357,10 @@ class GalleryController extends Controller
     public function getWeatherData($lat, $long) {
       //api.openweathermap.org/data/2.5/weather?lat=" + this.state.lat + "&lon=" + this.state.long + "&APPID=dc917ecc31f3df833231b3804d609fed"
       $url = sprintf(
-        "api.openweathermap.org/data/2.5/weather?lat=%s&lon=%s&APPID=%s",
+        "api.openweathermap.org/data/2.5/weather?lat=%s&lon=%s&units=%s&APPID=%s",
         $lat,
         $long,
+        $this->tempUnitsType,
         $this->weatherApiKey
       );
 
