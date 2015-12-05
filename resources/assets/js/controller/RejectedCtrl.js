@@ -142,7 +142,7 @@
     vm.processPhotoData = function(data) {
       console.log(data);
       var photo_url = "";
-      var rejects = data.acceptedPhotos;
+      var rejects = data.rejectedPhotos;
       vm.totalApproves = data.totalApproves;
 
       for (var i=0; i<=rejects.length; i++) {
