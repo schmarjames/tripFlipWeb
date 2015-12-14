@@ -45,9 +45,10 @@ html {
   -webkit-tap-highlight-color: transparent; }
 
 html {
-  overflow: hidden; }
+  overflow: hidden; height: 100%; }
 
 body {
+  height: 100%;
   font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   line-height: 1.42857;
@@ -7046,13 +7047,9 @@ label {
     transform: rotateZ(360deg); } }
 
     /**********************
-    6 -  Marketing Page styles
+    7 -  Marketing Page styles
     ***********************/
-    @font-face {
-        font-family: Nevis;
-        src: url(../nevis.ttf);
-    }
-
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
     .col-center {
       float: none;
       margin: 0 auto;
@@ -7061,7 +7058,6 @@ label {
     #wrapper {
       height: 100%;
       width: 100%;
-      position: relative;
       background-size: cover;
     }
 
@@ -7070,8 +7066,24 @@ label {
       float: left;
     }
 
-    #wrapper video {
+    #wrapper #bg-image {
       position: fixed;
+      right: 0;
+      top: 0;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      background : url('../images/italy-wallpaper.jpg');
+      background-size: cover;
+      overflow: hidden;
+    }
+
+    #bg-image img {
+      width : 100%;
+    }
+
+    #wrapper video {
       right: 0;
       top: -140px;
       min-width: 100%;
@@ -7106,28 +7118,45 @@ label {
     }
 
     #wrapper .content_section {
-      width: 540px;
+      width: 1040px;
       min-height: 600px;
-      margin: 8% auto;
+      margin: 15% auto 0;
       color: #ef4f25;
+      text-align: center;
     }
 
     #wrapper .content_section #logo {
-      text-transform: uppercase;
-      text-align: center;
-      font-family: Nevis;
-      font-size: 48px;
-      padding: 20px 0 20px 120px;
-      background: url('../img/souniority_logo.png') 30px 3px no-repeat;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 50px;
+      font-weight: 700;
+      padding: 40px 0 24px 0;
     }
 
     #wrapper .content_section p {
-      font-size: 15px;
+      font-size: 36px;
+      font-weight: 700;
       margin-top: 20px;
       line-height: 1.5;
-      font-family: Nevis;
-      text-align: center;
-      font-size: 22px;
+      color: #f8f8f8;
+      font-family: 'Verdana', sans-serif;
+    }
+
+    .app-link {
+      width: 150px;
+      display : block;
+      margin : 20px auto;
+    }
+
+    .app-link img {
+      width: 100%;
+    }
+
+    .iphone-wrapper {
+      width: 100%;
+    }
+
+    .iphone-wrapper img {
+      width: 100%;
     }
 
     #email_section {
@@ -7228,7 +7257,7 @@ label {
         height: 980px;
       }
       #wrapper .content_section {
-        width: 80%;
+        width: 95%;
       }
       .content_section #logo {
         text-align: center;
@@ -7255,6 +7284,13 @@ label {
 
     }
 
+    @media (max-width: 768px) {
+      .iphone-wrapper {
+        width: 50%;
+        margin: 0 auto;
+      }
+    }
+
     @media (max-width: 448px) {
       #wrapper .content_section {
         width: 100%;
@@ -7269,6 +7305,5 @@ label {
         font-size: 16px;
       }
     }
-
 
 /*# sourceMappingURL=main.css.map */
