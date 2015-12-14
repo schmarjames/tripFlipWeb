@@ -93,14 +93,19 @@ var app = angular.module("app", [
         })
 
         .state('login', {
-          url: '/',
+          url: '/login',
           templateUrl: 'templates/login.html',
           controller: 'LoginCtrl as login'
         })
 
         .state('logout', {
-          url: '/',
+          url: '/login',
           templateUrl: 'templates/login.html'
+        })
+
+        .state('market', {
+          url: '/',
+          templateUrl: 'templates/market.html'
         });
     }
 ]);
@@ -1333,7 +1338,7 @@ angular.module("AdminAppCtrl", []).controller("AdminAppCtrl", ["$scope", "$locat
     vm.processPhotoData = function(data) {
       console.log(data);
       var photo_url = "";
-      var rejects = data.acceptedPhotos;
+      var rejects = data.rejectedPhotos;
       vm.totalApproves = data.totalApproves;
 
       for (var i=0; i<=rejects.length; i++) {

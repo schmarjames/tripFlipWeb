@@ -269,9 +269,10 @@ html {
   -webkit-tap-highlight-color: transparent; }
 
 html {
-  overflow: hidden; }
+  overflow: hidden; height: 100%; }
 
 body {
+  height: 100%;
   font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   line-height: 1.42857;
@@ -7268,6 +7269,266 @@ label {
 @keyframes spin {
   100% {
     transform: rotateZ(360deg); } }
+
+    /**********************
+    7 -  Marketing Page styles
+    ***********************/
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+    .col-center {
+      float: none;
+      margin: 0 auto;
+    }
+
+    #wrapper {
+      height: 100%;
+      width: 100%;
+      background-size: cover;
+    }
+
+    #main {
+      height: 100%;
+      float: left;
+    }
+
+    #wrapper #bg-image {
+      position: fixed;
+      right: 0;
+      top: 0;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      background : url('../images/italy-wallpaper.jpg');
+      background-size: cover;
+      overflow: hidden;
+    }
+
+    #bg-image img {
+      width : 100%;
+    }
+
+    #wrapper video {
+      right: 0;
+      top: -140px;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      background-size: cover;
+    }
+
+    #overlay {
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      /*-webkit-filter: blur(5px);
+      -moz-filter: blur(5px);
+      -ms-filter: blur(5px);
+      -o-filter: blur(5px);
+      filter: blur(5px);*/
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 500;
+    }
+
+    #wrapper .inner_wrapper {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+
+    #wrapper .content_section {
+      width: 1040px;
+      min-height: 600px;
+      margin: 15% auto 0;
+      color: #ef4f25;
+      text-align: center;
+    }
+
+    #wrapper .content_section #logo {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 50px;
+      font-weight: 700;
+      padding: 40px 0 24px 0;
+    }
+
+    #wrapper .content_section p {
+      font-size: 36px;
+      font-weight: 700;
+      margin-top: 20px;
+      line-height: 1.5;
+      color: #f8f8f8;
+      font-family: 'Verdana', sans-serif;
+    }
+
+    .app-link {
+      width: 150px;
+      display : block;
+      margin : 20px auto;
+    }
+
+    .app-link img {
+      width: 100%;
+    }
+
+    .iphone-wrapper {
+      width: 100%;
+    }
+
+    .iphone-wrapper img {
+      width: 100%;
+    }
+
+    #email_section {
+      width: 540px;
+      padding: 20px;
+      border-radius: 10px;
+      background: rgba(0,0,0,0.4);
+    }
+
+    #email_section p {
+      font-size: 16px !important;
+      border-bottom: 1px solid #ef4f25;
+      margin-bottom: 30px;
+      padding-bottom: 5px;
+    }
+
+    .content_section #email_section .input_wrap {
+      width: 100%;
+      height: 50px;
+      padding: 0 10px;
+      margin: 5px auto;
+      border-radius: 5px;
+
+      /*-webkit-box-shadow: inset 0px 0px 14px 0px rgba(0,0,0,1);
+      -moz-box-shadow: inset 0px 0px 14px 0px rgba(0,0,0,1);
+      box-shadow: inset 0px 0px 14px 0px rgba(0,0,0,1);*/
+    }
+
+    .content_section #email_section input[type=text],
+    .content_section #email_section input[type=email] {
+      width: 100%;
+      height: 40px;
+      padding: 5px;
+      margin: 5px 0;
+      border: 1px solid #ef4f25;
+      border-radius: 5px;
+      background: rgba(41, 35, 33, 0.8);
+      font-size: 18px;
+      outline: none;
+      color: #ef4f25;
+    }
+
+    .content_section #email_section input[type=submit] {
+      height: 40px;
+      width: 100%;
+      padding: 0 10px;
+      border-radius: 5px;
+      border-top: 1px solid #ef4f25;
+      border-bottom: 1px solid #ef4f25;
+      border-right: 1px solid #ef4f25;
+      border-left: none;
+      background: #ef4f25;
+      text-transform: uppercase;
+      color: #ffffff;
+      outline: none;
+      font-size: 22px;
+    }
+
+    #wrapper #app_section {
+      height: 450px;
+      width: 222px;
+      margin: 0 auto;
+      background: url('../img/iphone6plus.png') 0px 0px no-repeat;
+    }
+
+    #wrapper #footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      z-index: 1000;
+    }
+
+    #footer a {
+      display: block;
+      float: right;
+      margin: 0 20px;
+      width: 150px;
+      height: 100%;
+      background: url('../img/devolution_logo.png') 0px 0px no-repeat;
+      background-size: 150px;
+    }
+
+    .success_message {
+      padding: 20px;
+      line-height: 1.5;
+      font-family: Nevis;
+      text-align: center;
+      font-size: 22px;
+      border: none !important;
+    }
+
+    /* media queries */
+
+    @media (max-width: 992px) {
+      #wrapper {
+        height: 980px;
+      }
+      #wrapper .content_section {
+        width: 95%;
+      }
+      .content_section #logo {
+        text-align: center;
+        padding: 120px 0 20px 0 !important;
+        background-position: 50% 12px !important;
+      }
+      .content_section p {
+        text-align: center;
+        margin: 10px 0 !important;
+      }
+      #email_section {
+        width: 100%;
+      }
+      .content_section #email_section .input_wrap {
+        margin: 0px;
+      }
+      .content_section #email_section form {
+        max-width: 90%;
+        margin: 20px auto;
+      }
+      #footer a {
+        margin: 0 auto !important;
+      }
+
+    }
+
+    @media (max-width: 768px) {
+      .iphone-wrapper {
+        width: 50%;
+        margin: 0 auto;
+      }
+    }
+
+    @media (max-width: 448px) {
+      #wrapper .content_section {
+        width: 100%;
+      }
+      .content_section #email_section form {
+        width: 100%;
+      }
+      .content_section #email_section .input_wrap {
+        width: 100%;
+      }
+      .content_section #email_section input[type=submit] {
+        font-size: 16px;
+      }
+    }
 
 /*# sourceMappingURL=main.css.map */
 

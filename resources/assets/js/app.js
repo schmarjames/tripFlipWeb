@@ -93,14 +93,19 @@ var app = angular.module("app", [
         })
 
         .state('login', {
-          url: '/',
+          url: '/login',
           templateUrl: 'templates/login.html',
           controller: 'LoginCtrl as login'
         })
 
         .state('logout', {
-          url: '/',
+          url: '/login',
           templateUrl: 'templates/login.html'
+        })
+
+        .state('market', {
+          url: '/',
+          templateUrl: 'templates/market.html'
         });
     }
 ]);
