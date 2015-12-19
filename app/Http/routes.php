@@ -19,6 +19,10 @@ Route::get('/', function () {
     return view('master');
 });
 
+Route::get('/admin', function () {
+  return view('admin');
+});
+
 Route::group(['prefix' => 'api', 'middleware' => 'cors'], function() {
   Route::resource('auth', 'AuthenticateController@auth');
   Route::post('adminauth', 'AuthenticateController@adminAuth');

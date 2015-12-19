@@ -17,6 +17,7 @@ elixir(function(mix) {
     mix.copy('resources/vendor/bootstrap/dist/fonts/*.*', 'public/fonts/');
     mix.copy('resources/vendor/weather-icons/fonts/*.*', 'public/fonts/');
     mix.copy('resources/vendor/font-awesome/fonts/*.*', 'public/fonts/');
+    mix.copy('resources/vendor/marketing-styles.css', 'public/css/marketing-styles.css');
 
     mix.styles([
         'fontawesome/css/font-awesome.min.css',
