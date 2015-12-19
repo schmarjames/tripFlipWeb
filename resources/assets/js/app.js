@@ -55,7 +55,7 @@ var app = angular.module("app", [
 
       $httpProvider.interceptors.push('APIInterceptor');
       $authProvider.loginUrl  = appConfig.url + '/api/adminauth';
-      $urlRouterProvider.otherwise("/admin/dashboard");
+      $urlRouterProvider.otherwise("/dashboard");
 
       $stateProvider
         .state('admin', {
