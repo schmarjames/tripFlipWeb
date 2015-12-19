@@ -65,41 +65,41 @@ var app = angular.module("app", [
         })
 
         .state('admin.dashboard', {
-          url: '/admin/dashboard',
+          url: '/dashboard',
           templateUrl: 'templates/admin.dashboard.html',
           controller: 'dashbardCtrl',
           data: {requiresLogin : true }
         })
 
         .state('admin.rejects', {
-          url: '/admin/rejects',
+          url: '/rejects',
           templateUrl: 'templates/admin.rejected.html',
           controller: 'RejectedCtrl as rejected',
           data: {requiresLogin : true }
         })
 
         .state('admin.accepts', {
-          url: '/admin/accepts',
+          url: '/accepts',
           templateUrl: 'templates/admin.accepted.html',
           controller: 'AcceptedCtrl as accepted',
           data: {requiresLogin : true }
         })
 
         .state('admin.locationQueries', {
-          url: '/admin/locationqueries',
+          url: '/locationqueries',
           templateUrl: 'templates/admin.locationqueries.html',
           controller: 'LocationQueriesCtrl as locationquery',
           data: {requireLogin : true }
         })
 
         .state('login', {
-          url: '/admin/login',
+          url: '/login',
           templateUrl: 'templates/login.html',
           controller: 'LoginCtrl as login'
         })
 
         .state('logout', {
-          url: '/admin/login',
+          url: '/login',
           templateUrl: 'templates/login.html'
         });
     }
