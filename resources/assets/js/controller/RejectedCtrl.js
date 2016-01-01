@@ -68,13 +68,11 @@
     vm.acceptPhoto = function(id, idx) {
       if ($rootScope.currentUser.permission_type === 1) {
         general.acceptPhoto(id).then(function(data) {
-          console.log(data);
           var message = data;
           Flash.create('success', message);
           // remove this photo from the vm.rejects array
-          delete vm.rejects[idx];
+          vm.rejects.splice(idx, 1);
           currentPage = vm.currentPage;
-
           //reset table
           vm.search();
           vm.currentPage = currentPage;
@@ -83,24 +81,20 @@
 
       else if ($rootScope.currentUser.permission_type === 2) {
         general.setPhotoToApprovalStatus("rejects", id).then(function(data) {
-          console.log(data);
           var message = data.message;
           vm.totalApproves = data.total;
           Flash.create('success', message);
           // remove this photo from the vm.accepted array
-          delete vm.accepts[idx];
+          vm.rejects.splice(idx, 1);
           currentPage = vm.currentPage;
-
           //reset table
           vm.search();
           vm.currentPage = currentPage;
         });
       }
-
     };
 
     vm.filterTable = function() {
-      console.log(vm.newFilters);
       var approved = (vm.newFilters.approved == 0) ? false : true,
           location = (vm.newFilters.selectedLocation !== undefined) ? vm.newFilters.selectedLocation.originalObject : undefined;
 
@@ -125,22 +119,21 @@
     vm.removePhoto = function(id, idx) {
       if ($rootScope.currentUser.permission_type === 1) {
           general.removePhoto(id).then(function(data) {
-            console.log(data);
             var message = data;
             Flash.create('success', message);
             // remove this photo from the vm.rejects array
-            delete vm.rejects[idx];
+            vm.rejects.splice(idx, 1);
             currentPage = vm.currentPage;
 
             //reset table
-            vm.currentPage = currentPage;
+
             vm.search();
+            vm.currentPage = currentPage;
           });
       }
     };
 
     vm.processPhotoData = function(data) {
-      console.log(data);
       var photo_url = "";
       var rejects = data.rejectedPhotos;
       vm.totalApproves = data.totalApproves;
@@ -157,7 +150,6 @@
           if (i === (rejects.length-1)) {
             vm.lastPhotoId = rejects[i].id;
           }
-          console.log(photo_url);
         }
       }
 
@@ -172,7 +164,6 @@
 
     general.getRejectedPhotos(vm.lastPhotoId, vm.filters.location).then(vm.processPhotoData);
     general.getLocations().then(function(data) {
-      console.log(data);
       vm.locations = data.locations;
     });
 

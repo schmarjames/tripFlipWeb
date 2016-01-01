@@ -108,8 +108,9 @@
                 <td>{{accept.country}}</td>
                 <td><img ng-src="{{accept.photo_data}}" /></td>
                 <td>
-                  <a ng-click="accepted.approvePhoto(accept.id, accept.index)"  class="btn btn-primary">Approve</a>
-                  <a ng-if="currentUser.permission_type === 1" ng-click="accepted.rejectPhoto(accept.id, accept.index)" class="btn btn-primary">Reject</a>
+                  <a ng-click="accepted.approvePhoto(accept.id, accepted.accepts.indexOf(accept))"  class="btn btn-primary">Approve</a>
+                  {{accepted.accepts.indexOf(accept)}}
+                  <a ng-if="currentUser.permission_type === 1" ng-click="accepted.rejectPhoto(accept.id, accepted.accepts.indexOf(accept))" class="btn btn-primary">Reject</a>
                 </td>
             </tr>
         </tbody>

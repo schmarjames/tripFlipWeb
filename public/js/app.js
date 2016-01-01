@@ -55,7 +55,7 @@ var app = angular.module("app", [
 
       $httpProvider.interceptors.push('APIInterceptor');
       $authProvider.loginUrl  = appConfig.url + '/api/adminauth';
-      $urlRouterProvider.otherwise("/admin/dashboard");
+      $urlRouterProvider.otherwise("/dashboard");
 
       $stateProvider
         .state('admin', {
@@ -65,41 +65,41 @@ var app = angular.module("app", [
         })
 
         .state('admin.dashboard', {
-          url: '/admin/dashboard',
+          url: '/dashboard',
           templateUrl: 'templates/admin.dashboard.html',
           controller: 'dashbardCtrl',
           data: {requiresLogin : true }
         })
 
         .state('admin.rejects', {
-          url: '/admin/rejects',
+          url: '/rejects',
           templateUrl: 'templates/admin.rejected.html',
           controller: 'RejectedCtrl as rejected',
           data: {requiresLogin : true }
         })
 
         .state('admin.accepts', {
-          url: '/admin/accepts',
+          url: '/accepts',
           templateUrl: 'templates/admin.accepted.html',
           controller: 'AcceptedCtrl as accepted',
           data: {requiresLogin : true }
         })
 
         .state('admin.locationQueries', {
-          url: '/admin/locationqueries',
+          url: '/locationqueries',
           templateUrl: 'templates/admin.locationqueries.html',
           controller: 'LocationQueriesCtrl as locationquery',
           data: {requireLogin : true }
         })
 
         .state('login', {
-          url: '/admin/login',
+          url: '/login',
           templateUrl: 'templates/login.html',
           controller: 'LoginCtrl as login'
         })
 
         .state('logout', {
-          url: '/admin/login',
+          url: '/login',
           templateUrl: 'templates/login.html'
         });
     }
@@ -1257,15 +1257,17 @@ angular.module("AdminAppCtrl", []).controller("AdminAppCtrl", ["$scope", "$locat
     };
 
     vm.acceptPhoto = function(id, idx) {
+      console.log("oijwiofwefjeofjieowfjiofjwefji");
       if ($rootScope.currentUser.permission_type === 1) {
         general.acceptPhoto(id).then(function(data) {
-          console.log(data);
           var message = data;
           Flash.create('success', message);
           // remove this photo from the vm.rejects array
-          delete vm.rejects[idx];
+          vm.rejects.splice(idx, 1);
           currentPage = vm.currentPage;
-
+          console.log(idx);
+          console.log(vm.rejects.length);
+          console.log(vm.rejects[idx]);
           //reset table
           vm.search();
           vm.currentPage = currentPage;
@@ -1274,20 +1276,20 @@ angular.module("AdminAppCtrl", []).controller("AdminAppCtrl", ["$scope", "$locat
 
       else if ($rootScope.currentUser.permission_type === 2) {
         general.setPhotoToApprovalStatus("rejects", id).then(function(data) {
-          console.log(data);
           var message = data.message;
           vm.totalApproves = data.total;
           Flash.create('success', message);
           // remove this photo from the vm.accepted array
-          delete vm.accepts[idx];
+          vm.rejects.splice(idx, 1);
           currentPage = vm.currentPage;
-
+          console.log(idx);
+          console.log(vm.rejects.length);
+          console.log(vm.rejects[idx]);
           //reset table
           vm.search();
           vm.currentPage = currentPage;
         });
       }
-
     };
 
     vm.filterTable = function() {
@@ -1320,12 +1322,16 @@ angular.module("AdminAppCtrl", []).controller("AdminAppCtrl", ["$scope", "$locat
             var message = data;
             Flash.create('success', message);
             // remove this photo from the vm.rejects array
-            delete vm.rejects[idx];
+            vm.rejects.splice(idx, 1);
+            console.log(idx);
+            console.log(vm.rejects.length);
+            console.log(vm.rejects[idx]);
             currentPage = vm.currentPage;
 
             //reset table
-            vm.currentPage = currentPage;
+
             vm.search();
+            vm.currentPage = currentPage;
           });
       }
     };
@@ -1357,6 +1363,8 @@ angular.module("AdminAppCtrl", []).controller("AdminAppCtrl", ["$scope", "$locat
       } else {
           vm.rejects = vm.rejects.concat(rejects);
       }
+      console.log(vm.rejects.length);
+      console.log(vm.rejects);
       vm.pageTotal = vm.rejects.length / vm.numPerPage;
       vm.search();
     };

@@ -72,7 +72,7 @@
             var message = data;
             Flash.create('success', message);
             // remove this photo from the vm.accepted array
-            delete vm.accepts[idx];
+            vm.accepts.splice(idx, 1);
             currentPage = vm.currentPage;
 
             //reset table
@@ -88,7 +88,7 @@
             vm.totalApproves = data.total;
             Flash.create('success', message);
             // remove this photo from the vm.accepted array
-            delete vm.accepts[idx];
+            vm.accepts.splice(idx, 1);
             currentPage = vm.currentPage;
 
             //reset table
@@ -128,7 +128,7 @@
           var message = data;
           Flash.create('success', message);
           // remove this photo from the vm.accepted array
-          delete vm.accepts[idx];
+          vm.accepts.splice(idx, 1);
           currentPage = vm.currentPage;
 
           //reset table
