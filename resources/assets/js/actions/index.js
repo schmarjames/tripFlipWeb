@@ -1,7 +1,9 @@
 import alt from '../alt';
 import Auth from '../sources/AuthSource';
+import Photo from '../sources/PhotoSource';
+import ls from 'local-storage';
 
-class AuthActions {
+class Actions {
   logInUser(credentials) {
     return (dispatch) => {
       Auth.login(credentials)
@@ -29,9 +31,20 @@ class AuthActions {
   }
 
   getUserData() {
-    console.log(window.localStorage);
-    return window.localstorage;
+    return (dispatch) => {
+      dispatch(ls.getItem('userData'));
+    }
+  }
+
+  setCurrentViewState(currentView) {
+    return (dispatch) => {
+      dispatch(currentView);
+    }
+  }
+
+  getMorePhotos() {
+
   }
 }
 
-export default alt.createActions(AuthActions);
+export default alt.createActions(Actions);

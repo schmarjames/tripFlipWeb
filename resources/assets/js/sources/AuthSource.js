@@ -3,15 +3,17 @@ import JQuery from 'jquery';
 
 var Auth = {
   login: function(credentials) {
-    console.log(credentials);
-    console.log(globals);
-    var data = JQuery.param({
+    var data = JSON.stringify({
       email: credentials.email,
       password: credentials.password
     });
 
     return fetch(`${globals.baseUrl}auth`, {
         method : 'post',
+        headers : {
+          'Accept' : 'application/json',
+          'Content-Type' : 'application/json'
+        },
         body : data
       })
         .then((response) => {

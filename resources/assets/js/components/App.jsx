@@ -1,5 +1,5 @@
 import React from 'react';
-import Actions from '../actions/AuthActions';
+import Actions from '../actions';
 import connectToStores from 'alt-utils/lib/connectToStores';
 import PhotoGalleryStore from '../stores/PhotoGalleryStore';
 
@@ -13,9 +13,9 @@ class App extends React.Component {
         'what is that'
       ]
     }
-
+    Actions.getUserData();
     Actions.logInUser({
-      email: "Rob@gmail.com",
+      email: "rob@gmail.com",
       password: "Impala96"
     });
   }
