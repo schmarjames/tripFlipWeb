@@ -1,6 +1,7 @@
 import alt from '../alt';
 import Auth from '../sources/AuthSource';
 import Photo from '../sources/PhotoSource';
+import VisiblityFilter from '../sources/VisibilitySource';
 import ls from 'local-storage';
 
 class Actions {
@@ -10,7 +11,7 @@ class Actions {
         .then((tokenResult) => {
         // Get user data
         Auth.getUserData(tokenResult.token, (user) => {
-          dispatch(user);
+          dispatch(Object.assign(user, {token: tokenResult.token}));
           // Store token and user data in localstorage
           /*AsyncStorage.multiSet([
             [authKey, tokenResult.token],
@@ -30,20 +31,46 @@ class Actions {
     }
   }
 
+  logOutUser() {
+    return (dispatch) => {
+      ls.remove('userData');
+
+      // if removed
+      if (ls.get('userData') === null) {
+        dispatch(true);
+      }
+    }
+  }
+
   getUserData() {
     return (dispatch) => {
-      dispatch(ls.getItem('userData'));
+      dispatch(ls.get('userData'));
     }
   }
 
-  setCurrentViewState(currentView) {
+  setCurrentViewFilter(viewData) {
     return (dispatch) => {
-      dispatch(currentView);
+      // based on gallery or discover view
+      dispatch({
+        currentView : viewData.currentView,
+        filter : VisiblityFilter[viewData.currentView][viewData.filter]
+      });
     }
   }
 
-  getMorePhotos() {
+  listMorePhotos(currentView, data, newFilter) {
+    return (dispatch) => {
+      Photos.queryPhotos(data, (res) => {
+        dispatch(currentView, res, newFilter);
+      });
+    }
+  }
 
+  likePhoto(photoId) {
+    return (dispatch) => {
+      dispatch(photoId);
+      Photos.likePhoto(photoId);
+    }
   }
 }
 

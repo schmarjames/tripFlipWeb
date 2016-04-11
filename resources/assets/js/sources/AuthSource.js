@@ -2,7 +2,7 @@ import globals from '../utils/Globals';
 import JQuery from 'jquery';
 
 var Auth = {
-  login: function(credentials) {
+  login: (credentials)=> {
     var data = JSON.stringify({
       email: credentials.email,
       password: credentials.password
@@ -30,7 +30,7 @@ var Auth = {
         });
   },
 
-  getUserData: function(token, cb) {
+  getUserData: (token, cb)=> {
     fetch(`${globals.baseUrl}authenticate/user?token=${token}&mobile=1`, {
       method: 'get'
     })

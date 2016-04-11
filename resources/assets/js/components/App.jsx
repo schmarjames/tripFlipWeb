@@ -2,6 +2,7 @@ import React from 'react';
 import Actions from '../actions';
 import connectToStores from 'alt-utils/lib/connectToStores';
 import PhotoGalleryStore from '../stores/PhotoGalleryStore';
+import ls from 'local-storage';
 
 @connectToStores
 class App extends React.Component {
@@ -13,11 +14,13 @@ class App extends React.Component {
         'what is that'
       ]
     }
-    Actions.getUserData();
+    //Actions.getUserData();
     Actions.logInUser({
       email: "rob@gmail.com",
       password: "Impala96"
     });
+
+    //Actions.logOutUser();
   }
 
   static getStores() {
@@ -32,6 +35,8 @@ class App extends React.Component {
     var view = <div>waiting.....</div>;
 
     if (this.props.user) {
+      console.log(this.props.user);
+    } else {
       console.log(this.props.user);
     }
     return (
