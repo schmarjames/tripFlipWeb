@@ -31,7 +31,6 @@ class PhotoGalleryStore {
 
   @bind(Actions.logOutUser);
   logout(status) {
-    console.log(status);
     if (status) {
       this.setState({
         loggedIn: false,
@@ -49,43 +48,57 @@ class PhotoGalleryStore {
   }
 
   @bind(Actions.listMorePhotos);
-  getMorePhotos(view, data, newFilter) {
+  listMorePhotos(data) {
     // missing token!
-    if (!data) {
+    if (!data.photos) {
       Actions.logOutUser();
       return;
     }
 
-    if (view == 'gallery') {
-      if (newFilter) {
-        this.setState({currentGalleryList : data});
+    if (data.view == 'gallery') {
+      if (data.filter) {
+        this.setState({currentGalleryList : data.photos});
         return;
       }
       this.setState({
-        currentGalleryList : this.state.currentGalleryList.concat(data)
+        currentGalleryList : this.state.currentGalleryList.concat(data.photos)
       });
     }
 
-    if (view == 'discovery') {
-      if (newFilter) {
-        this.setState({
-          currentDiscoveryList : data
-        });
+    if (data.view == 'discovery') {
+      if (data.filter) {
+        this.setState({currentDiscoveryList : data.photos});
         return;
       }
       this.setState({
-        currentDiscoveryList : this.state.currentDiscoveryList.concat(data)
+        currentDiscoveryList : this.state.currentDiscoveryList.concat(data.photos)
       });
     }
   }
 
   @bind(Actions.likePhoto);
   likePhoto(photoId) {
-    // update each list if photo exist
-    var index = this.state.currentGalleryList.findIndex((el, idx, array) => {
-          if (el.id == photo.id) { return true; }
-                return false;
-        });
+    var self = this,
+        lists = ['currentGalleryList', 'currentDiscoveryList'];
+
+    lists.forEach((list) => {
+      var index = this.state[list].findIndex((el, idx, array) => {
+            if (el.id == photo.id) { return true; }
+                  return false;
+          }),
+          listCopy = JSON.parse(JSON.strigify(this.state[list]));
+
+      if (listCopy[index].likedByUser) {
+        listCopy[index].likes--;
+        listCopy[index].likedByUser = false;
+      } else {
+        listCopy[index].likes++;
+        listCopy[index].likedByUser = true;
+      }
+
+      self.setState({[list]: listCopy});
+    });
+
   }
 
   @bind(Actions.setCurrentViewFilter);

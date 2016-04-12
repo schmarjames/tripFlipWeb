@@ -1,4 +1,4 @@
-var Visiblity = {
+var Visibility = {
   discovery : {
     ALL : 'ALL',
     INDOOR : 'INDOOR',

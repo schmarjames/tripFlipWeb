@@ -14,13 +14,35 @@ class App extends React.Component {
         'what is that'
       ]
     }
-    //Actions.getUserData();
-    Actions.logInUser({
+    Actions.getUserData();
+    /*Actions.logInUser({
       email: "rob@gmail.com",
       password: "Impala96"
-    });
+    });*/
 
     //Actions.logOutUser();
+
+    Actions.listMorePhotos('discovery',{
+        "urlType" : "collection",
+        "data" : {
+          "amount" : 10,
+          "category" : 1,
+          "lastQueryId" : "",
+          "latest" : 0
+        }
+    } , true);
+
+    setTimeout(() => {
+      Actions.listMorePhotos('discovery',{
+          "urlType" : "collection",
+          "data" : {
+            "amount" : 10,
+            "category" : 1,
+            "lastQueryId" : 194,
+            "latest" : 0
+          }
+      } , true);
+    }, 4000);
   }
 
   static getStores() {
@@ -36,6 +58,7 @@ class App extends React.Component {
 
     if (this.props.user) {
       console.log(this.props.user);
+      console.log(this.props.currentDiscoveryList);
     } else {
       console.log(this.props.user);
     }

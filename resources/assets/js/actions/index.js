@@ -1,6 +1,6 @@
 import alt from '../alt';
 import Auth from '../sources/AuthSource';
-import Photo from '../sources/PhotoSource';
+import Photos from '../sources/PhotoSource';
 import VisiblityFilter from '../sources/VisibilitySource';
 import ls from 'local-storage';
 
@@ -11,7 +11,7 @@ class Actions {
         .then((tokenResult) => {
         // Get user data
         Auth.getUserData(tokenResult.token, (user) => {
-          dispatch(Object.assign(user, {token: tokenResult.token}));
+          dispatch(Object.assign(user, {token: 'Bearer ' + tokenResult.token}));
           // Store token and user data in localstorage
           /*AsyncStorage.multiSet([
             [authKey, tokenResult.token],
@@ -61,7 +61,12 @@ class Actions {
   listMorePhotos(currentView, data, newFilter) {
     return (dispatch) => {
       Photos.queryPhotos(data, (res) => {
-        dispatch(currentView, res, newFilter);
+        currentView, res, newFilter
+        dispatch({
+          view : currentView,
+          photos : res,
+          filter : newFilter
+        });
       });
     }
   }

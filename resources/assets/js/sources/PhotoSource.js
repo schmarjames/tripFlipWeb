@@ -1,22 +1,23 @@
 import globals from '../utils/Globals';
 import JQuery from 'jquery';
+import ls from 'local-storage';
 
 var Photos = {
       photoType: {
         collection: {
           url: `${globals.baseUrl}photo/collection`,
-          prepareData: (obj) => {
+          prepareData: function(obj) {
             return JSON.stringify({
               amount : obj.amount,
               latest : (obj.latest !== null) ? obj.latest : 0,
-              lastQueryId : (obj.id !== null) ? obj.id : "",
+              lastQueryId : (obj.lastQueryId !== null) ? obj.lastQueryId : "",
               category : (obj.category === undefined) ? null : obj.category
             });
           }
         },
         userlocationcollection: {
           url: `${globals.baseUrl}gallery/userlocationcollection`,
-          prepareData: (obj) => {
+          prepareData: function(obj) {
             return JSON.stringify({
               amount : obj.amount,
               lastQueryId : (obj.lastQueryId !== null) ? obj.lastQueryId : null,
@@ -26,7 +27,7 @@ var Photos = {
         },
         usercategorycollection: {
           url: `${globals.baseUrl}gallery/usercategorycollection`,
-          prepareData: (obj) => {
+          prepareData: function(obj) {
             var locations;
             if (obj.hasOwnProperty('location')) {
               locations = JSON.stringify([
@@ -45,10 +46,9 @@ var Photos = {
           }
         }
       },
-      queryPhotos: (data, cb) => {
+      queryPhotos: function (data, cb) {
         var queryType = this.photoType[data.urlType],
             user = ls.get('userData');
-
         if (user && user.token === null) { return cb(undefined); }
         var promise = fetch(queryType.url, {
               method: "post",
@@ -65,7 +65,7 @@ var Photos = {
         });
       },
 
-      likePhoto: (photoId) => {
+      likePhoto: function (photoId) {
         var url = `${globals.baseUrl}photo/like`,
             user = ls.get('userData'),
             userId;
@@ -87,7 +87,7 @@ var Photos = {
         self.handleResult(promise);
       },
 
-      handleResult: (promise, cb) => {
+      handleResult: function(promise, cb) {
         promise.then((response) => {
           if (response.status >= 200 && response.status < 300) {
               return response;
