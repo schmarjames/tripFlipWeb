@@ -9,11 +9,19 @@ class PhotoGalleryStore {
     this.state = {
       loggedIn : false,
       user : {},
+      photoAlbumSummary : [],
       viewGalleryFilter: 'CATAGORIES',
+      galleryFilterList: [
+        'CATAGORIES',
+        'LOCATIONS',
+        'SPECIFIC_CATAGORIES',
+        'SPECIFIC_LOCATIONS'
+      },
       currentGalleryList: [],
-      viewDiscoveryFilter: 'ALL',
+      viewDiscoveryFilter: 'all',
+      discoveryCategoryFilterList: [],
       currentDiscoveryList: [],
-      photoCards : undefined
+      photoCards : []
     }
   }
 
@@ -74,6 +82,41 @@ class PhotoGalleryStore {
         currentDiscoveryList : this.state.currentDiscoveryList.concat(data.photos)
       });
     }
+
+    if (data.view == 'explorer') {
+      if (data.filter) {
+        this.setState({photoCards : data.photos});
+        return;
+      }
+      this.setState({
+        photoCards : this.state.photoCards.concat(data.photos)
+      });
+    }
+  }
+
+  @bind(Actions.getCategoryPhotos);
+  getCategoryPhotos(data) {
+    if (!data) {
+      Actions.logOutUser();
+      return;
+    }
+
+    this.setState({
+      discoveryCategoryFilterList : this.state.discoveryCategoryFilterList.concat(data)
+    });
+
+  }
+
+  @bind(Actions.getUserAlbumPhotos);
+  getUserAlbumPhotos(data) {
+    if (!data) {
+      Actions.logOutUser();
+      return;
+    }
+
+    this.setState({
+      photoAlbumSummary : this.state.photoAlbumSummary.concat(data)
+    });
   }
 
   @bind(Actions.likePhoto);
@@ -103,10 +146,22 @@ class PhotoGalleryStore {
 
   @bind(Actions.setCurrentViewFilter);
   setViewFilter(data) {
+    var match,
+        newFilter;
     if (data.currentView == 'gallery') {
+      match = this.state.galleryFilterList.filter((galleryViewEntry) => {
+        if (galleryViewEntry == data.filter) return galleryViewEntry;
+      })[0];
+
+      newFilter = (match) ? data.filter : 'CATAGORIES';
       this.setState({viewGalleryFilter: data.filter});
     } else if (data.currentView == 'discovery') {
-      this.setState({viewDiscoveryFilter: data.filter});
+      match = this.state.discoveryCategoryFilterList.filter((categoryEntry) => {
+        if (categoryEntry.category_name == data.filter) return categoryEntry;
+      })[0];
+
+      newFilter = (match) ? data.filter : 'all';
+      this.setState({viewDiscoveryFilter: newFilter});
     }
   }
 }

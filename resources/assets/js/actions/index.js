@@ -51,6 +51,7 @@ class Actions {
   setCurrentViewFilter(viewData) {
     return (dispatch) => {
       // based on gallery or discover view
+      dispatch(viewData);
       dispatch({
         currentView : viewData.currentView,
         filter : VisiblityFilter[viewData.currentView][viewData.filter]
@@ -75,6 +76,22 @@ class Actions {
     return (dispatch) => {
       dispatch(photoId);
       Photos.likePhoto(photoId);
+    }
+  }
+
+  getCategoryPhotos() {
+    return (dispatch) => {
+      Photos.getCategoryPhotos((data) => {
+        dispatch(data);
+      });
+    }
+  }
+
+  getUserAlbumPhotos() {
+    return (dispatch) => {
+      Photo.getUserAlbumPhotos((data) => {
+        dispatch(data);
+      });
     }
   }
 }

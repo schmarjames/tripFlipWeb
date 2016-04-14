@@ -22,17 +22,14 @@ class App extends React.Component {
 
     //Actions.logOutUser();
 
-    Actions.listMorePhotos('discovery',{
-        "urlType" : "collection",
+    /*Actions.listMorePhotos('explorer',{
+        "urlType" : "randomcollection",
         "data" : {
-          "amount" : 10,
-          "category" : 1,
-          "lastQueryId" : "",
-          "latest" : 0
+          "views" : []
         }
-    } , true);
+    } , true);*/
 
-    setTimeout(() => {
+
       Actions.listMorePhotos('discovery',{
           "urlType" : "collection",
           "data" : {
@@ -42,7 +39,6 @@ class App extends React.Component {
             "latest" : 0
           }
       } , true);
-    }, 4000);
   }
 
   static getStores() {

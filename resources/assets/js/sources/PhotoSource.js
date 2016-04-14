@@ -44,12 +44,21 @@ var Photos = {
               locationData : locations
             });
           }
+        },
+        randomcollection: {
+          url: `${globals.baseUrl}photo/randomcollection`,
+          prepareData: function(obj) {
+            return JSON.stringify({
+              userId : ls.get('userData').id,
+              viewedPhotos : (obj.views !== null) ? obj.views : []
+            });
+          }
         }
       },
       queryPhotos: function (data, cb) {
         var queryType = this.photoType[data.urlType],
             user = ls.get('userData');
-        if (user && user.token === null) { return cb(undefined); }
+        if ((user && user.token === undefined) || user === null) { return cb(undefined); }
         var promise = fetch(queryType.url, {
               method: "post",
               headers: {
@@ -65,12 +74,53 @@ var Photos = {
         });
       },
 
+      getCategoryPhotos: function (cb) {
+        var url = `${globals.baseUrl}photo/categoryphotos`,
+            user = ls.get('userData');
+
+        if ((user && user.token === undefined) || user === null) { return cb(undefined); }
+
+        var promise = fetch(url, {
+            method: "get",
+            header: {
+              'Accept' : 'application/json',
+              'Content-Type' : 'application/json',
+              'Authorization' : user.token
+            }
+          });
+        this.handleResult(promise, (result) => {
+          cb(result);
+        });
+      },
+
+      getUserAlbumPhotos: function(type, cb) {
+        var url = `${globals.baseUrl}gallery/albumcollection`,
+            user = ls.get('userData');
+
+        if ((user && user.token === undefined) || user === null) { return cb(undefined); }
+
+        var promise = fetch(url, {
+          method : "post",
+          headers : {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+            'Authorization' : user.token
+          },
+          body : JSON.stringify({
+            type : type
+          })
+        });
+        this.handleResult(promise, (result) => {
+          cb(result);
+        });
+      },
+
       likePhoto: function (photoId) {
         var url = `${globals.baseUrl}photo/like`,
             user = ls.get('userData'),
             userId;
 
-        if (user && user.token === null) { return cb(undefined); }
+        if ((user && user.token === undefined) || user === null) { return cb(undefined); }
         var promise = fetch(url, {
           method: "post",
           headers: {
