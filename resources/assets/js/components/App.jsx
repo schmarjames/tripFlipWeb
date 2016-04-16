@@ -1,10 +1,7 @@
 import React from 'react';
 import Actions from '../actions';
-import connectToStores from 'alt-utils/lib/connectToStores';
-import PhotoGalleryStore from '../stores/PhotoGalleryStore';
-import ls from 'local-storage';
+import {RouteHandler} from 'react-router';
 
-@connectToStores
 class App extends React.Component {
   constructor() {
     super();
@@ -30,7 +27,7 @@ class App extends React.Component {
     } , true);*/
 
 
-      Actions.listMorePhotos('discovery',{
+      /*Actions.listMorePhotos('discovery',{
           "urlType" : "collection",
           "data" : {
             "amount" : 10,
@@ -38,28 +35,23 @@ class App extends React.Component {
             "lastQueryId" : 194,
             "latest" : 0
           }
-      } , true);
+      } , true);*/
   }
 
-  static getStores() {
+/*  static getStores() {
     return [PhotoGalleryStore];
   }
 
   static getPropsFromStores() {
     return PhotoGalleryStore.getState();
-  }
+  }*/
 
   render() {
-    var view = <div>waiting.....</div>;
 
-    if (this.props.user) {
-      console.log(this.props.user);
-      console.log(this.props.currentDiscoveryList);
-    } else {
-      console.log(this.props.user);
-    }
     return (
-      <div>{this.state.messages[0]}</div>
+      <div>
+        <RouteHandler />
+      </div>
     );
   }
 }
