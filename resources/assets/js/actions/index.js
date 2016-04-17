@@ -12,6 +12,7 @@ class Actions {
         // Get user data
         Auth.getUserData(tokenResult.token, (user) => {
           dispatch(Object.assign(user, {token: 'Bearer ' + tokenResult.token}));
+          window.location.hash ='/discovery';
           // Store token and user data in localstorage
           /*AsyncStorage.multiSet([
             [authKey, tokenResult.token],
@@ -38,6 +39,7 @@ class Actions {
       // if removed
       if (ls.get('userData') === null) {
         dispatch(true);
+        window.location.hash ='/marketing';
       }
     }
   }

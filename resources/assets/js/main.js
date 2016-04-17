@@ -1,4 +1,4 @@
+require('../sass/app.scss');
 require('../sass/main.scss');
-//require('bootstrap');
-//require('bootstrap-sass');
+require('bootstrap');
 require('./routes');

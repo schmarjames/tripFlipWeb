@@ -3,6 +3,7 @@ module.exports = {
   devtool: 'eval-source-map',
   entry: {
     bundle: [
+      'bootstrap-loader',
       './resources/assets/js/main.js',
     ]
   },

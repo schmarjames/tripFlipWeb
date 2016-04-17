@@ -1,14 +1,24 @@
 import React from 'react';
 import Actions from '../actions';
-import connectToStores from 'alt-utils/lib/connectToStores';
-import PhotoGalleryStore from '../stores/PhotoGalleryStore';
 import Nav from './Nav.jsx';
+import {RouteHandler} from 'react-router';
 
-@connectToStores
-class App extends React.Component {
+class Admin extends React.Component {
   constructor() {
     super();
+    this.state = {
+      messages: [
+        'hi there how are you',
+        'what is that'
+      ]
+    }
     Actions.getUserData();
+    /*Actions.logInUser({
+      email: "rob@gmail.com",
+      password: "Impala96"
+    });*/
+
+    //Actions.logOutUser();
 
     /*Actions.listMorePhotos('explorer',{
         "urlType" : "randomcollection",
@@ -29,27 +39,23 @@ class App extends React.Component {
       } , true);*/
   }
 
-  static getStores() {
+/*  static getStores() {
     return [PhotoGalleryStore];
   }
 
   static getPropsFromStores() {
     return PhotoGalleryStore.getState();
-  }
+  }*/
 
   render() {
-    console.log(this.props);
-    var navProps = {};
-    if (this.props.user) {
-      navProps = this.props.user;
-    }
+
     return (
       <div>
-        <Nav {...navProps}/>
+        <Nav />
         {this.props.children}
       </div>
     );
   }
 }
 
-export default App;
+export default Admin;

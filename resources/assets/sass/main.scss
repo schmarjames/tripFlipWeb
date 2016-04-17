@@ -3,3 +3,8 @@ $color: red;
 body {
   color : $color;
 }
+
+.nav-bar {
+  background-color: $color;
+  height: 50px;
+}

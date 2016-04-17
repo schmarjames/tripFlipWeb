@@ -7,7 +7,6 @@ import ls from 'local-storage';
 class PhotoGalleryStore {
   constructor() {
     this.state = {
-      loggedIn : false,
       user : {},
       photoAlbumSummary : [],
       viewGalleryFilter: 'CATAGORIES',
@@ -16,7 +15,7 @@ class PhotoGalleryStore {
         'LOCATIONS',
         'SPECIFIC_CATAGORIES',
         'SPECIFIC_LOCATIONS'
-      },
+      ],
       currentGalleryList: [],
       viewDiscoveryFilter: 'all',
       discoveryCategoryFilterList: [],
@@ -29,7 +28,6 @@ class PhotoGalleryStore {
   login(user) {
     if (typeof user === 'object') {
       this.setState({
-        loggedIn: true,
         user: Object.assign(this.state.user, user)
       });
       ls.remove('userData');
@@ -40,17 +38,13 @@ class PhotoGalleryStore {
   @bind(Actions.logOutUser);
   logout(status) {
     if (status) {
-      this.setState({
-        loggedIn: false,
-        user: Object.assign(this.state.user, {})
-      });
+      this.setState({user: {}});
     }
   }
 
   @bind(Actions.getUserData);
   getUserData(user) {
     this.setState({
-      loggedIn: true,
       user: Object.assign(this.state.user, user)
     });
   }
