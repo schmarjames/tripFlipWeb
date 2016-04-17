@@ -10,6 +10,7 @@ class Actions {
       Auth.login(credentials)
         .then((tokenResult) => {
         // Get user data
+        console.log(tokenResult);
         Auth.getUserData(tokenResult.token, (user) => {
           dispatch(Object.assign(user, {token: 'Bearer ' + tokenResult.token}));
           window.location.hash ='/discovery';

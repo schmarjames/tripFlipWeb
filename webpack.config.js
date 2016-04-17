@@ -21,7 +21,11 @@ module.exports = {
         test: /\.scss$/,
         include: path.join(__dirname, 'resources/assets/sass'),
         loader: 'style!css!sass'
-      }
+      },
+      // Bootstrap 3
+      { test:/bootstrap-sass[\/\\]assets[\/\\]javascripts[\/\\]/, loader: 'imports?jQuery=jquery' },
+      { test: /\.(woff2?|svg)$/, loader: 'url?limit=10000' },
+      { test: /\.(ttf|eot)$/, loader: 'file' },
     ]
   }
 }

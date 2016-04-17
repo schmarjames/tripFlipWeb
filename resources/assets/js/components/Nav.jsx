@@ -14,7 +14,6 @@ class Nav extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     var userStateButtons = <div></div>;
 
     if (this.props.token) {

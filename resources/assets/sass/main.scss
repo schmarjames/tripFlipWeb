@@ -8,3 +8,10 @@ body {
   background-color: $color;
   height: 50px;
 }
+
+#login-form {
+  float: none;
+  border: 1px solid #666;
+  padding: 10px;
+  border-radius: 5px;
+}
