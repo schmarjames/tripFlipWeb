@@ -7,16 +7,18 @@ class Login extends React.Component {
     this.state = {
       email: undefined,
       password: undefined,
-      enableSubmit: false
+      enableSubmit: ""
     };
   }
 
   changeEmailVal(e) {
     this.setState({email: e.target.value});
+    this.toggleSubmitAbility();
   }
 
   changePasswordVal(e) {
     this.setState({password: e.target.value});
+    this.toggleSubmitAbility();
   }
 
   toggleSubmitAbility() {
@@ -47,7 +49,7 @@ class Login extends React.Component {
               <input
                 type="email"
                 value={this.state.email}
-                onChange={this.changeEmailVal}
+                onChange={this.changeEmailVal.bind(this)}
                 className="form-control"
                 id="exampleInputEmail1"
                 placeholder="Email" />
@@ -57,12 +59,12 @@ class Login extends React.Component {
               <input
                 type="password"
                 value={this.state.pasword}
-                onChange={this.changePasswordVal}
+                onChange={this.changePasswordVal.bind(this)}
                 className="form-control"
                 id="exampleInputPassword1"
                 placeholder="Password" />
             </div>
-            <button type="submit" className="btn btn-default" onClick={this.logIn.bind(this)}>Submit</button>
+            <input type="submit" className="btn btn-default" onClick={this.logIn.bind(this)} disabled={this.state.enableSubmit ? "" : "disabled"} value="Submit" />
           </form>
         </div>
       </div>

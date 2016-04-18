@@ -16,17 +16,6 @@ class App extends React.Component {
           "views" : []
         }
     } , true);*/
-
-
-      /*Actions.listMorePhotos('discovery',{
-          "urlType" : "collection",
-          "data" : {
-            "amount" : 10,
-            "category" : 1,
-            "lastQueryId" : 194,
-            "latest" : 0
-          }
-      } , true);*/
   }
 
   static getStores() {
