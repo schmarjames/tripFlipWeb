@@ -29,33 +29,36 @@ class Discovery extends React.Component {
             "latest" : 0
           }
       } , true);
-
-      setTimeout(() => {
-        Actions.listMorePhotos('discovery',{
-            "urlType" : "collection",
-            "data" : {
-              "amount" : 10,
-              "category" : 1,
-              "lastQueryId" : 194,
-              "latest" : 0
-            }
-        } , false);
-      }, 4000);
     }
   }
   componentDidMount() {
-    if (this.state.masonryList) {
-      // detect screen position
-      $(window).on('scroll', () => {
-        if ($(window).scrollTop() + $(window).height() == $(document.height())) {
-          console.log("bottom");
-        }
-      });
-    }
-
+    var self = this;
+    $(window).on('scroll', () => {
+      if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+        console.log("bottom");
+        self.getMorePhotos();
+      }
+    });
   }
 
   componentDidUpdate() {
+  }
+
+  getMorePhotos() {
+    console.log(this.state);
+    if (this.storeState.currentDiscoveryList) {
+      var lastPhotoId = this.props.currentDiscoveryList[this.props.currentDiscoveryList.length-1].id;
+console.log(lastPhotoId);
+      Actions.listMorePhotos('discovery',{
+          "urlType" : "collection",
+          "data" : {
+            "amount" : 10,
+            "category" : 1,
+            "lastQueryId" : 194,
+            "latest" : 0
+          }
+      } , false);
+    }
   }
 
   transitionCheck() {
@@ -77,6 +80,7 @@ class Discovery extends React.Component {
 
 if (this.props.currentDiscoveryList.length > 0) {
   console.log(this.props.currentDiscoveryList);
+  console.log(this.props.currentDiscoveryList[this.props.currentDiscoveryList.length - 1]);
   var photos = this.props.currentDiscoveryList.map((photoData) => {
     return(
       <li className="photoEntry">
