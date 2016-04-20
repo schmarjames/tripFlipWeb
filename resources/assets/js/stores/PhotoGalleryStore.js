@@ -8,6 +8,7 @@ class PhotoGalleryStore {
   constructor() {
     this.state = {
       user : {},
+      what : "",
       photoAlbumSummary : [],
       viewGalleryFilter: 'CATAGORIES',
       galleryFilterList: [
@@ -38,7 +39,7 @@ class PhotoGalleryStore {
   @bind(Actions.logOutUser);
   logout(status) {
     if (status) {
-      this.setState({user: {}});
+      this.resetState();
     }
   }
 
@@ -52,8 +53,8 @@ class PhotoGalleryStore {
   @bind(Actions.listMorePhotos);
   listMorePhotos(data) {
     // missing token!
-    if (!data.photos) {
-      Actions.logOutUser();
+    if (data.badCredentials || data.unknownError) {
+      this.resetState();
       return;
     }
 
@@ -90,8 +91,8 @@ class PhotoGalleryStore {
 
   @bind(Actions.getCategoryPhotos);
   getCategoryPhotos(data) {
-    if (!data) {
-      Actions.logOutUser();
+    if (data.badCredentials || data.unknownError) {
+      this.resetState();
       return;
     }
 
@@ -103,8 +104,8 @@ class PhotoGalleryStore {
 
   @bind(Actions.getUserAlbumPhotos);
   getUserAlbumPhotos(data) {
-    if (!data) {
-      Actions.logOutUser();
+    if (data.badCredentials || data.unknownError) {
+      this.resetState();
       return;
     }
 
@@ -151,12 +152,24 @@ class PhotoGalleryStore {
       this.setState({viewGalleryFilter: data.filter});
     } else if (data.currentView == 'discovery') {
       match = this.state.discoveryCategoryFilterList.filter((categoryEntry) => {
-        if (categoryEntry.category_name == data.filter) return categoryEntry;
+        if (categoryEntry.category_id == data.filterId) return categoryEntry;
       })[0];
 
-      newFilter = (match) ? data.filter : 'all';
+      newFilter = (match) ? match.category_id : 'all';
       this.setState({viewDiscoveryFilter: newFilter});
+      console.log('change filter');
+      console.log(this.state.viewDiscoveryFilter);
     }
+  }
+
+  resetState() {
+    ls.remove('userData');
+    this.setState({
+      user: {},
+      currentGalleryList: [],
+      currentDiscoveryList : []
+    });
+    window.location.hash ='/marketing';
   }
 }
 

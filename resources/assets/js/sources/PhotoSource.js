@@ -82,7 +82,7 @@ var Photos = {
 
         var promise = fetch(url, {
             method: "get",
-            header: {
+            headers: {
               'Accept' : 'application/json',
               'Content-Type' : 'application/json',
               'Authorization' : user.token

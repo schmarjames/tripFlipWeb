@@ -55,10 +55,6 @@ class Actions {
     return (dispatch) => {
       // based on gallery or discover view
       dispatch(viewData);
-      dispatch({
-        currentView : viewData.currentView,
-        filter : VisiblityFilter[viewData.currentView][viewData.filter]
-      });
     }
   }
 

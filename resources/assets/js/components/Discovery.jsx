@@ -9,14 +9,14 @@ import Masonry from 'react-masonry-component';
 class Discovery extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      masonryList : undefined
-    }
     this.storeState = PhotoGalleryStore.getState();
   }
 
   componentWillMount() {
     this.transitionCheck();
+
+    // get all categories
+    Actions.getCategoryPhotos();
 
     if (this.storeState.currentDiscoveryList.length == 0) {
       // call action to aquire photos from feed
@@ -24,7 +24,6 @@ class Discovery extends React.Component {
           "urlType" : "collection",
           "data" : {
             "amount" : 10,
-            "category" : 1,
             "lastQueryId" : "",
             "latest" : 0
           }
@@ -36,28 +35,29 @@ class Discovery extends React.Component {
     $(window).on('scroll', () => {
       if ($(window).scrollTop() + $(window).height() == $(document).height()) {
         console.log("bottom");
-        self.getMorePhotos();
+        self.getMorePhotos(false);
       }
     });
   }
 
-  componentDidUpdate() {
-  }
-
-  getMorePhotos() {
-    console.log(this.state);
+  getMorePhotos(freshFilter) {
     if (this.storeState.currentDiscoveryList) {
-      var lastPhotoId = this.props.currentDiscoveryList[this.props.currentDiscoveryList.length-1].id;
-console.log(lastPhotoId);
+      var lastPhotoId = this.props.currentDiscoveryList[this.props.currentDiscoveryList.length-1].id,
+          data = {
+            "amount" : 10,
+            "lastQueryId" : lastPhotoId,
+            "latest" : 0
+          };
+      if (freshFilter) {
+        data.lastQueryId = "";
+      }
+      if (this.props.viewDiscoveryFilter != 'all') {
+        data.category = this.props.viewDiscoveryFilter;
+      }
       Actions.listMorePhotos('discovery',{
           "urlType" : "collection",
-          "data" : {
-            "amount" : 10,
-            "category" : 1,
-            "lastQueryId" : 194,
-            "latest" : 0
-          }
-      } , false);
+          "data" : data
+      } , freshFilter);
     }
   }
 
@@ -66,6 +66,33 @@ console.log(lastPhotoId);
     if (!state.user.token) {
       window.location.hash ='/marketing';
     }
+  }
+
+  changeDiscoveryCategory(id) {
+    //e.preventDefault();
+    if (id) {
+      Actions.setCurrentViewFilter({
+        currentView: "discovery",
+        filterId: id
+      });
+      setTimeout(() => {
+        this.getMorePhotos(true);
+      }, 3000);
+
+    }
+  }
+
+  prepareCategoryNav() {
+    var navButtons = this.props.discoveryCategoryFilterList.map((data) => {
+      return (
+        <li className="category-btn">
+          <button onClick={this.changeDiscoveryCategory.bind(this, data.category_id)}>{data.category_name}</button>
+        </li>
+      );
+    });
+    return (
+      <ul className="discovery-category-nav">{navButtons}</ul>
+    );
   }
 
   static getStores() {
@@ -77,26 +104,28 @@ console.log(lastPhotoId);
   }
 
   render() {
+  var categoryButtons = (this.props.discoveryCategoryFilterList.length == 0) ? <ul></ul> : this.prepareCategoryNav();
 
-if (this.props.currentDiscoveryList.length > 0) {
-  console.log(this.props.currentDiscoveryList);
-  console.log(this.props.currentDiscoveryList[this.props.currentDiscoveryList.length - 1]);
-  var photos = this.props.currentDiscoveryList.map((photoData) => {
-    return(
-      <li className="photoEntry">
-        <img src={photoData.url}/>
-      </li>
-    );
-  });
+  if (this.props.currentDiscoveryList.length > 0) {
+    var photos = this.props.currentDiscoveryList.map((photoData) => {
       return (
-        <Masonry
-          className={'photo-list'}
-          elementType={'ul'}
-          options={{}}
-          disableImagesLoaded={false}
-        >
-          {photos}
-        </Masonry>
+        <li className="photoEntry">
+          <img src={photoData.url}/>
+        </li>
+      );
+    });
+      return (
+        <div>
+          {categoryButtons}
+          <Masonry
+            className={'photo-list'}
+            elementType={'ul'}
+            options={{}}
+            disableImagesLoaded={false}
+          >
+            {photos}
+          </Masonry>
+        </div>
       );
     } else {
       return (
