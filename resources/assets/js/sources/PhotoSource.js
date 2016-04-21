@@ -129,12 +129,12 @@ var Photos = {
             'Authorization' : user.token
           },
           body: JSON.stringify({
-            userId : user.Id,
+            userId : user.id,
             like : photoId
           })
         });
 
-        self.handleResult(promise);
+        this.handleResult(promise);
       },
 
       handleResult: function(promise, cb) {

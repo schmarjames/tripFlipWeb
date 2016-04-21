@@ -95,6 +95,15 @@ class Discovery extends React.Component {
     );
   }
 
+  likePhoto(id, e) {
+    console.log(e);
+    console.log(id);
+    e.preventDefault();
+
+    Actions.likePhoto(id);
+
+  }
+
   static getStores() {
     return [PhotoGalleryStore];
   }
@@ -110,6 +119,7 @@ class Discovery extends React.Component {
     var photos = this.props.currentDiscoveryList.map((photoData) => {
       return (
         <li className="photoEntry">
+          <a href="" onClick={this.likePhoto.bind(this, photoData.id)}><span className="glyphicon glyphicon-heart" aria-hidden="true"></span></a>
           <img src={photoData.url}/>
         </li>
       );

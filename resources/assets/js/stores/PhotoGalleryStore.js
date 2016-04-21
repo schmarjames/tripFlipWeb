@@ -120,21 +120,23 @@ class PhotoGalleryStore {
         lists = ['currentGalleryList', 'currentDiscoveryList'];
 
     lists.forEach((list) => {
-      var index = this.state[list].findIndex((el, idx, array) => {
-            if (el.id == photo.id) { return true; }
-                  return false;
-          }),
-          listCopy = JSON.parse(JSON.strigify(this.state[list]));
+      if (this.state[list].length > 0) {
+        var index = this.state[list].findIndex((el, idx, array) => {
+              if (el.id == photoId) { return true; }
+                    return false;
+            }),
+            listCopy = JSON.parse(JSON.stringify(this.state[list]));
+  console.log(listCopy);
+        if (listCopy[index].likedByUser) {
+          listCopy[index].likes--;
+          listCopy[index].likedByUser = false;
+        } else {
+          listCopy[index].likes++;
+          listCopy[index].likedByUser = true;
+        }
 
-      if (listCopy[index].likedByUser) {
-        listCopy[index].likes--;
-        listCopy[index].likedByUser = false;
-      } else {
-        listCopy[index].likes++;
-        listCopy[index].likedByUser = true;
+        self.setState({[list]: listCopy});
       }
-
-      self.setState({[list]: listCopy});
     });
 
   }
