@@ -2,7 +2,7 @@ import React from 'react';
 import Actions from '../actions';
 import connectToStores from 'alt-utils/lib/connectToStores';
 import PhotoGalleryStore from '../stores/PhotoGalleryStore';
-import Nav from './Nav.jsx';
+import Navigation from './Nav.jsx';
 
 @connectToStores
 class App extends React.Component {
@@ -34,7 +34,7 @@ class App extends React.Component {
     }
     return (
       <div>
-        <Nav {...navProps}/>
+        <Navigation {...navProps}/>
         {this.props.children}
       </div>
     );

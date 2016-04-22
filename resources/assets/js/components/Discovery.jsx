@@ -4,6 +4,8 @@ import Actions from '../actions';
 import connectToStores from 'alt-utils/lib/connectToStores';
 import PhotoGalleryStore from '../stores/PhotoGalleryStore';
 import Masonry from 'react-masonry-component';
+import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
+import Button from 'react-bootstrap/lib/Button';
 
 @connectToStores
 class Discovery extends React.Component {
@@ -85,13 +87,13 @@ class Discovery extends React.Component {
   prepareCategoryNav() {
     var navButtons = this.props.discoveryCategoryFilterList.map((data) => {
       return (
-        <li className="category-btn">
-          <button onClick={this.changeDiscoveryCategory.bind(this, data.category_id)}>{data.category_name}</button>
-        </li>
+        <Button bsStyle="primary" bsSize="small" onClick={this.changeDiscoveryCategory.bind(this, data.category_id)}>{data.category_name}</Button>
       );
     });
     return (
-      <ul className="discovery-category-nav">{navButtons}</ul>
+      <ButtonToolbar className="discovery-category-nav">
+        {navButtons}
+      </ButtonToolbar>
     );
   }
 
@@ -99,9 +101,7 @@ class Discovery extends React.Component {
     console.log(e);
     console.log(id);
     e.preventDefault();
-
     Actions.likePhoto(id);
-
   }
 
   static getStores() {

@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Actions from '../actions';
+import { Navbar, Nav, NavItem } from 'react-bootstrap';
+import LinkContainer from 'react-router-bootstrap';
 
-class Nav extends React.Component {
+class Navigation extends React.Component {
   constructor(props) {
     super(props);
 
@@ -15,32 +17,30 @@ class Nav extends React.Component {
 
   render() {
     var userStateButtons = <div></div>;
-
+console.log(Navbar);
     if (this.props.token) {
       userStateButtons = <li>
         <a href="#" onClick={this.logout}>Log Out</a>
       </li>;
     } else {
-      userStateButtons = <div>
-          <li>
-            <Link to="signup">Sign Up</Link>
-          </li>
-          <li>
-            <Link to="login">Log In</Link>
-          </li>
-        </div>;
+      userStateButtons = <Nav>
+        <NavItem href="#signup">Sign Up</NavItem>
+        <NavItem href="#login">Log In</NavItem>
+        </Nav>;
     }
 
     return (
-      <div className="nav-bar row">
-        <ul role="nav">
-          <li><Link to="/about">About</Link></li>
-          <li><Link to="/repos">Repos</Link></li>
-          { userStateButtons }
-        </ul>
-      </div>
+      <Navbar>
+        <Navbar.Header>
+          Reacting
+        </Navbar.Header>
+        <Nav>
+           {userStateButtons}
+        </Nav>
+      </Navbar>
+
     );
   };
 }
 
-export default Nav;
+export default Navigation;
