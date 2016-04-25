@@ -4,6 +4,7 @@ import React from 'react';
 import App from '../components/App.jsx';
 import Marketing from '../components/Marketing.jsx';
 import Discovery from '../components/Discovery.jsx';
+import Gallery from '../components/Gallery.jsx';
 import Login from '../components/Login.jsx';
 
 // admin app components
@@ -23,7 +24,10 @@ render((
   <Router history={appHistory}>
     <Route path="/" component={App}>
       <Route path="marketing" component={Marketing} />
-      <Route path="discovery" component={Discovery} />
+      <Route path="discovery" component={Discovery}>
+        <Route path="discovery/:categoryId" component={Discovery} />
+      </Route>
+      <Route path="gallery" component={Gallery} />
       <Route path="login" component={Login} />
     </Route>
     <Route path="/admin/" component={Admin}>

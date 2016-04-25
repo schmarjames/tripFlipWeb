@@ -126,7 +126,7 @@ class PhotoGalleryStore {
                     return false;
             }),
             listCopy = JSON.parse(JSON.stringify(this.state[list]));
-  console.log(listCopy);
+
         if (listCopy[index].likedByUser) {
           listCopy[index].likes--;
           listCopy[index].likedByUser = false;
@@ -145,6 +145,7 @@ class PhotoGalleryStore {
   setViewFilter(data) {
     var match,
         newFilter;
+        console.log(data.currentView);
     if (data.currentView == 'gallery') {
       match = this.state.galleryFilterList.filter((galleryViewEntry) => {
         if (galleryViewEntry == data.filter) return galleryViewEntry;
@@ -156,7 +157,7 @@ class PhotoGalleryStore {
       match = this.state.discoveryCategoryFilterList.filter((categoryEntry) => {
         if (categoryEntry.category_id == data.filterId) return categoryEntry;
       })[0];
-
+      console.log(match);
       newFilter = (match) ? match.category_id : 'all';
       this.setState({viewDiscoveryFilter: newFilter});
       console.log('change filter');

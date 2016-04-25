@@ -30,7 +30,10 @@ class App extends React.Component {
     console.log(this.props);
     var navProps = {};
     if (this.props.user) {
-      navProps = this.props.user;
+      navProps = {
+        user : this.props.user,
+        discoveryCategoryFilterList : this.props.discoveryCategoryFilterList
+      };
     }
     return (
       <div>

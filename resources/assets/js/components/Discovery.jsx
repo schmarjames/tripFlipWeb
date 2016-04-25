@@ -4,34 +4,61 @@ import Actions from '../actions';
 import connectToStores from 'alt-utils/lib/connectToStores';
 import PhotoGalleryStore from '../stores/PhotoGalleryStore';
 import Masonry from 'react-masonry-component';
-import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
-import Button from 'react-bootstrap/lib/Button';
+import { Grid, Row, Col, ButtonToolbar, Button } from 'react-bootstrap';
 
 @connectToStores
 class Discovery extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      selectedCategory : undefined,
+      categories : {}
+    };
     this.storeState = PhotoGalleryStore.getState();
   }
 
   componentWillMount() {
     this.transitionCheck();
-
-    // get all categories
-    Actions.getCategoryPhotos();
-
-    if (this.storeState.currentDiscoveryList.length == 0) {
-      // call action to aquire photos from feed
-      Actions.listMorePhotos('discovery',{
-          "urlType" : "collection",
-          "data" : {
-            "amount" : 10,
-            "lastQueryId" : "",
-            "latest" : 0
-          }
-      } , true);
-    }
   }
+
+  componentWillReceiveProps(nextProps) {
+      // store categories
+      if (Object.keys(this.state.categories).length == 0) {
+        this.setState({
+          categories: Object.assign(this.state.categories, nextProps.discoveryCategoryFilterList)
+        });
+      }
+
+      var newCategoryId = nextProps.location.query.categoryId;
+      if (newCategoryId && (newCategoryId != this.state.selectedCategory)) {
+
+        // all photos
+        if (newCategoryId == "all") {
+          this.setState({selectedCategory: "all"}, () => {
+            this.getMorePhotos(true);
+          });
+        }
+
+        // category specific photos
+        else {
+          $.each(this.state.categories, (index, category) => {
+            if (category.category_id == newCategoryId) {
+              this.setState({selectedCategory: newCategoryId}, () => {
+                this.getMorePhotos(true);
+              });
+
+            }
+          });
+        }
+
+      // initial photo load
+      } else if (nextProps.currentDiscoveryList.length == 0 && this.state.selectedCategory == undefined) {
+        this.setState({selectedCategory: "all"}, () => {
+          this.getMorePhotos(true);
+        });
+      }
+  }
+
   componentDidMount() {
     var self = this;
     $(window).on('scroll', () => {
@@ -43,8 +70,7 @@ class Discovery extends React.Component {
   }
 
   getMorePhotos(freshFilter) {
-    if (this.storeState.currentDiscoveryList) {
-      var lastPhotoId = this.props.currentDiscoveryList[this.props.currentDiscoveryList.length-1].id,
+      var lastPhotoId = (this.props.currentDiscoveryList.length == 0) ? null : this.props.currentDiscoveryList[this.props.currentDiscoveryList.length-1].id,
           data = {
             "amount" : 10,
             "lastQueryId" : lastPhotoId,
@@ -53,14 +79,13 @@ class Discovery extends React.Component {
       if (freshFilter) {
         data.lastQueryId = "";
       }
-      if (this.props.viewDiscoveryFilter != 'all') {
-        data.category = this.props.viewDiscoveryFilter;
+      if (this.state.selectedCategory) {
+        data.category = (this.state.selectedCategory == "all") ? undefined : this.state.selectedCategory;
       }
       Actions.listMorePhotos('discovery',{
           "urlType" : "collection",
           "data" : data
       } , freshFilter);
-    }
   }
 
   transitionCheck() {
@@ -72,7 +97,8 @@ class Discovery extends React.Component {
 
   changeDiscoveryCategory(id) {
     //e.preventDefault();
-    if (id) {
+    console.log(id);
+      console.log(id);
       Actions.setCurrentViewFilter({
         currentView: "discovery",
         filterId: id
@@ -80,21 +106,6 @@ class Discovery extends React.Component {
       setTimeout(() => {
         this.getMorePhotos(true);
       }, 3000);
-
-    }
-  }
-
-  prepareCategoryNav() {
-    var navButtons = this.props.discoveryCategoryFilterList.map((data) => {
-      return (
-        <Button bsStyle="primary" bsSize="small" onClick={this.changeDiscoveryCategory.bind(this, data.category_id)}>{data.category_name}</Button>
-      );
-    });
-    return (
-      <ButtonToolbar className="discovery-category-nav">
-        {navButtons}
-      </ButtonToolbar>
-    );
   }
 
   likePhoto(id, e) {
@@ -113,22 +124,33 @@ class Discovery extends React.Component {
   }
 
   render() {
-  var categoryButtons = (this.props.discoveryCategoryFilterList.length == 0) ? <ul></ul> : this.prepareCategoryNav();
+
 
   if (this.props.currentDiscoveryList.length > 0) {
     var photos = this.props.currentDiscoveryList.map((photoData) => {
+      var heartState = "glyphicon"
+      heartState += (photoData.likedByUser) ? ' glyphicon-heart' : ' glyphicon-heart-empty';
       return (
         <li className="photoEntry">
-          <a href="" onClick={this.likePhoto.bind(this, photoData.id)}><span className="glyphicon glyphicon-heart" aria-hidden="true"></span></a>
+          <Grid fluid className="imageTitle">
+            <Col md={10}>
+              {photoData.city}, {photoData.country}
+            </Col>
+            <Col md={2}>
+              <a href="" className="likeBtn" onClick={this.likePhoto.bind(this, photoData.id)}>
+                <span className={heartState} aria-hidden="true"></span>
+              </a>
+            </Col>
+          </Grid>
+
           <img src={photoData.url}/>
         </li>
       );
     });
       return (
         <div>
-          {categoryButtons}
           <Masonry
-            className={'photo-list'}
+            className={'photo-list center-block'}
             elementType={'ul'}
             options={{}}
             disableImagesLoaded={false}

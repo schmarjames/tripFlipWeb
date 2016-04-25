@@ -1,11 +1,9 @@
-$color: red;
-
-body {
-  color : $color;
-}
+$navColor: #666;
+$masonryColor: #ffffff;
+$imageHeaderFontSize: 20px;
 
 .nav-bar {
-  background-color: $color;
+  background-color: $navColor;
   height: 50px;
 }
 
@@ -14,4 +12,44 @@ body {
   border: 1px solid #666;
   padding: 10px;
   border-radius: 5px;
+}
+
+.discovery-category-nav {
+  width: 440px;
+}
+
+/**********************************************
+  MASONRY STYLES
+**********************************************/
+.photo-list {
+  width: 85%;
+  padding: 0;
+
+  .photoEntry {
+    margin: 5px;
+    list-style: none;
+    position: relative;
+    color: $masonryColor;
+
+    .imageTitle {
+      padding-top: 1em;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 0.5em 0;
+      font-size: $imageHeaderFontSize;
+
+      .likeBtn {
+        float: right;
+        font-size: 2em;
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .photo-list {
+    width: 100%;
+  }
 }
