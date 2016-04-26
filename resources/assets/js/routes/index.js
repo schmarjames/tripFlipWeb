@@ -5,6 +5,7 @@ import App from '../components/App.jsx';
 import Marketing from '../components/Marketing.jsx';
 import Discovery from '../components/Discovery.jsx';
 import Gallery from '../components/Gallery.jsx';
+import GalleryFeed from '../components/GalleryFeed.jsx';
 import Login from '../components/Login.jsx';
 
 // admin app components
@@ -27,7 +28,10 @@ render((
       <Route path="discovery" component={Discovery}>
         <Route path="discovery/:categoryId" component={Discovery} />
       </Route>
-      <Route path="gallery" component={Gallery} />
+      <Route path="gallery" component={Gallery}>
+        <Route path="gallery/:albumFilter" component={Gallery} />
+        <Route path="gallery/:albumFilter/:id" component={GalleryFeed} />
+      </Route>
       <Route path="login" component={Login} />
     </Route>
     <Route path="/admin/" component={Admin}>

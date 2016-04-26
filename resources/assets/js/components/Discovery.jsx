@@ -4,6 +4,7 @@ import Actions from '../actions';
 import connectToStores from 'alt-utils/lib/connectToStores';
 import PhotoGalleryStore from '../stores/PhotoGalleryStore';
 import Masonry from 'react-masonry-component';
+import Lightbox from 'react-images';
 import { Grid, Row, Col, ButtonToolbar, Button } from 'react-bootstrap';
 
 @connectToStores
@@ -12,7 +13,12 @@ class Discovery extends React.Component {
     super(props);
     this.state = {
       selectedCategory : undefined,
-      categories : {}
+      categories : {},
+
+      // light box state data
+      lightBoxData : [],
+      lightBoxIsOpen : false,
+      currentLightBoxImage : 0
     };
     this.storeState = PhotoGalleryStore.getState();
   }
@@ -22,6 +28,7 @@ class Discovery extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+
       // store categories
       if (Object.keys(this.state.categories).length == 0) {
         this.setState({
@@ -57,6 +64,11 @@ class Discovery extends React.Component {
           this.getMorePhotos(true);
         });
       }
+
+      //prepare lightbox data
+      if (nextProps.currentDiscoveryList.length > 0) {
+        this.prepareLightBoxData(nextProps.currentDiscoveryList);
+      }
   }
 
   componentDidMount() {
@@ -88,6 +100,43 @@ class Discovery extends React.Component {
       } , freshFilter);
   }
 
+  prepareLightBoxData(data) {
+    var lightBoxArr = data.map((photo) => {
+      return {
+        src: photo.url,
+        caption: 'Author: ' + photo.author + ' -- ' + photo.city + ', ' + photo.country
+      }
+    });
+    this.setState({lightBoxData : lightBoxArr});
+  }
+
+  openLightBox(index, e) {
+    e.preventDefault();
+    this.setState({
+      currentLightBoxImage: index,
+      lightBoxIsOpen: true
+    });
+  }
+
+  closeLightBox() {
+    this.setState({
+      currentImage:0,
+      lightBoxIsOpen:false
+    });
+  }
+
+  goToPrevious() {
+    this.setState({
+      currentLightBoxImage: this.state.currentLightBoxImage -1
+    });
+  }
+
+  goToNext() {
+    this.setState({
+      currentLightBoxImage: this.state.currentLightBoxImage +1
+    });
+  }
+
   transitionCheck() {
     var state = PhotoGalleryStore.getState();
     if (!state.user.token) {
@@ -96,9 +145,6 @@ class Discovery extends React.Component {
   }
 
   changeDiscoveryCategory(id) {
-    //e.preventDefault();
-    console.log(id);
-      console.log(id);
       Actions.setCurrentViewFilter({
         currentView: "discovery",
         filterId: id
@@ -109,7 +155,6 @@ class Discovery extends React.Component {
   }
 
   likePhoto(id, e) {
-    console.log(e);
     console.log(id);
     e.preventDefault();
     Actions.likePhoto(id);
@@ -124,14 +169,12 @@ class Discovery extends React.Component {
   }
 
   render() {
-
-
   if (this.props.currentDiscoveryList.length > 0) {
-    var photos = this.props.currentDiscoveryList.map((photoData) => {
+    var photos = this.props.currentDiscoveryList.map((photoData, i) => {
       var heartState = "glyphicon"
       heartState += (photoData.likedByUser) ? ' glyphicon-heart' : ' glyphicon-heart-empty';
       return (
-        <li className="photoEntry">
+        <li className="photoEntry" key={i}>
           <Grid fluid className="imageTitle">
             <Col md={10}>
               {photoData.city}, {photoData.country}
@@ -142,8 +185,9 @@ class Discovery extends React.Component {
               </a>
             </Col>
           </Grid>
-
-          <img src={photoData.url}/>
+          <a href={photoData.url} onClick={this.openLightBox.bind(this, i)}>
+            <img src={photoData.url}/>
+          </a>
         </li>
       );
     });
@@ -157,6 +201,14 @@ class Discovery extends React.Component {
           >
             {photos}
           </Masonry>
+          <Lightbox
+              currentImage={this.state.currentLightBoxImage}
+              images={this.state.lightBoxData}
+              isOpen={this.state.lightBoxIsOpen}
+              onClickPrev={this.goToPrevious.bind(this)}
+              onClickNext={this.goToNext.bind(this)}
+              onClose={this.closeLightBox.bind(this)}
+            />
         </div>
       );
     } else {

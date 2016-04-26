@@ -13,9 +13,7 @@ class PhotoGalleryStore {
       viewGalleryFilter: 'CATAGORIES',
       galleryFilterList: [
         'CATAGORIES',
-        'LOCATIONS',
-        'SPECIFIC_CATAGORIES',
-        'SPECIFIC_LOCATIONS'
+        'COUNTRIES'
       ],
       currentGalleryList: [],
       viewDiscoveryFilter: 'all',

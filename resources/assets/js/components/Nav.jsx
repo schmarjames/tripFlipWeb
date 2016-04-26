@@ -57,15 +57,35 @@ class Navigation extends React.Component {
       this.props.discoveryCategoryFilterList.length > 0) ? this.prepareCategoryNav() : <ul></ul>;
 
     if (this.props.user && this.props.user.token) {
-      userStateButtons = <Nav>
-        <li>
-            <Link to="gallery">Gallery</Link>
-          </li>
-          {categoryButtons}
-          <li>
-            <Link to="#" onClick={this.logout}>Log Out</Link>
-          </li>
-      </Nav>;
+      userStateButtons =
+        <Navbar.Collapse>
+          <Nav>
+            <NavDropdown eventKey={3} title="My Album" id="basic-nav-dropdown">
+              <li>
+                <Link to="gallery" query={{albumFilter : "categories"}}>Categories</Link>
+              </li>
+              <li>
+                <Link to="gallery" query={{albumFilter : "locations"}}>Countries</Link>
+              </li>
+            </NavDropdown>
+              {categoryButtons}
+              <li>
+                <Link to="#" onClick={this.logout}>Log Out</Link>
+              </li>
+          </Nav>
+          <Nav className="profile-info" pullRight>
+            <li>
+              <span className="profile-pic">
+                <img src={this.props.user.profile_pic} />
+              </span>
+            </li>
+            <li>
+              <span className="profile-name">
+                {this.props.user.name}
+              </span>
+            </li>
+          </Nav>
+        </Navbar.Collapse>;
     } else {
       userStateButtons = <Nav>
         <NavItem href="#signup">Sign Up</NavItem>
@@ -77,6 +97,7 @@ class Navigation extends React.Component {
       <Navbar>
         <Navbar.Header>
           Reacting
+          <Navbar.Toggle />
         </Navbar.Header>
         {userStateButtons}
       </Navbar>
