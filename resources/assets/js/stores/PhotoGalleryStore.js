@@ -12,7 +12,7 @@ class PhotoGalleryStore {
       photoAlbumSummary : [],
       viewGalleryFilter: 'CATAGORIES',
       galleryFilterList: [
-        'CATAGORIES',
+        'CATEGORIES',
         'COUNTRIES'
       ],
       currentGalleryList: [],
@@ -108,7 +108,7 @@ class PhotoGalleryStore {
     }
 
     this.setState({
-      photoAlbumSummary : this.state.photoAlbumSummary.concat(data)
+      photoAlbumSummary : data
     });
   }
 

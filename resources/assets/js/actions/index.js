@@ -86,10 +86,10 @@ class Actions {
     }
   }
 
-  getUserAlbumPhotos() {
+  getUserAlbumPhotos(data) {
     return (dispatch) => {
-      Photo.getUserAlbumPhotos((data) => {
-        dispatch(data);
+      Photos.getUserAlbumPhotos(data, (res) => {
+        dispatch(res);
       });
     }
   }

@@ -13,39 +13,41 @@ class Gallery extends React.Component {
 
     this.state = {
       selectedFilter : undefined,
-      filters : []
+
     }
   }
 
   componentWillMount() {
     this.transitionCheck();
-  }
-
-  componentWillReceiveProps(nextProps) {
-
-    // store filters
-    if (this.state.filters.length == 0) {
-      this.setState({
-        filters: this.state.filters.concat(nextProps.galleryFilterList)
-      });
-    }
-
-    var newFilter = nextProps.locatoin.query.albumFilter;
-    if (newFilter && (newFilter != this.state.selectedFilter)) {
-
-      this.state.filters.forEach((filter) => {
-        if (filter == newFilter.toUpperCase()) {
-          this.setState({selectedFilter: newFilter}, () => {
-            this.filterAlbumPhotos();
-          });
-        }
-      });
-
+    var newFilter = this.props.location.query.albumFilter;
+    if (newFilter && (newFilter.toUpperCase() != this.state.selectedFilter)) {
+      this.changeAlbumFilter(this.props);
     } else {
-      this.setState({selectedFilter: this.state.filters[0]}, () => {
+      this.setState({selectedFilter: this.state.galleryFilterList[0]}, () => {
         this.filterAlbumPhotos();
       });
     }
+
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
+
+    var newFilter = nextProps.location.query.albumFilter;
+    if (newFilter && (newFilter != this.state.selectedFilter)) {
+      this.changeAlbumFilter(nextProps);
+    }
+  }
+
+  changeAlbumFilter(currentProps) {
+    var newFilter = currentProps.location.query.albumFilter;
+    currentProps.galleryFilterList.forEach((filter) => {
+      if (filter == newFilter.toUpperCase()) {
+        this.setState({selectedFilter: newFilter}, () => {
+          this.filterAlbumPhotos();
+        });
+      }
+    });
   }
 
   componentDidMount() {}
@@ -58,7 +60,40 @@ class Gallery extends React.Component {
   }
 
   filterAlbumPhotos() {
-    Action.getUserAlbumPhotos(this.state.selectedFilter);
+    Actions.getUserAlbumPhotos(this.state.selectedFilter);
+  }
+
+  preparePhotoAlbum() {
+    var albumData = this.props.photoAlbumSummary,
+        rowAmount = Math.ceil(this.props.photoAlbumSummary.length / 3),
+        extra = this.props.photoAlbumSummary.length % 3,
+        albumSections,
+        rows = [];
+console.log(rowAmount);
+
+        var currentRow = 1;
+        var currentPhoto = 0;
+        for (var i = 0; i< rowAmount; i++) {
+          var maxCount = 1;
+          rows.push(
+            <Row>
+              {this.props.photoAlbumSummary.map((data, index) => {
+                console.log('index ----' + index);
+                console.log('currentPhoto ---' + currentPhoto);
+                console.log('maxCount ---' + maxCount);
+                if ((index >= currentPhoto) && !(maxCount > 3)) {
+                  currentPhoto++;
+                  maxCount++;
+                  return (
+                    <Col xs={4}><img src={data.url} /></Col>
+                  );
+                }
+              })}
+            </Row>
+          );
+        }
+
+    return <Grid>{rows}</Grid>;
   }
 
   static getStores() {
@@ -70,7 +105,15 @@ class Gallery extends React.Component {
   }
 
   render() {
-    return(<div>the gallery.</div>);
+    var summaryLayout = <Grid></Grid>;
+      console.log(this.props.photoAlbumSummary);
+    if (this.props.photoAlbumSummary.length > 0) {
+      summaryLayout = this.preparePhotoAlbum();
+      console.log(summaryLayout);
+    }
+    return(
+      <div>{summaryLayout}</div>
+    );
   };
 }
 
