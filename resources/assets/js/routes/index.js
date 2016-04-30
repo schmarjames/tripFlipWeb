@@ -24,13 +24,17 @@ const appHistory = useRouterHistory(createHashHistory)({ queryKey: false })
 render((
   <Router history={appHistory}>
     <Route path="/" component={App}>
+      <IndexRoute component={Marketing} />
       <Route path="marketing" component={Marketing} />
       <Route path="discovery" component={Discovery}>
+        <IndexRoute component={Discovery} />
         <Route path="discovery/:categoryId" component={Discovery} />
       </Route>
-      <Route path="gallery" component={Gallery}>
-        <Route path="gallery/:albumFilter" component={Gallery} />
-        <Route path="gallery/:albumFilter/:id" component={GalleryFeed} />
+      <Route path="album" component={Gallery}>
+        <Route path="album/:albumFilter" component={Gallery} />
+      </Route>
+      <Route path="album-feed" component={GalleryFeed}>
+        <Route path="album-feed/:albumFilter/:id" component={GalleryFeed} />
       </Route>
       <Route path="login" component={Login} />
     </Route>

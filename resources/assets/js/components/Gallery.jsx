@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import $ from 'jquery';
 import Actions from '../actions';
 import connectToStores from 'alt-utils/lib/connectToStores';
@@ -13,7 +14,9 @@ class Gallery extends React.Component {
 
     this.state = {
       selectedFilter : undefined,
-
+      stateId : undefined,
+      countryId : undefined,
+      cityId : undefined
     }
   }
 
@@ -23,7 +26,7 @@ class Gallery extends React.Component {
     if (newFilter && (newFilter.toUpperCase() != this.state.selectedFilter)) {
       this.changeAlbumFilter(this.props);
     } else {
-      this.setState({selectedFilter: this.state.galleryFilterList[0]}, () => {
+      this.setState({selectedFilter: this.props.galleryFilterList[0]}, () => {
         this.filterAlbumPhotos();
       });
     }
@@ -34,8 +37,14 @@ class Gallery extends React.Component {
     console.log(nextProps);
 
     var newFilter = nextProps.location.query.albumFilter;
+    // if we have a new params
     if (newFilter && (newFilter != this.state.selectedFilter)) {
       this.changeAlbumFilter(nextProps);
+    }
+
+    // if we have a new search
+    else if (this.searchHasChanged(nextProps.searchData)) {
+      this.filterAlbumPhotos();
     }
   }
 
@@ -59,41 +68,87 @@ class Gallery extends React.Component {
     }
   }
 
+  searchHasChanged(obj) {
+    var props = Object.getOwnPropertyNames(obj),
+        hasChanged = false;
+
+    for (var i = 0; i < props.length; i++) {
+      var propName = props[i];
+
+      if (obj[propName] != this.state[propName]) {
+        this.setState({propName : obj[propName]});
+        hasChanged = true;
+      }
+    }
+    return hasChanged;
+  }
+
   filterAlbumPhotos() {
     Actions.getUserAlbumPhotos(this.state.selectedFilter);
   }
 
   preparePhotoAlbum() {
-    var albumData = this.props.photoAlbumSummary,
-        rowAmount = Math.ceil(this.props.photoAlbumSummary.length / 3),
-        extra = this.props.photoAlbumSummary.length % 3,
-        albumSections,
-        rows = [];
-console.log(rowAmount);
+    var rowAmount = Math.ceil(this.props.photoAlbumSummary.length / 3),
+        rows = [],
+        currentRow = 1,
+        currentPhoto = 0,
+        filterType = this.props.location.query.albumFilter;
 
-        var currentRow = 1;
-        var currentPhoto = 0;
-        for (var i = 0; i< rowAmount; i++) {
-          var maxCount = 1;
-          rows.push(
-            <Row>
-              {this.props.photoAlbumSummary.map((data, index) => {
-                console.log('index ----' + index);
-                console.log('currentPhoto ---' + currentPhoto);
-                console.log('maxCount ---' + maxCount);
-                if ((index >= currentPhoto) && !(maxCount > 3)) {
-                  currentPhoto++;
-                  maxCount++;
-                  return (
-                    <Col xs={4}><img src={data.url} /></Col>
-                  );
-                }
-              })}
-            </Row>
-          );
-        }
+    for (var i = 0; i< rowAmount; i++) {
+        var maxCount = 1;
+        rows.push(
+          <Row key={i}>
+            {this.props.photoAlbumSummary.map((data, index) => {
+              if ((index >= currentPhoto) && !(maxCount > 3)) {
+                currentPhoto++;
+                maxCount++;
 
-    return <Grid>{rows}</Grid>;
+                return (
+                  <Col lg={4} md={6} sm={12} key={index} className="album-entry">
+                    <Link to="album-feed" query={{albumFilter : filterType, id : (filterType == 'categories' ? data.category_id : data.country_id)}}>
+                      <Grid fluid className="summary-info">
+                        <Col xs={12}>
+                          {(filterType == 'categories') ? data.category_name : data.country}
+                        </Col>
+                        {(data.likeAmount) ? <Col xs={12}>data.likeAmount</Col> : null}
+                      </Grid>
+                      <img src={data.url} />
+                    </Link>
+                  </Col>
+                );
+              }
+            })}
+          </Row>
+        );
+
+        /*
+        <Link to="album-feed" query={{albumFilter : filterType, id : (filterType == 'categories' ? data.category_id : data.country_id)}}>
+          <Grid fluid className="summary-info">
+            <Col xs={12}>
+              {(filterType == 'categories') ? data.category_name : data.country}
+            </Col>
+            {(data.likeAmount) ? <Col xs={12}>data.likeAmount</Col> : null}
+          </Grid>
+          <img src={data.url} />
+        </Link>
+        */
+    }
+
+    return <Grid id="album-summary">{rows}</Grid>;
+  }
+
+  displayAlbumSection(id, e) {
+    e.preventDefault();
+    console.log(id);
+    // check the current filter
+
+    // get id
+
+    // prepare data for specific filter type
+
+    // run request for photos
+
+    // pass photos to gallery feed component
   }
 
   static getStores() {

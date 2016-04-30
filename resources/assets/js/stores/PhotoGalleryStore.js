@@ -16,6 +16,12 @@ class PhotoGalleryStore {
         'COUNTRIES'
       ],
       currentGalleryList: [],
+      searchData : {
+        countryId : undefined,
+        stateId : undefined,
+        cityId : undefined
+      },
+      searchOptions : {},
       viewDiscoveryFilter: 'all',
       discoveryCategoryFilterList: [],
       currentDiscoveryList: [],
@@ -57,6 +63,7 @@ class PhotoGalleryStore {
     }
 
     if (data.view == 'gallery') {
+      console.log(data.filter);
       if (data.filter) {
         this.setState({currentGalleryList : data.photos});
         return;
@@ -143,7 +150,7 @@ class PhotoGalleryStore {
   setViewFilter(data) {
     var match,
         newFilter;
-        console.log(data.currentView);
+
     if (data.currentView == 'gallery') {
       match = this.state.galleryFilterList.filter((galleryViewEntry) => {
         if (galleryViewEntry == data.filter) return galleryViewEntry;
@@ -155,12 +162,14 @@ class PhotoGalleryStore {
       match = this.state.discoveryCategoryFilterList.filter((categoryEntry) => {
         if (categoryEntry.category_id == data.filterId) return categoryEntry;
       })[0];
-      console.log(match);
       newFilter = (match) ? match.category_id : 'all';
       this.setState({viewDiscoveryFilter: newFilter});
-      console.log('change filter');
-      console.log(this.state.viewDiscoveryFilter);
     }
+  }
+
+  @bind(Actions.getLocationSearchOptions);
+  storeLocationSearchOptions(data) {
+    this.setState({searchOptions : data});
   }
 
   resetState() {

@@ -158,6 +158,7 @@ class Discovery extends React.Component {
     console.log(id);
     e.preventDefault();
     Actions.likePhoto(id);
+    Actions.getLocationSearchOptions();
   }
 
   static getStores() {
@@ -169,53 +170,53 @@ class Discovery extends React.Component {
   }
 
   render() {
-  if (this.props.currentDiscoveryList.length > 0) {
-    var photos = this.props.currentDiscoveryList.map((photoData, i) => {
-      var heartState = "glyphicon"
-      heartState += (photoData.likedByUser) ? ' glyphicon-heart' : ' glyphicon-heart-empty';
-      return (
-        <li className="photoEntry" key={i}>
-          <Grid fluid className="imageTitle">
-            <Col md={10}>
-              {photoData.city}, {photoData.country}
-            </Col>
-            <Col md={2}>
-              <a href="" className="likeBtn" onClick={this.likePhoto.bind(this, photoData.id)}>
-                <span className={heartState} aria-hidden="true"></span>
-              </a>
-            </Col>
-          </Grid>
-          <a href={photoData.url} onClick={this.openLightBox.bind(this, i)}>
-            <img src={photoData.url}/>
-          </a>
-        </li>
-      );
-    });
-      return (
-        <div>
-          <Masonry
-            className={'photo-list center-block'}
-            elementType={'ul'}
-            options={{}}
-            disableImagesLoaded={false}
-          >
-            {photos}
-          </Masonry>
-          <Lightbox
-              currentImage={this.state.currentLightBoxImage}
-              images={this.state.lightBoxData}
-              isOpen={this.state.lightBoxIsOpen}
-              onClickPrev={this.goToPrevious.bind(this)}
-              onClickNext={this.goToNext.bind(this)}
-              onClose={this.closeLightBox.bind(this)}
-            />
-        </div>
-      );
-    } else {
-      return (
-        <div>LOADING.........</div>
-      );
-    }
+    if (this.props.currentDiscoveryList.length > 0) {
+      var photos = this.props.currentDiscoveryList.map((photoData, i) => {
+        var heartState = "glyphicon"
+        heartState += (photoData.likedByUser) ? ' glyphicon-heart' : ' glyphicon-heart-empty';
+        return (
+          <li className="photoEntry" key={i}>
+            <Grid fluid className="imageTitle">
+              <Col md={10}>
+                {photoData.city}, {photoData.country}
+              </Col>
+              <Col md={2}>
+                <a href="" className="likeBtn" onClick={this.likePhoto.bind(this, photoData.id)}>
+                  <span className={heartState} aria-hidden="true"></span>
+                </a>
+              </Col>
+            </Grid>
+            <a href={photoData.url} onClick={this.openLightBox.bind(this, i)}>
+              <img src={photoData.url}/>
+            </a>
+          </li>
+        );
+      });
+        return (
+          <div>
+            <Masonry
+              className={'photo-list center-block'}
+              elementType={'ul'}
+              options={{}}
+              disableImagesLoaded={false}
+            >
+              {photos}
+            </Masonry>
+            <Lightbox
+                currentImage={this.state.currentLightBoxImage}
+                images={this.state.lightBoxData}
+                isOpen={this.state.lightBoxIsOpen}
+                onClickPrev={this.goToPrevious.bind(this)}
+                onClickNext={this.goToNext.bind(this)}
+                onClose={this.closeLightBox.bind(this)}
+              />
+          </div>
+        );
+      } else {
+        return (
+          <div>LOADING.........</div>
+        );
+      }
   };
 }
 

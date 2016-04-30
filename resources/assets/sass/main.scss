@@ -67,6 +67,21 @@ $imageHeaderFontSize: 20px;
   }
 }
 
+/**********************************************
+  ALBUM STYLES
+**********************************************/
+#album-summary {
+  .album-entry {
+    overflow: hidden;
+    padding: 5px;
+    height: 258px;
+
+    img {
+      width: 100%;
+    }
+  }
+}
+
 @media (max-width: 767px) {
   .photo-list {
     width: 100%;

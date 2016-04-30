@@ -18,10 +18,16 @@ var Photos = {
         userlocationcollection: {
           url: `${globals.baseUrl}gallery/userlocationcollection`,
           prepareData: function(obj) {
+            var locations = JSON.stringify([
+                obj.countryId,
+                obj.stateRegionId,
+                obj.cityId
+              ]);
+
             return JSON.stringify({
               amount : obj.amount,
               lastQueryId : (obj.lastQueryId !== null) ? obj.lastQueryId : null,
-              locationData : locations
+              locationData : (locations) ? locations : null
             });
           }
         },
@@ -37,11 +43,11 @@ var Photos = {
               ]);
             }
 
-            return data = JSON.stringify({
+            return JSON.stringify({
               amount : obj.amount,
               lastQueryId : (obj.lastQueryId !== null) ? obj.lastQueryId : "",
               category : (obj.category === undefined) ? null : obj.category,
-              locationData : locations
+              locationData : (locations) ? locations : null
             });
           }
         },
@@ -151,10 +157,14 @@ var Photos = {
           return res.json();
         })
         .then((result) => {
-          cb(result);
+          if (cb) {
+            cb(result);
+          }
         })
         .catch((err) => {
-          return cb(err);
+          if (cb) {
+            return cb(err);
+          }
         });
       }
 };

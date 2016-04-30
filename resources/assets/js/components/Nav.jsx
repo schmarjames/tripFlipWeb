@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Actions from '../actions';
+import Search from './Search.jsx';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 
 class Navigation extends React.Component {
@@ -29,14 +30,15 @@ class Navigation extends React.Component {
       if (currentProps.discoveryCategoryFilterList.length == 0) {
         // get all categories
         Actions.getCategoryPhotos();
+        Actions.getLocationSearchOptions();
       }
     }
   }
 
   prepareCategoryNav() {
-    var navButtons = this.state.categories.map((data) => {
+    var navButtons = this.state.categories.map((data, index) => {
       return (
-        <li>
+        <li key={index}>
           <Link to="discovery" query={{categoryId : data.category_id}}>{data.category_name}</Link>
         </li>
       );
@@ -61,17 +63,21 @@ class Navigation extends React.Component {
   render() {
     var userStateButtons = <div></div>;
     var categoryButtons = (this.state.categories.length > 0) ? this.prepareCategoryNav() : <ul></ul>;
-console.log(this.state.categories.length);
+    var searchProps = {
+      location : this.props.location,
+      searchOptions : this.props.searchOptions
+    }
+
     if (this.props.user && this.props.user.token) {
       userStateButtons =
         <Navbar.Collapse>
           <Nav>
-            <NavDropdown eventKey={3} title="My Album" id="basic-nav-dropdown">
+            <NavDropdown title="My Album" id="basic-nav-dropdown">
               <li>
-                <Link to="gallery" query={{albumFilter : "categories"}}>Categories</Link>
+                <Link to="album" query={{albumFilter : "categories"}}>Categories</Link>
               </li>
               <li>
-                <Link to="gallery" query={{albumFilter : "countries"}}>Countries</Link>
+                <Link to="album" query={{albumFilter : "countries"}}>Countries</Link>
               </li>
             </NavDropdown>
               {categoryButtons}
@@ -106,6 +112,7 @@ console.log(this.state.categories.length);
           <Navbar.Toggle />
         </Navbar.Header>
         {userStateButtons}
+        <Search {...searchProps} />
       </Navbar>
 
     );

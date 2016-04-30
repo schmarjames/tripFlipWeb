@@ -1,6 +1,7 @@
 import alt from '../alt';
 import Auth from '../sources/AuthSource';
 import Photos from '../sources/PhotoSource';
+import Location from '../sources/LocationSource';
 import VisiblityFilter from '../sources/VisibilitySource';
 import ls from 'local-storage';
 
@@ -89,6 +90,14 @@ class Actions {
   getUserAlbumPhotos(data) {
     return (dispatch) => {
       Photos.getUserAlbumPhotos(data, (res) => {
+        dispatch(res);
+      });
+    }
+  }
+
+  getLocationSearchOptions() {
+    return (dispatch) => {
+      Location.getSearchOptions((res) => {
         dispatch(res);
       });
     }
