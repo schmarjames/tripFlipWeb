@@ -34,7 +34,8 @@ class App extends React.Component {
         user : this.props.user,
         discoveryCategoryFilterList : this.props.discoveryCategoryFilterList,
         location : this.props.location,
-        searchOptions : this.props.searchOptions
+        searchOptions : this.props.searchOptions,
+        galleryFilterList : this.props.galleryFilterList
       };
     }
     return (

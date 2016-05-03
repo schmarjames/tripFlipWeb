@@ -12,20 +12,9 @@ class Actions {
         .then((tokenResult) => {
         // Get user data
         console.log(tokenResult);
-        Auth.getUserData(tokenResult.token, (user) => {
+        Auth.getUserData(tokenResult.token, true, (user) => {
           dispatch(Object.assign(user, {token: 'Bearer ' + tokenResult.token}));
           window.location.hash ='/discovery';
-          // Store token and user data in localstorage
-          /*AsyncStorage.multiSet([
-            [authKey, tokenResult.token],
-            [userKey, JSON.stringify(user)]
-          ], (err) => {
-            if (err) {
-              throw err;
-            }
-            return cb({success : true});
-          });*/
-
         });
       })
       .catch((err) => {
@@ -101,6 +90,32 @@ class Actions {
         dispatch(res);
       });
     }
+  }
+
+  /**********************************************
+      ADMIN ACTIONS
+   *********************************************/
+  logInAdminUser(credentials) {
+    return (dispatch) => {
+      Auth.adminLogin(credentials)
+        .then((tokenResult) => {
+        // Get user data
+        console.log(tokenResult);
+        Auth.getUserData(tokenResult.token, false, (user) => {
+          dispatch(Object.assign(user, {token: 'Bearer ' + tokenResult.token}));
+          window.location.hash ='/admin/accepts';
+        });
+      })
+      .catch((err) => {
+        return;
+      });
+    }
+  }
+
+  getMorePhotosForAdmin(tableType, lastId, locations) {
+    Photos.getMorePhotosForAdmin(tableType, lastId, locations, (res) => {
+      console.log(res);
+    });
   }
 }
 

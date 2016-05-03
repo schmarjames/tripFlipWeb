@@ -143,6 +143,29 @@ var Photos = {
         this.handleResult(promise);
       },
 
+      /************************************************************************
+        ADMIN SERVICES
+      ************************************************************************/
+
+      getMorePhotosForAdmin: function (tableType, lastId, locations) {
+        var locations = JSON.stringify(locations),
+            url = `${globals.baseUrl}${tableType}/photos/100/${lastId}/${locations}`,
+            user = ls.get('userData');
+console.log(url);
+        if ((user && user.token === undefined) || user === null) { return cb(undefined); }
+
+        var promise = fetch(url, {
+          method: "post",
+          headers: {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+            'Authorization' : user.token
+          }
+        });
+
+        this.handleResult(promise);
+      },
+
       handleResult: function(promise, cb) {
         promise.then((response) => {
           if (response.status >= 200 && response.status < 300) {

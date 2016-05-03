@@ -1,39 +1,32 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Actions from '../actions';
+import Select from 'react-select';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 
 class Search extends React.Component {
   constructor(props) {
     super(props);
-
+var self = this;
     this.state = {
       display : false,
       paramsKeyLength : 0,
       searchOptions : []
     };
+
   }
 
   componentWillMount() {
-    if (this.state.searchOptions.length == 0) {
-      this.setState({
-        searchOptions: this.props.searchOptions
-      });
+    if (this.props.searchOptions.length != 0) {
+      this.prepareSearchBar(this.props.location.query);
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
     var params = nextProps.location.query;
-
-    if (nextProps.searchOptions.length > 0 && nextProps.searchOptions.length != this.state.searchOptions.length) {
-      this.setState({
-        searchOptions: nextProps.searchOptions
-      });
+    if (this.props.searchOptions.length != 0) {
+      this.prepareSearchBar(params);
     }
-
-    this.prepareSearchBar(params);
-
   }
 
   prepareSearchBar(params) {
@@ -48,18 +41,16 @@ class Search extends React.Component {
         // filter search options for states, cities, & countries
         if (params.albumFilter == 'categories') {
           if (params.id) {
-            this.setState({display : true});
-            this.filterOptionsForAllLoctions();
+            this.filterOptionsForCountries();
           } else {
             this.setState({display : false});
           }
 
         } else if (params.albumFilter == 'countries') {
           if (params.id) {
-            this.setState({display : true});
             this.filterOptionsForSpecificLocationsInCountry();
           } else {
-            this.filterOptionsForAllLoctions();
+            this.filterOptionsForCountries();
           }
         } else {
           this.setState({display : false});
@@ -68,71 +59,73 @@ class Search extends React.Component {
     }
   }
 
-  filterExist(filter) {
-    this.galleryFilterList.forEach((filter) => {
-      if (filter == filter.toUpperCase()) {
-        return true;
+  filterExist(newFilter) {
+    var exist = false;
+    this.props.galleryFilterList.forEach((filter) => {
+      if (filter == newFilter.toUpperCase()) {
+        exist = true;
       }
     });
-    return false;
+    return exist;
   }
 
-  filterOptionsForAllLoctions() {
+  filterOptionsForCountries() {
     var newOptions = [];
 
-    this.state.searchOptions.forEach((opt) => {
-      var cityObj = {
-        name : opt.city,
-        id : opt.city_id
-      };
-
-      var stateObj = {
-        name : opt.state_region,
-        id : opt.state_region_id
-      };
+    this.props.searchOptions.forEach((opt) => {
 
       var countryObj = {
         name : opt.country,
-        id : opt.country_id
+        id : opt.country_id,
+        type : 'country'
       };
 
-      newOptions.push(cityObj, stateObj, coutryObj);
+      newOptions.push(countryObj);
     });
-
-    this.setState({searchOptions: newOptions});
+    console.log(newOptions);
+    this.setState({searchOptions: newOptions, display: true});
   }
 
   filterOptionsForSpecificLocationsInCountry() {
     var newOptions = [];
 
-    this.state.searchOptions.forEach((opt) => {
+    this.props.searchOptions.forEach((opt) => {
       var currentCountryId = nextProps.location.query.id;
 
       if (currentCountryId == opt.country_id) {
         var cityObj = {
-          name : opt.city,
-          id : opt.city_id
+          name : opt.city + ', ' + opt.country,
+          id : opt.city_id,
+          type : 'city'
         };
 
         var stateObj = {
-          name : opt.state_region,
-          id : opt.state_region_id
+          name : opt.state_region + ', ' + opt.country,
+          id : opt.state_region_id,
+          type : 'state'
         };
 
         newOptions.push(cityObj, stateObj);
       }
     });
-
-    this.setState({searchOptions: newOptions});
+    console.log(newOptions);
+    this.setState({searchOptions: newOptions, display: true});
   }
 
+  sortState(a, b, value) {
+    return (
+      a.name.toLowerCase().indexOf(value.toLowerCase()) >
+      b.name.toLowerCase().indexOf(value.toLowerCase()) ? 1 : -1
+    )
+  }
+
+
   render() {
-    console.log(this.state.display);
-    var searchBar = <div></div>;
+    var searchBar;
     if (this.state.display) {
-      searchBar = <div>Searching ...</div>;
+      searchBar = <div>Searching .....</div>;
     } else {
-      searchBar = <div></div>;
+      searchBar = <div>Not Searching .....</div>;
     }
 
     return (

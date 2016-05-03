@@ -65,7 +65,8 @@ class Navigation extends React.Component {
     var categoryButtons = (this.state.categories.length > 0) ? this.prepareCategoryNav() : <ul></ul>;
     var searchProps = {
       location : this.props.location,
-      searchOptions : this.props.searchOptions
+      searchOptions : this.props.searchOptions,
+      galleryFilterList : this.props.galleryFilterList
     }
 
     if (this.props.user && this.props.user.token) {

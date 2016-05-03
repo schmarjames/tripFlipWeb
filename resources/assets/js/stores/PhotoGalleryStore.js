@@ -21,7 +21,7 @@ class PhotoGalleryStore {
         stateId : undefined,
         cityId : undefined
       },
-      searchOptions : {},
+      searchOptions : [],
       viewDiscoveryFilter: 'all',
       discoveryCategoryFilterList: [],
       currentDiscoveryList: [],
