@@ -90,7 +90,7 @@ var self = this;
     var newOptions = [];
 
     this.props.searchOptions.forEach((opt) => {
-      var currentCountryId = nextProps.location.query.id;
+      var currentCountryId = this.props.location.query.id;
 
       if (currentCountryId == opt.country_id) {
         var cityObj = {

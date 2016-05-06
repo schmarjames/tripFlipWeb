@@ -1,5 +1,5 @@
 import React from 'react';
-import Actions from '../actions';
+import Actions from '../actions/adminActions';
 
 class Login extends React.Component {
   constructor() {

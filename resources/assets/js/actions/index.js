@@ -91,32 +91,6 @@ class Actions {
       });
     }
   }
-
-  /**********************************************
-      ADMIN ACTIONS
-   *********************************************/
-  logInAdminUser(credentials) {
-    return (dispatch) => {
-      Auth.adminLogin(credentials)
-        .then((tokenResult) => {
-        // Get user data
-        console.log(tokenResult);
-        Auth.getUserData(tokenResult.token, false, (user) => {
-          dispatch(Object.assign(user, {token: 'Bearer ' + tokenResult.token}));
-          window.location.hash ='/admin/accepts';
-        });
-      })
-      .catch((err) => {
-        return;
-      });
-    }
-  }
-
-  getMorePhotosForAdmin(tableType, lastId, locations) {
-    Photos.getMorePhotosForAdmin(tableType, lastId, locations, (res) => {
-      console.log(res);
-    });
-  }
 }
 
 export default alt.createActions(Actions);

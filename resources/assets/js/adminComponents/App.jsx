@@ -1,5 +1,5 @@
 import React from 'react';
-import Actions from '../actions';
+import Actions from '../actions/adminActions';
 import connectToStores from 'alt-utils/lib/connectToStores';
 import AdminStore from '../stores/AdminStore';
 import Navigation from './Nav.jsx';
@@ -8,7 +8,7 @@ import Navigation from './Nav.jsx';
 class App extends React.Component {
   constructor() {
     super();
-    Actions.getAUserData();
+    Actions.getUserData();
   }
 
   static getStores() {

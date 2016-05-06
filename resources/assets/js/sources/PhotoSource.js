@@ -147,11 +147,11 @@ var Photos = {
         ADMIN SERVICES
       ************************************************************************/
 
-      getMorePhotosForAdmin: function (tableType, lastId, locations) {
-        var locations = JSON.stringify(locations),
-            url = `${globals.baseUrl}${tableType}/photos/100/${lastId}/${locations}`,
+      getMorePhotosForAdmin: function (data, cb) {
+        var locations = JSON.stringify(data.locations),
+            url = `${globals.baseUrl}${data.tableType}/photos/100/${data.lastId}/${locations}`,
             user = ls.get('userData');
-console.log(url);
+
         if ((user && user.token === undefined) || user === null) { return cb(undefined); }
 
         var promise = fetch(url, {
@@ -163,7 +163,69 @@ console.log(url);
           }
         });
 
-        this.handleResult(promise);
+        this.handleResult(promise, (result) => {
+          cb(result);
+        });
+      },
+
+      approvePhoto: function(id, cb) {
+        var url = `${globals.baseUrl}accepts/store/${id}`,
+            user = ls.get('userData');
+
+        if ((user && user.token === undefined) || user === null) { return cb(undefined); }
+
+        var promise = fetch(url, {
+          method: "post",
+          headers: {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+            'Authorization' : user.token
+          }
+        });
+
+        this.handleResult(promise, (result) => {
+          cb(result);
+        });
+      },
+
+      rejectPhoto(id, cb) {
+        var url = `${globals.baseUrl}accepts/transfer/${id}`,
+            user = ls.get('userData');
+
+        if ((user && user.token === undefined) || user === null) { return cb(undefined); }
+
+        var promise = fetch(url, {
+          method: "post",
+          headers: {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+            'Authorization' : user.token
+          }
+        });
+
+        this.handleResult(promise, (result) => {
+          cb(result);
+        });
+      },
+
+      removePhoto(id, cb) {
+        var url = `${globals.baseUrl}rejects/${id}`,
+            user = ls.get('userData');
+
+        if ((user && user.token === undefined) || user === null) { return cb(undefined); }
+
+        var promise = fetch(url, {
+          method: "post",
+          headers: {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+            'Authorization' : user.token
+          }
+        });
+
+        this.handleResult(promise, (result) => {
+          cb(result);
+        });
       },
 
       handleResult: function(promise, cb) {

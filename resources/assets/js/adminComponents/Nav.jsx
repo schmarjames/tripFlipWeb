@@ -18,10 +18,10 @@ class Navigation extends React.Component {
         <Nav>
           <NavDropdown eventKey={3} title="Photo Sort Tables" id="basic-nav-dropdown">
             <li>
-              <Link to="accpets" query={{albumFilter : "categories"}}>Accepts</Link>
+              <Link to="admin/accepts">Accepts</Link>
             </li>
             <li>
-              <Link to="rejects" query={{albumFilter : "countries"}}>Rejects</Link>
+              <Link to="admin/rejects">Rejects</Link>
             </li>
           </NavDropdown>
         </Nav>
