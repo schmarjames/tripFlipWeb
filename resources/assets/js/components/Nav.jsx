@@ -107,13 +107,12 @@ class Navigation extends React.Component {
     }
 
     return (
-      <Navbar>
+      <Navbar style={this.props.styles}>
         <Navbar.Header>
           Reacting
           <Navbar.Toggle />
         </Navbar.Header>
         {userStateButtons}
-        <Search {...searchProps} />
       </Navbar>
 
     );

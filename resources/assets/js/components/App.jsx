@@ -18,6 +18,37 @@ class App extends React.Component {
     } , true);*/
   }
 
+  setMainBackground() {
+    var pathName = this.props.location.pathname.replace('/', ''),
+        unRestrictedPaths = ['marketing', 'login', 'signup'],
+        background = {
+          background : (unRestrictedPaths.indexOf(pathName) > -1) ? 'url(images/bar01.jpg) no-repeat' : '#ffffff',
+          backgroundSize: 'cover'
+        };
+
+        console.log(background);
+    return background;
+  }
+
+  setNavSyles() {
+    var pathName = this.props.location.pathname.replace('/', ''),
+        unRestrictedPaths = ['marketing', 'login', 'signup'];
+
+    if (unRestrictedPaths.indexOf(pathName) > -1) {
+      return {
+        background : 'rgba(0, 0, 0, 0.4)',
+        color: '#ffffff',
+        borderBottom: '1px solid #333',
+      }
+    } else {
+      return {
+        background : '#cdcdcd',
+        color: '#000',
+        borderBottom: '0px'
+      }
+    }
+  }
+
   static getStores() {
     return [PhotoGalleryStore];
   }
@@ -28,18 +59,23 @@ class App extends React.Component {
 
   render() {
     console.log(this.props);
-    var navProps = {};
+
+    var background = this.setMainBackground();
+    var navProps = {
+      styles : this.setNavSyles()
+    };
     if (this.props.user) {
       navProps = {
         user : this.props.user,
         discoveryCategoryFilterList : this.props.discoveryCategoryFilterList,
         location : this.props.location,
         searchOptions : this.props.searchOptions,
-        galleryFilterList : this.props.galleryFilterList
+        galleryFilterList : this.props.galleryFilterList,
+        styles : this.setNavSyles()
       };
     }
     return (
-      <div>
+      <div className="mainWrap" style={background}>
         <Navigation {...navProps}/>
         {this.props.children}
       </div>

@@ -1,9 +1,48 @@
-$navColor: #666;
-$masonryColor: #ffffff;
-$imageHeaderFontSize: 20px;
+@import 'app';
+
+html, body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+#app {
+  height: 100%;
+}
+
+/**********************************************
+  MARKETING STYLES
+**********************************************/
+.mainWrap {
+  width: 100%;
+  height: 100%;
+}
 
 .navbar {
-  height: 50px;
+  height: 100px;
+  font-family: $font-family-sans-serif;
+  border-radius: 0;
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  margin-bottom: 0px !important;
+
+  .navbar-header {
+    font-size: 36px;
+  }
+
+  .container {
+    margin: 25px auto;
+  }
+
+  ul.navbar-nav {
+    font-size: 20px;
+    float: right !important;
+
+    li a {
+      color: $regularColor;
+    }
+  }
 
   ul.profile-info {
 
@@ -21,16 +60,51 @@ $imageHeaderFontSize: 20px;
     }
 
     li .profile-name {
-
+      display: block;
+      padding: 13px;
     }
   }
 }
 
+.overlay {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  height:100%;
+}
+
+.slick-slider {
+  position: absolute !important;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 96%;
+  height: 200px;
+  text-align: center;
+  margin: auto;
+  font-family: $font-family-sans-serif;
+  font-size: 2.9em;
+  color: $regularColor;
+  z-index: 100;
+}
+
 #login-form {
-  float: none;
-  border: 1px solid #666;
-  padding: 10px;
+  width: 500px;
+  height: 225px;
+  border: 1px solid #000;
+  padding: 20px;
   border-radius: 5px;
+  position: absolute !important;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  z-index: 100;
+  font-family: $font-family-sans-serif;
+  color: $regularColor;
+  background: rgba(0, 0, 0, 0.7);
 }
 
 .discovery-category-nav {
@@ -48,7 +122,7 @@ $imageHeaderFontSize: 20px;
     margin: 5px;
     list-style: none;
     position: relative;
-    color: $masonryColor;
+    color: $regularColor;
 
     .imageTitle {
       padding-top: 1em;
@@ -64,6 +138,14 @@ $imageHeaderFontSize: 20px;
         font-size: 2em;
       }
     }
+  }
+}
+
+.react-spinner {
+  width: 64px !important;
+  height: 64px !important;
+  .react-spinner_bar {
+    background: $primaryColor;
   }
 }
 

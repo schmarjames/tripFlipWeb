@@ -15,7 +15,6 @@ import Accepts from '../adminComponents/Accepts.jsx';
 import Rejects from '../adminComponents/Rejects.jsx';
 import AdminLogin from '../adminComponents/Login.jsx';
 
-import JQuery from 'jquery';
 import {Router, Route, Link, IndexRoute, useRouterHistory} from 'react-router';
 import { createHashHistory } from 'history'
 import { render } from 'react-dom';

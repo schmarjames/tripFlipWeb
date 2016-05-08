@@ -41,7 +41,8 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div className="row">
+      <div>
+        <div className="overlay"></div>
         <div id="login-form" className="col-sm-8 center-block">
           <form>
             <div className="form-group">

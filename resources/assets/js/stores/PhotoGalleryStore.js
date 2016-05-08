@@ -131,15 +131,16 @@ class PhotoGalleryStore {
                     return false;
             }),
             listCopy = JSON.parse(JSON.stringify(this.state[list]));
-
-        if (listCopy[index].likedByUser) {
-          listCopy[index].likes--;
-          listCopy[index].likedByUser = false;
-        } else {
-          listCopy[index].likes++;
-          listCopy[index].likedByUser = true;
+            console.log(index);
+        if (index > -1) {
+          if (listCopy[index].likedByUser) {
+            listCopy[index].likes--;
+            listCopy[index].likedByUser = false;
+          } else {
+            listCopy[index].likes++;
+            listCopy[index].likedByUser = true;
+          }
         }
-
         self.setState({[list]: listCopy});
       }
     });

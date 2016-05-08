@@ -6,6 +6,7 @@ import PhotoGalleryStore from '../stores/PhotoGalleryStore';
 import Masonry from 'react-masonry-component';
 import Lightbox from 'react-images';
 import { Grid, Row, Col, ButtonToolbar, Button } from 'react-bootstrap';
+import Spinner from 'react-spinner';
 
 @connectToStores
 class Discovery extends React.Component {
@@ -170,6 +171,7 @@ class Discovery extends React.Component {
   }
 
   render() {
+    console.log(this.props.currentDiscoveryList);
     if (this.props.currentDiscoveryList.length > 0) {
       var photos = this.props.currentDiscoveryList.map((photoData, i) => {
         var heartState = "glyphicon"
@@ -202,6 +204,7 @@ class Discovery extends React.Component {
             >
               {photos}
             </Masonry>
+
             <Lightbox
                 currentImage={this.state.currentLightBoxImage}
                 images={this.state.lightBoxData}
@@ -214,7 +217,7 @@ class Discovery extends React.Component {
         );
       } else {
         return (
-          <div>LOADING.........</div>
+          <Spinner />
         );
       }
   };
