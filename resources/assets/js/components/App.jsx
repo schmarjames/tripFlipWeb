@@ -42,7 +42,7 @@ class App extends React.Component {
       }
     } else {
       return {
-        background : '#cdcdcd',
+        background : '#e7e7e7',
         color: '#000',
         borderBottom: '0px'
       }
