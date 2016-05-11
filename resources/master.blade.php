@@ -5,6 +5,7 @@
 <title>Trip Flip</title>
 <!--<link href="{{ asset('dist/css/app.css') }}" rel="stylesheet">-->
 <link rel="shortcut icon" href="/img/favicon.ico" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
 <!-- Latest compiled and minified CSS -->
 </head>
 
