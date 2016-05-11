@@ -20,7 +20,7 @@ class App extends React.Component {
 
   setMainBackground() {
     var pathName = this.props.location.pathname.replace('/', ''),
-        unRestrictedPaths = ['marketing', 'login', 'signup'],
+        unRestrictedPaths = ['', 'marketing', 'login', 'signup'],
         background = {
           background : (unRestrictedPaths.indexOf(pathName) > -1) ? 'url(images/bar01.jpg) no-repeat' : '#ffffff',
           backgroundSize: 'cover'
@@ -32,7 +32,7 @@ class App extends React.Component {
 
   setNavSyles() {
     var pathName = this.props.location.pathname.replace('/', ''),
-        unRestrictedPaths = ['marketing', 'login', 'signup'];
+        unRestrictedPaths = ['', 'marketing', 'login', 'signup'];
 
     if (unRestrictedPaths.indexOf(pathName) > -1) {
       return {
