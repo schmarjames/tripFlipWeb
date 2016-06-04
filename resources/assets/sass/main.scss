@@ -1,4 +1,5 @@
 @import 'app';
+@import 'mixins';
 
 html, body {
   height: 100%;
@@ -19,7 +20,7 @@ html, body {
 }
 
 .navbar {
-  height: 100px;
+  /*height: 100px;*/
   font-family: $font-family-sans-serif;
   border-radius: 0;
   border-top: 0px;
@@ -37,7 +38,6 @@ html, body {
 
   ul.navbar-nav {
     font-size: 20px;
-    float: right !important;
 
     li a {
       color: $regularColor;
@@ -48,6 +48,12 @@ html, body {
         color: #555;
       }
     }
+  }
+
+  .navbar-toggle {
+    background: #000;
+    border: none;
+    border-radius: 0px;
   }
 
   ul.profile-info {
@@ -121,7 +127,7 @@ html, body {
   MASONRY STYLES
 **********************************************/
 .photo-list {
-  width: 85%;
+  width: 90%;
   padding: 0;
 
   .photoEntry {
@@ -139,17 +145,21 @@ html, body {
       padding: 0.5em 0;
       font-size: $imageHeaderFontSize;
       background: rgba(0,0,0,1);
-      background: -moz-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.36) 64%, rgba(255,255,255,0) 100%);
-      background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(0,0,0,1)), color-stop(45%, rgba(0,0,0,0.55)), color-stop(64%, rgba(0,0,0,0.36)), color-stop(100%, rgba(255,255,255,0)));
-      background: -webkit-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.36) 64%, rgba(255,255,255,0) 100%);
-      background: -o-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.36) 64%, rgba(255,255,255,0) 100%);
-      background: -ms-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.36) 64%, rgba(255,255,255,0) 100%);
-      background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.36) 64%, rgba(255,255,255,0) 100%);
-      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#ffffff', GradientType=0 );
+      @include title-gradient(rgba(0,0,0,1), rgba(0,0,0,0.55), rgba(0,0,0,0.36), rgba(255,255,255,0), '#000000', '#ffffff');
 
       .likeBtn {
         float: right;
         font-size: 2em;
+      }
+    }
+
+    a {
+      width: 100%;
+      display: block;
+      overflow: hidden;
+
+      img {
+        width: 100%;
       }
     }
   }
@@ -178,8 +188,32 @@ html, body {
   }
 }
 
-@media (max-width: 767px) {
+@media (min-width: 510px) and (max-width: 767px) {
+  .photo-list {
+    width: 90%;
+  }
+}
+
+@media (min-width: 498px) and (max-width: 510px) {
   .photo-list {
     width: 100%;
+
+    .photoEntry {
+      margin: 5px 2%;
+    }
+  }
+}
+
+@media (max-width: 498px) {
+  #login-form {
+    width: 100%;
+  }
+
+  .photo-list {
+    width: 100%;
+
+    .photoEntry {
+      margin: 5px 0;
+    }
   }
 }

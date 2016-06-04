@@ -1,0 +1,9 @@
+@mixin title-gradient($firstColor, $secondColor, $thirdColor, $forthColor, $polyTopHex, $polyBottomHex) {
+  background: -moz-linear-gradient(top, $firstColor 0%, $secondColor 45%, $thirdColor 64%, $forthColor 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, $firstColor), color-stop(45%, $secondColor), color-stop(64%, $thirdColor), color-stop(100%, $forthColor));
+  background: -webkit-linear-gradient(top, $firstColor 0%, $secondColor 45%, $thirdColor 64%, $forthColor 100%);
+  background: -o-linear-gradient(top, $firstColor 0%, $secondColor 45%, $thirdColor 64%, $forthColor 100%);
+  background: -ms-linear-gradient(top, $firstColor 0%, $secondColor 45%, $thirdColor 64%, $forthColor 100%);
+  background: linear-gradient(to bottom, $firstColor 0%, $secondColor 45%, $thirdColor 64%, $forthColor 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=$polyTopHex, endColorstr=$polyBottomHex, GradientType=0 );
+}

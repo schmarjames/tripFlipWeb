@@ -100,10 +100,12 @@ class Navigation extends React.Component {
           </Nav>
         </Navbar.Collapse>;
     } else {
-      userStateButtons = <Nav>
-        <NavItem href="#signup">Sign Up</NavItem>
-        <NavItem href="#login">Log In</NavItem>
-        </Nav>;
+      userStateButtons = <Navbar.Collapse>
+        <Nav pullRight>
+          <NavItem href="#signup">Sign Up</NavItem>
+          <NavItem href="#login">Log In</NavItem>
+        </Nav>
+        </Navbar.Collapse>;
     }
 
     return (
