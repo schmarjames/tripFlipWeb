@@ -17,6 +17,31 @@ html, body {
 .mainWrap {
   width: 100%;
   height: 100%;
+  background-size: cover !important;
+}
+
+.navbar.marketing {
+  background : rgba(0, 0, 0, 0.4);
+  color: #ffffff;
+  border-bottom: 1px solid #333;
+
+  .navbar-nav {
+    li a {
+      color : $regularColor;
+    }
+  }
+}
+
+.navbar.in-app {
+  background : #e7e7e7;
+  color: #000;
+  border-bottom: 0px;
+
+  .navbar-nav {
+    li a {
+      color : $primaryColor;
+    }
+  }
 }
 
 .navbar {
@@ -38,10 +63,6 @@ html, body {
 
   ul.navbar-nav {
     font-size: 20px;
-
-    li a {
-      color: $regularColor;
-    }
 
     ul.dropdown-menu {
       a {
@@ -127,10 +148,11 @@ html, body {
   MASONRY STYLES
 **********************************************/
 .photo-list {
-  width: 90%;
+  width: 75%;
   padding: 0;
 
   .photoEntry {
+    width: 470px;
     margin: 5px;
     list-style: none;
     position: relative;
@@ -179,18 +201,92 @@ html, body {
 #album-summary {
   .album-entry {
     overflow: hidden;
-    padding: 5px;
-    height: 258px;
+    margin: 0px;
+    padding: 0px;
+    height: 375px;
+    position: relative;
+
+    a {
+      width: 98%;
+      height: 98%;
+      margin: 5px;
+      display: block;
+      overflow: hidden;
+
+      .summary-info {
+        padding-top: 1em;
+        position: absolute;
+        top: 0;
+        left: 5px;
+        right: 5px;
+        padding: 0.5em 0;
+        font-size: $imageHeaderFontSize;
+        background: rgba(0,0,0,1);
+        @include title-gradient(rgba(0,0,0,1), rgba(0,0,0,0.55), rgba(0,0,0,0.36), rgba(255,255,255,0), '#000000', '#ffffff');
+        color: $regularColor;
+      }
+
+      img {
+        width: 100%;
+      }
+    }
+
+
+  }
+}
+
+.photo-details-modal {
+  width: 575px;
+  height: auto;
+  margin: 8% auto 20px auto;
+  padding: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+
+  .closeModal {
+    display: block;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+  .photo-details-photo {
+    padding: 0;
+
+    .summary-info {
+      padding-top: 1em;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0.5em 0;
+      font-size: $imageHeaderFontSize;
+      background: rgba(0,0,0,1);
+      @include title-gradient(rgba(255,255,255,0), rgba(0,0,0,0.36), rgba(0,0,0,0.55), rgba(0,0,0,1), '#000000', '#ffffff');
+      color: $regularColor;
+    }
 
     img {
       width: 100%;
     }
   }
+
+
 }
 
 @media (min-width: 510px) and (max-width: 767px) {
   .photo-list {
     width: 90%;
+
+    .photoEntry {
+      width: 470px;
+    }
   }
 }
 

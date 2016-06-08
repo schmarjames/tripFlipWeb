@@ -109,7 +109,7 @@ class Navigation extends React.Component {
     }
 
     return (
-      <Navbar style={this.props.styles}>
+      <Navbar className={this.props.styles}>
         <Navbar.Header>
           Develop Artist
           <Navbar.Toggle />

@@ -120,21 +120,9 @@ class Gallery extends React.Component {
             })}
           </Row>
         );
-
-        /*
-        <Link to="album-feed" query={{albumFilter : filterType, id : (filterType == 'categories' ? data.category_id : data.country_id)}}>
-          <Grid fluid className="summary-info">
-            <Col xs={12}>
-              {(filterType == 'categories') ? data.category_name : data.country}
-            </Col>
-            {(data.likeAmount) ? <Col xs={12}>data.likeAmount</Col> : null}
-          </Grid>
-          <img src={data.url} />
-        </Link>
-        */
     }
 
-    return <Grid id="album-summary">{rows}</Grid>;
+    return <Grid fluid id="album-summary">{rows}</Grid>;
   }
 
   displayAlbumSection(id, e) {

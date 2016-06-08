@@ -9,44 +9,22 @@ class App extends React.Component {
   constructor() {
     super();
     Actions.getUserData();
-
-    /*Actions.listMorePhotos('explorer',{
-        "urlType" : "randomcollection",
-        "data" : {
-          "views" : []
-        }
-    } , true);*/
   }
 
   setMainBackground() {
     var pathName = this.props.location.pathname.replace('/', ''),
         unRestrictedPaths = ['', 'marketing', 'login', 'signup'],
         background = {
-          background : (unRestrictedPaths.indexOf(pathName) > -1) ? 'url(images/bar01.jpg) no-repeat' : '#ffffff',
-          backgroundSize: 'cover'
+          background : (unRestrictedPaths.indexOf(pathName) > -1) ? 'url(images/greece.jpg) no-repeat' : '#ffffff'
         };
 
-        console.log(background);
     return background;
   }
 
   setNavSyles() {
     var pathName = this.props.location.pathname.replace('/', ''),
         unRestrictedPaths = ['', 'marketing', 'login', 'signup'];
-
-    if (unRestrictedPaths.indexOf(pathName) > -1) {
-      return {
-        background : 'rgba(0, 0, 0, 0.4)',
-        color: '#ffffff',
-        borderBottom: '1px solid #333',
-      }
-    } else {
-      return {
-        background : '#e7e7e7',
-        color: '#000',
-        borderBottom: '0px'
-      }
-    }
+    return (unRestrictedPaths.indexOf(pathName) > -1) ? 'marketing' : 'in-app';
   }
 
   static getStores() {

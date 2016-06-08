@@ -4,6 +4,8 @@ import Actions from '../actions';
 import connectToStores from 'alt-utils/lib/connectToStores';
 import PhotoGalleryStore from '../stores/PhotoGalleryStore';
 import Masonry from 'react-masonry-component';
+import PhotoDetails from './PhotoDetails.jsx';
+import Modal from 'react-modal/lib/';
 import { Grid, Row, Col, ButtonToolbar, Button } from 'react-bootstrap';
 
 @connectToStores
@@ -16,7 +18,9 @@ class GalleryFeed extends React.Component {
       categoryId : undefined,
       stateId : undefined,
       countryId : undefined,
-      cityId : undefined
+      cityId : undefined,
+      showDetails : false,
+      currentPhotoData : undefined
     }
   }
 
@@ -160,10 +164,19 @@ class GalleryFeed extends React.Component {
   }
 
   likePhoto(id, e) {
-    console.log(id);
     e.preventDefault();
     Actions.likePhoto(id);
     Actions.getLocationSearchOptions();
+  }
+
+  showPhotoDetails(photoData, e) {
+    e.preventDefault();
+
+    this.setState({
+      currentPhotoData : photoData,
+      showDetails : true
+    });
+
   }
 
   static getStores() {
@@ -193,7 +206,7 @@ class GalleryFeed extends React.Component {
                 </a>
               </Col>
             </Grid>
-            <a href={photoData.url} >
+            <a href="" onClick={this.showPhotoDetails.bind(this, photoData)}>
               <img src={photoData.url}/>
             </a>
           </li>
@@ -209,6 +222,10 @@ class GalleryFeed extends React.Component {
             >
               {photos}
             </Masonry>
+            <PhotoDetails
+              open={this.state.showDetails}
+              data={this.state.currentPhotoData}
+              />
           </div>
         );
       } else {

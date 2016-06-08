@@ -76,7 +76,6 @@ class Discovery extends React.Component {
     var self = this;
     $(window).on('scroll', () => {
       if ($(window).scrollTop() + $(window).height() == $(document).height()) {
-        console.log("bottom");
         self.getMorePhotos(false);
       }
     });
@@ -156,7 +155,6 @@ class Discovery extends React.Component {
   }
 
   likePhoto(id, e) {
-    console.log(id);
     e.preventDefault();
     Actions.likePhoto(id);
     Actions.getLocationSearchOptions();
@@ -171,7 +169,6 @@ class Discovery extends React.Component {
   }
 
   render() {
-    console.log(this.props.currentDiscoveryList);
     if (this.props.currentDiscoveryList.length > 0) {
       var photos = this.props.currentDiscoveryList.map((photoData, i) => {
         var heartState = "glyphicon"

@@ -3,7 +3,7 @@
 <html>
 <head>
 <title>Trip Flip</title>
-<!--<link href="{{ asset('dist/css/app.css') }}" rel="stylesheet">-->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <link rel="shortcut icon" href="/img/favicon.ico" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
 <!-- Latest compiled and minified CSS -->
