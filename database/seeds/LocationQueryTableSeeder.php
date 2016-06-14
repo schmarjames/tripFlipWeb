@@ -8,37 +8,37 @@ class LocationQueryTableSeeder extends Seeder {
         DB::table('location_query')->insert(
             array(
                 array(
-                    "country"       => "",
-                    "state_region"  => "Florida",
-                    "city"          => 'Naples',
+                    "country"       => "Germany",
+                    "state_region"  => "",
+                    "city"          => "Hamburg",
                     "total_pages"   => 0,
                     "current_page"  => 0
                 ),
                 array(
-                    "country"       => "Colombia",
+                    "country"       => "Thailand",
                     "state_region"  => "",
-                    "city"          => "Medellin",
+                    "city"          => "Bangkok",
                     "total_pages"   => 0,
                     "current_page"  => 0
                 ),
                 array(
-                    "country"       => "Italy",
+                    "country"       => "Taiwan",
                     "state_region"  => "",
-                    "city"          => 'Rome',
+                    "city"          => "Taichung",
                     "total_pages"   => 0,
                     "current_page"  => 0
                 ),
                 array(
-                    "country"       => "Greece",
+                    "country"       => "Austria",
                     "state_region"  => "",
-                    "city"          => "Mykonos",
+                    "city"          => "Gastein",
                     "total_pages"   => 0,
                     "current_page"  => 0
                 ),
                 array(
-                    "country"       => "Czech Republic",
+                    "country"       => "Germany",
                     "state_region"  => "",
-                    "city"          => "Prague",
+                    "city"          => "Bavaria",
                     "total_pages"   => 0,
                     "current_page"  => 0
                 )
