@@ -151,12 +151,13 @@ class PhotoController extends Controller
         $photo['likedByUser'] = ($userLiked->count() > 0 ? true : false);
 
         $weatherData = $this->getWeatherData($photo["lat"], $photo["long"]);
-        $photo["weather"] = [
-          "description" => $weatherData["weather"][0]["description"],
-          "iconCode" => $weatherData["weather"][0]["icon"],
-          "temp" => $weatherData["main"]["temp"]
-        ];
-
+        if ($weatherData["weather"]) {
+          $photo["weather"] = [
+            "description" => $weatherData["weather"][0]["description"],
+            "iconCode" => $weatherData["weather"][0]["icon"],
+            "temp" => $weatherData["main"]["temp"]
+          ];
+        }
         return $photo;
       });
       // return collection of photos and last photos id
