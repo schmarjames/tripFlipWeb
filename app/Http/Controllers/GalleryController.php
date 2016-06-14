@@ -238,7 +238,8 @@ class GalleryController extends Controller
                 ->from('category_tags_of_photos')
                 ->selectRaw('photo_id')
                 ->where('category_id', '=', $data['category']);
-            });
+            })
+            ->where('user_id', '=', $user->id);
         });
 
       if (!is_null($data['locationData'])) {

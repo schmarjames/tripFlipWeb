@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             'permission_type' => 2
         ]);
 
-        /*DB::table('users')->insert([
+        DB::table('users')->insert([
             'name' => 'Rob',
             'email' => 'rob@gmail.com',
             'password' => bcrypt('AudiR8'),
@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
             'geo' => "4.3, 2.3",
             'created_at' => Carbon\Carbon::now(),
             'updated_at' => Carbon\Carbon::now(),
-        ]);*/
+        ]);
 
         /*DB::table('gallery')->insert([
             'user_id' => 4,

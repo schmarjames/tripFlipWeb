@@ -63,7 +63,6 @@ class PhotoGalleryStore {
     }
 
     if (data.view == 'gallery') {
-      console.log(data.filter);
       if (data.filter) {
         this.setState({currentGalleryList : data.photos});
         return;
@@ -131,7 +130,7 @@ class PhotoGalleryStore {
                     return false;
             }),
             listCopy = JSON.parse(JSON.stringify(this.state[list]));
-            console.log(index);
+
         if (index > -1) {
           if (listCopy[index].likedByUser) {
             listCopy[index].likes--;
