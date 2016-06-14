@@ -151,7 +151,7 @@ class PhotoController extends Controller
         $photo['likedByUser'] = ($userLiked->count() > 0 ? true : false);
 
         $weatherData = $this->getWeatherData($photo["lat"], $photo["long"]);
-        var_dump($weatherData); die();
+    
         if (array_key_exist("weather", $weatherData)) {
           $photo["weather"] = [
             "description" => $weatherData["weather"][0]["description"],
