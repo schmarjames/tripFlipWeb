@@ -42,7 +42,7 @@ class PhotoDetails extends React.Component {
         content : nextProps.data.city + ', ' + nextProps.data.country
       }, () => {
         $("#photo-details-modal, .modal-backdrop").fadeIn(500, function() {
-          this.prepareMap.bind(this);
+          self.prepareMap.bind(this);
         });
       });
 
@@ -122,11 +122,7 @@ class PhotoDetails extends React.Component {
 
   closeModal(e) {
     e.preventDefault();
-    var self = this;
-    $("#photo-details-modal, .modal-backdrop").fadeOut(500, () => {
-      //self.props.closeModal();
-    });
-    //this.setState({open : false});
+    $("#photo-details-modal, .modal-backdrop").fadeOut(500);
   }
 
   static getStores() {
