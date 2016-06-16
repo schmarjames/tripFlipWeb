@@ -12,6 +12,7 @@
 <body>
   <div id="app"></div>
 
+<script src="https://maps.googleapis.com/maps/api/js"></script>
 <script src="{{ asset('dist/js/bundle.js') }}"></script>
 </body>
 

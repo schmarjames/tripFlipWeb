@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import Actions from '../actions';
 import connectToStores from 'alt-utils/lib/connectToStores';
@@ -20,6 +21,11 @@ class GalleryFeed extends React.Component {
       countryId : undefined,
       cityId : undefined,
       showDetails : false,
+      closeModal : () => {
+        console.log();
+        var node = ReactDOM.findDOMNode(PhotoDetails);
+        React.unmountComponentAtNode(node);
+      },
       currentPhotoData : undefined
     }
   }
@@ -223,6 +229,7 @@ class GalleryFeed extends React.Component {
               {photos}
             </Masonry>
             <PhotoDetails
+              closeModal={this.state.closeModal}
               open={this.state.showDetails}
               data={this.state.currentPhotoData}
               />
