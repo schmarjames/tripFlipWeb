@@ -123,6 +123,7 @@ class PhotoDetails extends React.Component {
   closeModal(e) {
     e.preventDefault();
     $("#photo-details-modal, .modal-backdrop").fadeOut(500);
+    this.props.closeModal();
   }
 
   static getStores() {

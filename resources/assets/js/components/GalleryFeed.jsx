@@ -22,9 +22,7 @@ class GalleryFeed extends React.Component {
       cityId : undefined,
       showDetails : false,
       closeModal : () => {
-        console.log();
-        var node = ReactDOM.findDOMNode(PhotoDetails);
-        React.unmountComponentAtNode(node);
+        this.setState({ showDetails : false });
       },
       currentPhotoData : undefined
     }
@@ -194,8 +192,6 @@ class GalleryFeed extends React.Component {
   }
 
   render() {
-    console.log(this.props.currentGalleryList);
-
     if (this.props.currentGalleryList.length > 0) {
       var photos = this.props.currentGalleryList.map((photoData, i) => {
         var heartState = "glyphicon"
