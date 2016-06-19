@@ -20,6 +20,30 @@ class App extends React.Component {
         player;
 
     if (unRestrictedPaths.indexOf(pathName) > -1) {
+        this.readyYoutube();
+    }
+
+    $(window).scroll(function() {
+       var hT = $('.m-video').height(),
+           wS = $(this).scrollTop();
+       if (wS > hT) {
+          this.player.pauseVideo();
+       }
+       else {
+          this.player.playVideo();
+       }
+    });
+
+    $(window).on('resize', function() {
+        this.resizeVideo.bind(this);
+    });
+
+    this.resizeVideo();
+
+  }
+
+  readyYoutube(){
+    if((typeof YT !== "undefined") && YT && YT.Player) {
       this.player = new YT.Player('player', {
           playerVars: {
               'autoplay': 1,
@@ -33,40 +57,32 @@ class App extends React.Component {
               //'end': 110,
               'playlist': 'aRzJFOVDARg'
           },
-          videoId: 'NQKC24th90U',
+          videoId: 'aRzJFOVDARg',
           events: {
               'onReady': this.onPlayerReady
           }
       });
+      $("#player").css({
+        width: "100%",
+        height: "100%"
+      });
 
+    }else{
+      setTimeout(this.readyYoutube.bind(this), 100);
     }
-    $("#player").css({
-      width: "100%",
-      height: "100%"
-    });
-    $(window).scroll(function() {
-       var hT = $('.m-video').height(),
-           wS = $(this).scrollTop();
-       if (wS > hT) {
-          this.player.pauseVideo();
-       }
-       else {
-          this.player.playVideo();
-       }
-    });
+}
 
-    $(window).on('resize', function() {
+  resizeVideo() {
+    if ($(document).find("#player").length > 0) {
+      // Same code as on load
+      var aspectRatio = 1.78;
+      var video = $('#player');
+      var videoHeight = video.outerHeight();
+      var newWidth = videoHeight*aspectRatio;
+      var halfNewWidth = newWidth/2;
 
-        // Same code as on load
-        var aspectRatio = 1.78;
-        var video = $('#player');
-        var videoHeight = video.outerHeight();
-        var newWidth = videoHeight*aspectRatio;
-        var halfNewWidth = newWidth/2;
-
-        video.css({"width":newWidth+"px","left":"50%","margin-left":"-"+halfNewWidth+"px"});
-
-    });
+      video.css({"width":newWidth+"px","left":"50%","margin-left":"-"+halfNewWidth+"px"});
+    }
   }
 
   setMainBackground() {
