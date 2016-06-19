@@ -7,7 +7,7 @@ import PhotoGalleryStore from '../stores/PhotoGalleryStore';
 import Masonry from 'react-masonry-component';
 import PhotoDetails from './PhotoDetails.jsx';
 import Modal from 'react-modal/lib/';
-import { Grid, Row, Col, ButtonToolbar, Button } from 'react-bootstrap';
+import { ListGroup, ListGroupItem, Grid, Row, Col, ButtonToolbar, Button } from 'react-bootstrap';
 
 @connectToStores
 class GalleryFeed extends React.Component {
@@ -193,6 +193,9 @@ class GalleryFeed extends React.Component {
 
   render() {
     if (this.props.currentGalleryList.length > 0) {
+      var tipMessage = <ListGroup>
+                          <ListGroupItem bsStyle="info">Select a photo in your album to see further details about its location.</ListGroupItem>
+                        </ListGroup>;
       var photos = this.props.currentGalleryList.map((photoData, i) => {
         var heartState = "glyphicon"
         heartState += (photoData.likedByUser) ? ' glyphicon-heart' : ' glyphicon-heart-empty';
@@ -216,6 +219,7 @@ class GalleryFeed extends React.Component {
       });
         return (
           <div>
+            {tipMessage}
             <Masonry
               className={'photo-list center-block'}
               elementType={'ul'}
