@@ -12,6 +12,7 @@
 <body>
   <div id="app"></div>
 
+<script src="http://www.youtube.com/player_api"></script>
 <script src="https://maps.googleapis.com/maps/api/js"></script>
 <script src="{{ asset('dist/js/bundle.js') }}"></script>
 </body>
