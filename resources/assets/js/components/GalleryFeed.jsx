@@ -194,7 +194,7 @@ class GalleryFeed extends React.Component {
   render() {
     if (this.props.currentGalleryList.length > 0) {
       var tipMessage = <ListGroup>
-                          <ListGroupItem bsStyle="info">Select a photo in your album to see further details about its location.</ListGroupItem>
+                          <ListGroupItem bsStyle="info" style={{ textAlign : "center" }}>Select a photo in your album to see further details about its location.</ListGroupItem>
                         </ListGroup>;
       var photos = this.props.currentGalleryList.map((photoData, i) => {
         var heartState = "glyphicon"
