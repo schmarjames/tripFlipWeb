@@ -15,13 +15,9 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    var pathName = this.props.location.pathname.replace('/', ''),
-        unRestrictedPaths = ['', 'marketing', 'login', 'signup'],
-        player;
+    var self = this;
 
-    if (unRestrictedPaths.indexOf(pathName) > -1) {
-        this.readyYoutube();
-    }
+    this.readyYoutube();
 
     $(window).scroll(function() {
        var hT = $('.m-video').height(),
@@ -35,11 +31,8 @@ class App extends React.Component {
     });
 
     $(window).on('resize', function() {
-        this.resizeVideo.bind(this);
+        self.resizeVideo();
     });
-
-    this.resizeVideo();
-
   }
 
   readyYoutube(){
@@ -62,13 +55,16 @@ class App extends React.Component {
               'onReady': this.onPlayerReady
           }
       });
+
       $("#player").css({
         width: "100%",
         height: "100%"
       });
+      this.resizeVideo();
+
 
     }else{
-      setTimeout(this.readyYoutube.bind(this), 100);
+      setTimeout(this.readyYoutube(), 100);
     }
 }
 
@@ -88,18 +84,19 @@ class App extends React.Component {
   setMainBackground() {
     var pathName = this.props.location.pathname.replace('/', ''),
         unRestrictedPaths = ['', 'marketing', 'login', 'signup'];
-        /*background = {
-          background : (unRestrictedPaths.indexOf(pathName) > -1) ? 'url(images/greece.jpg) no-repeat' : '#ffffff'
-        };*/
-    //var background = (unRestrictedPaths.indexOf(pathName) > -1) ? <div id="player"></div> : "";
-    var displayMode;
-    if (unRestrictedPaths.indexOf(pathName) > -1) {
-      displayMode = "block";
-      this.player.playVideo();
-    } else {
-      displayMode = "none";
-      this.player.pauseVideo();
-    }
+    var displayMode = "none";
+
+      if (unRestrictedPaths.indexOf(pathName) > -1) {
+        displayMode = "block";
+        if (this.player) {
+            this.player.playVideo();
+        }
+      } else {
+        displayMode = "none";
+        if (this.player) {
+            this.player.pauseVideo();
+        }
+      }
 
     return displayMode;
   }
@@ -127,9 +124,7 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.props);
-
-    var displayMode = this.setMainBackground.bind(this);
+    var displayMode = this.setMainBackground();
     var navProps = {
       styles : this.setNavSyles()
     };

@@ -14,7 +14,6 @@ class Navigation extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
     if (nextProps.discoveryCategoryFilterList.length > 0 && this.state.categories.length == 0) {
       this.setState({
         categories: this.state.categories.concat(nextProps.discoveryCategoryFilterList)
