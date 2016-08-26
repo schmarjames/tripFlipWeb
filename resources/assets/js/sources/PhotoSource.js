@@ -149,7 +149,7 @@ var Photos = {
 
       getMorePhotosForAdmin: function (data, cb) {
         var locations = JSON.stringify(data.locations),
-            url = `${globals.baseUrl}${data.tableType}/photos/100/${data.lastId}/${locations}`,
+            url = `${globals.baseUrl}${data.tableType}/photos/20/${data.lastId}/${locations}`,
             user = ls.get('userData');
 
         if ((user && user.token === undefined) || user === null) { return cb(undefined); }

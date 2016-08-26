@@ -44,30 +44,15 @@ class AdminStore {
             photoData[i].photo_data = JSON.parse(photoData[i].photo_data);
             photoUrl = "https://farm" + photoData[i].photo_data.farm + ".staticflickr.com/" + photoData[i].photo_data.server + "/" + photoData[i].photo_data.id + "_" + photoData[i].photo_data.secret + ".jpg";
             photoData[i].approved = (photoData[i].approved !== null) ? Boolean(photoData[i].approved) : false;
-            photoData[i].photo_data = <div><img src={photoUrl} /></div>;
+            photoData[i].photo_data = <div><img style={{width: "100%"}} src={photoUrl} /></div>;
             photoData[i].buttons = buttons;
             photoData[i].index = i;
-
-            // create buttons
-            if (data.tableType == 'accepts') {
-              photoData[i].buttons = <div>
-                  <button className="approve" data-photo-id={photoData[i].id} data-index={i}>Approve</button>
-                  <button className="reject" data-photo-id={photoData[i].id} data-index={i}>Reject</button>
-                </div>;
-            }
-
-            else if (data.tableType == 'rejects') {
-              photoData[i].buttons = <div>
-                  <button className="approve" data-photo-id={photoData[i].id} data-index={i}>Approve</button>
-                  <button className="remove" data-photo-id={photoData[i].id} data-index={i}>Remove</button>
-                </div>;
-            }
+            photoData[i].buttons = (data.tableType == 'accepts') ? 'accepts' : 'rejects';
 
             if (i === (photoData.length-1)) {
               this.setState({lastPhotoId : photoData[i].id});
             }
       }
-      console.log(photoData);
 
       if (data.tableType == 'accepts') {
         if (data.freshFilter) {

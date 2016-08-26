@@ -3,7 +3,8 @@ import $ from 'jquery';
 import Actions from '../actions/adminActions';
 import connectToStores from 'alt-utils/lib/connectToStores';
 import AdminStore from '../stores/AdminStore';
-var DataTable = require('react-data-components').DataTable;
+import PhotoData from './PhotoData.jsx';
+import Griddle from 'griddle-react';
 
 @connectToStores
 class Accepts extends React.Component {
@@ -14,16 +15,38 @@ class Accepts extends React.Component {
       totalApproves : 0,
       recentTotal : 0,
       lastPhotoId : undefined,
-      currentPageNum : undefined,
-      columns : [
-      { title: 'City', prop: 'city'  },
-      { title: 'State / Region', prop: 'state_region' },
-      { title: 'Country', prop: 'country' },
-      { title: 'Photo', prop: 'photo_data' },
-      { title: '', prop: 'buttons'}
-      ],
-      data : []
-    };
+      currentPageNum : 0,
+      maxPages: 5,
+      externalResultsPerPage: 20,
+      externalSetPageSize: 20,
+      columnMetaData: [
+        {
+          "columnName" : "id",
+          "visible" : false
+        },
+        {
+          "columnName" : "city",
+          "displayName" : "City"
+        },
+        {
+          "columnName" : "state_region",
+          "displayName" : "State / Region"
+        },
+        {
+          "columnName" : "country",
+          "displayName" : "Country"
+        },
+        {
+          "columnName" : "photo_data",
+          "displayName" : "Photo"
+        },
+        {
+          "columnName" : "buttons",
+          "displayName" : "",
+          "customComponent" : PhotoData
+        },
+      ]
+    }
   }
 
   componentWillMount() {
@@ -35,47 +58,10 @@ class Accepts extends React.Component {
 
     // initial load
     if (this.props.acceptedPhotos.length == 0) {
-      Actions.listMorePhotosForAdmin({
-        tableType : 'accepts',
-        lastId : null,
-        locations : {
-          country : "",
-          stateRegion : "",
-          city : ""
-        },
-        freshFilter : true
-      });
+      this.getPhotoData(undefined, true);
     }
 
-    // capture current page number of data table
-    $(document).on('click', 'ul.pagination a', function(e) {
-      if ($(this).attr("aria-label") == undefined) {
-        var currentPageNum = $(this).find('span').text();
-        if (!isNaN(currentPageNum)) {
-          self.setState({
-            currentPageNum : parseInt(currentPageNum)
-          });
-        }
-      }
-    });
-
-    // last pagination event - get more photos
-    $(document).on('click', 'ul.pagination a[aria-label="Last"]', function(e) {
-
-      Actions.listMorePhotosForAdmin({
-        tableType : 'accepts',
-        lastId : self.props.lastPhotoId,
-        locations : {
-          country : "",
-          stateRegion : "",
-          city : ""
-        },
-        freshFilter : false
-      });
-    });
-
     // accept / reject click events
-
     $(document).on('click', '.approve', function(e) {
       e.preventDefault();
 
@@ -93,15 +79,36 @@ class Accepts extends React.Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
+  setPage(index) {
+    index = index > this.state.maxPages ? this.state.maxPages : index < 1 ? 1 : index + 1;
+    this.getPhotoData(index, false);
+  }
 
+  getPhotoData(page, isfreshFilter) {
+    var self = this,
+        page = page || 1;
+
+    Actions.listMorePhotosForAdmin({
+      tableType : 'accepts',
+      lastId : self.props.lastPhotoId,
+      locations : {
+        country : "",
+        stateRegion : "",
+        city : ""
+      },
+      freshFilter : isfreshFilter
+    });
+
+    this.setState({
+      currentPageNum: page-1
+    });
   }
 
   transitionCheck() {
     var state = AdminStore.getState();
     console.log(state.user.token);
     if (!state.user.hasOwnProperty('token')) {
-      //window.location.hash ='/marketing';
+      window.location.hash ='/marketing';
     }
   }
 
@@ -116,15 +123,22 @@ class Accepts extends React.Component {
   render() {
     var acceptDom = <div></div>;
     if (this.props.acceptedPhotos.length > 0) {
-      acceptDom = <DataTable
-          className="container"
-          keys={[ 'id' ]}
-          columns={this.state.columns}
-          initialData={this.props.acceptedPhotos}
-          initialPageLength={5}
-          initialSortBy={{ prop: 'city', order: 'descending' }}
-          pageLengthOptions={[ 5, 20, 50 ]}
-        />
+      acceptDom = <Griddle
+                    useExternal={true}
+                    results={this.props.acceptedPhotos}
+                    columns={["city", "state_region", "country", "photo_data", "buttons"]}
+                    columnMetadata={this.state.columnMetaData}
+                    showFilter={true}
+                    externalSetPage={this.setPage.bind(this)}
+                    externalCurrentPage={this.state.currentPageNum}
+                    externalMaxPage={this.state.maxPages}
+                    externalSetPageSize={function() {}}
+                    externalSortColumn={null}
+                    externalSortAscending={true}
+                    externalChangeSort={function() {}}
+                    externalSetFilter={function() {}}
+                    resultsPerPage={this.state.externalResultsPerPage}
+                  />;
     } else {
       acceptDom = <div>Loading ....</div>;
     }

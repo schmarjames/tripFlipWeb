@@ -35,7 +35,7 @@ class App extends React.Component {
     });
   }
 
-  readyYoutube(){
+  readyYoutube() {
     if((typeof YT !== "undefined") && YT && YT.Player) {
       this.player = new YT.Player('player', {
           playerVars: {
@@ -66,6 +66,20 @@ class App extends React.Component {
     }else{
       setTimeout(this.readyYoutube(), 100);
     }
+}
+
+callStack(e) {
+
+  e.preventDefault();
+
+  var countLater = setTimeout(function() {
+          var counter = 0;
+
+          counter++;
+          if (counter == 3) {
+
+          }
+      }, 5000);
 }
 
   resizeVideo() {

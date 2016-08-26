@@ -8,7 +8,6 @@ class PhotoGalleryStore {
   constructor() {
     this.state = {
       user : {},
-      what : "",
       photoAlbumSummary : [],
       viewGalleryFilter: 'CATAGORIES',
       galleryFilterList: [
@@ -25,7 +24,10 @@ class PhotoGalleryStore {
       viewDiscoveryFilter: 'all',
       discoveryCategoryFilterList: [],
       currentDiscoveryList: [],
-      photoCards : []
+      photoCards : [],
+      flashMessages : {
+        login : undefined,
+      }
     }
   }
 
