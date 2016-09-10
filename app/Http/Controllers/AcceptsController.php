@@ -89,6 +89,7 @@ class AcceptsController extends Controller
       $user = \JWTAuth::parseToken()->authenticate();
       $acceptedPhotos;
       $acceptedPhotos = AcceptedPhotos::select('*')->whereNull("approved");
+      $totalPhotos = AcceptedPhotos::select('*')->get()->count();
 
       if ($locations) {
         $locations = json_decode($locations);
@@ -114,7 +115,11 @@ class AcceptsController extends Controller
         ->orderBy('id', 'desc')
         ->get();
       $total = ApprovedPhotos::select('*')->where('admin_user_id', $user->id)->get()->count();
-      return response()->json([ 'acceptedPhotos' => $acceptedPhotos, 'totalApproves' => $total]);
+      return response()->json([
+        'acceptedPhotos' => $acceptedPhotos,
+        'totalApproves' => $total,
+        'totalPhotos' => $totalPhotos
+      ]);
     }
 
     public function queryApprovedPhotos($amount, $lastQueryId, $locations) {

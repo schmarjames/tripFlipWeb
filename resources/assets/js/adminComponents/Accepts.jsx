@@ -80,11 +80,21 @@ class Accepts extends React.Component {
   }
 
   setPage(index) {
-    index = index > this.state.maxPages ? this.state.maxPages : index < 1 ? 1 : index + 1;
-    this.getPhotoData(index, false);
+
+    console.log('set page');
+    console.log(index);
+
+    if (index < this.state.currentPageNum) {
+        var index = index > this.state.maxPages ? this.state.maxPages : index < 1 ? 1 : index + 1,
+            indexedPhoto = this.props.acceptedPhotos[this.props.acceptedPhotos-this.state.externalResultsPerPage];
+        this.getPhotoData(index, indexedPhoto.id, false);
+    } else {
+        var index = index > this.state.maxPages ? this.state.maxPages : index < 1 ? 1 : index + 1;
+        this.getPhotoData(index, this.props.lastPhotoId, false);
+    }
   }
 
-  getPhotoData(page, isfreshFilter) {
+  getPhotoData(page, lastPhotoId, isfreshFilter) {
     var self = this,
         page = page || 1;
 
@@ -100,7 +110,11 @@ class Accepts extends React.Component {
     });
 
     this.setState({
-      currentPageNum: page-1
+      currentPageNum: page-1,
+      maxPages: Math.ceil(self.props.totalPhotos / self.state.externalResultsPerPage)
+    }, () => {
+      console.log('current page num');
+      console.log(self.state.currentPageNum);
     });
   }
 
@@ -108,7 +122,7 @@ class Accepts extends React.Component {
     var state = AdminStore.getState();
     console.log(state.user.token);
     if (!state.user.hasOwnProperty('token')) {
-      window.location.hash ='/marketing';
+      //window.location.hash ='/marketing';
     }
   }
 

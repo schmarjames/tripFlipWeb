@@ -11,11 +11,12 @@ import Login from '../components/Login.jsx';
 // admin app components
 import Admin from '../adminComponents/Admin.jsx';
 import Dashboard from '../adminComponents/Dashboard.jsx';
+import PhotoTable from '../adminComponents/PhotoTable.jsx';
 import Accepts from '../adminComponents/Accepts.jsx';
 import Rejects from '../adminComponents/Rejects.jsx';
 import AdminLogin from '../adminComponents/Login.jsx';
 
-import {Router, Route, Link, IndexRoute, useRouterHistory} from 'react-router';
+import {Router, Route, Link, IndexRoute, useRouterHistory, Redirect} from 'react-router';
 import { createHashHistory } from 'history'
 import { render } from 'react-dom';
 //let Route = Router.Route;
@@ -41,8 +42,9 @@ render((
     </Route>
     <Route path="/admin/" component={Admin}>
       <Route path="dashboard" component={Dashboard} />
-      <Route path="accepts" component={Accepts} />
-      <Route path="rejects" component={Rejects} />
+      <Route path="photos" component={PhotoTable}>
+        <Route path="photos/:photoType" component={PhotoTable} />
+      </Route>
       <Route path="login" component={AdminLogin} />
     </Route>
   </Router>

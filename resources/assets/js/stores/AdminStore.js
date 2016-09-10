@@ -9,9 +9,10 @@ class AdminStore {
   constructor() {
     this.state = {
       user : {},
-      acceptedPhotos : [],
-      rejectedPhotos : [],
-      lastPhotoId : undefined
+      accepts : [],
+      rejects : [],
+      lastPhotoId : undefined,
+      totalPhotos : 1275
     }
   }
 
@@ -58,27 +59,31 @@ class AdminStore {
         if (data.freshFilter) {
           console.log(data.results);
           this.setState({
-            acceptedPhotos : photoData,
-            totalApproves: data.results.totalApproves
+            accepts : photoData,
+            totalApproves: data.results.totalApproves,
+            //totalPhotos: data.results.totalPhotos
           });
           return;
         }
         this.setState({
-          acceptedPhotos : this.state.acceptedPhotos.concat(photoData),
-          totalApproves: data.results.totalApproves
+          accepts : this.state.acceptedPhotos.concat(photoData),
+          totalApproves: data.results.totalApproves,
+          //totalPhotos: data.results.totalPhotos
         });
       }
 
       else if (data.tableType == 'rejects') {
         if (data.freshFilter) {
           this.setState({
-            rejectedPhotos : photoData,
-            totalApproves: data.results.totalApproves
+            rejects : photoData,
+            totalApproves: data.results.totalApproves,
+            //totalPhotos: data.results.totalPhotos
           });
           return;
         }
         this.setState({
-          rejectedPhotos : this.state.rejectedPhotos.concat(photoData)
+          rejects : this.state.rejectedPhotos.concat(photoData),
+          //totalPhotos: data.results.totalPhotos
         });
       }
     }
@@ -88,29 +93,29 @@ class AdminStore {
   approvePhoto(data) {
     var clone = this.state.acceptedPhotos.slice(0);
     clone.splice(data.index, 1);
-    this.setState({acceptedPhotos: clone});
+    this.setState({accepts: clone});
   }
 
   @bind(Actions.rejectPhoto);
   rejectPhoto(data) {
     var clone = this.state.acceptedPhotos.slice(0);
     clone.splice(data.index, 1);
-    this.setState({acceptedPhotos: clone});
+    this.setState({accepts: clone});
   }
 
   @bind(Actions.removePhoto);
   removePhoto(data) {
     var clone = this.state.rejectedPhotos.slice(0);
     clone.splice(data.index, 1);
-    this.setState({rejectedPhotos: clone});
+    this.setState({rejects: clone});
   }
 
   resetState() {
     ls.remove('userData');
     this.setState({
       user: {},
-      acceptedPhotos : [],
-      rejectedPhotos : []
+      accepts : [],
+      rejects : []
     });
     window.location.hash ='/marketing';
   }

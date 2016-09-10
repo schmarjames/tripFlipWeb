@@ -32,7 +32,7 @@ class Actions {
         // Get user data
         Auth.getUserData(tokenResult.token, false, (user) => {
           dispatch(Object.assign(user, {token: 'Bearer ' + tokenResult.token}));
-          window.location.hash ='/admin/accepts';
+          window.location.hash ='/admin/photos?photoType=accepts';
         });
       })
       .catch((err) => {

@@ -10,7 +10,6 @@ class App extends React.Component {
   constructor() {
     super();
     Actions.getUserData();
-
     this.player;
   }
 
@@ -61,10 +60,8 @@ class App extends React.Component {
         height: "100%"
       });
       this.resizeVideo();
-
-
     }else{
-      setTimeout(this.readyYoutube(), 100);
+      this.readyYoutube();
     }
 }
 
@@ -99,9 +96,10 @@ callStack(e) {
     var pathName = this.props.location.pathname.replace('/', ''),
         unRestrictedPaths = ['', 'marketing', 'login', 'signup'];
     var displayMode = "none";
-
+    console.log(this.player);
       if (unRestrictedPaths.indexOf(pathName) > -1) {
         displayMode = "block";
+
         if (this.player) {
             this.player.playVideo();
         }
